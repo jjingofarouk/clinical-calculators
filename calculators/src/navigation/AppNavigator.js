@@ -1,4 +1,3 @@
-// AppNavigator.js
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -93,7 +92,7 @@ import BODECalculator from "../components/calculators/pulmonary/BODECalculator";
 import CATCalculator from "../components/calculators/pulmonary/CATCalculator";
 import CURB65 from "../components/calculators/pulmonary/CURB65";
 import CalculatorForm from "../components/calculators/pulmonary/CalculatorForm";
-import FE zadowalniające1FVCCalculator from "../components/calculators/pulmonary/FEV1FVC_Calculator";
+import FEV1FVCCalculator from "../components/calculators/pulmonary/FEV1FVC_Calculator";
 import LungAgeCalculator from "../components/calculators/pulmonary/LungAgeCalculator";
 import MMRCCalculator from "../components/calculators/pulmonary/MMRC_Calculator";
 import PEFRCalculator from "../components/calculators/pulmonary/PEFRCalculator";
@@ -137,7 +136,7 @@ const calculatorMetadata = [
   { screen: "BristolStoolChart", name: "Bristol Stool Chart", category: "Gastroenterology" },
   { screen: "ChildPughScore", name: "Child-Pugh Score", category: "Gastroenterology" },
   { screen: "CrohnsDiseaseActivity", name: "Crohn's Disease Activity", category: "Gastroenterology" },
-  { screen: "FIB4Calculator", name: "FIB-4 Score", category: "Gastroenterology" },
+ noen { screen: "FIB4Calculator", name: "FIB-4 Score", category: "Gastroenterology" },
   { screen: "GERDQualityOfLife", name: "GERD Quality of Life", category: "Gastroenterology" },
   { screen: "GERDSeverityScore", name: "GERD Severity Score", category: "Gastroenterology" },
   { screen: "GIBleedingRisk", name: "GI Bleeding Risk", category: "Gastroenterology" },
@@ -155,7 +154,9 @@ const calculatorMetadata = [
   { screen: "UricAcidCalculator", name: "Uric Acid Calculator", category: "Nephrology" },
   { screen: "UrineProteinToCreatinineRatio", name: "Urine Protein to Creatinine Ratio", category: "Nephrology" },
   { screen: "ABCD2Score", name: "ABCD2 Score", category: "Neurology" },
-  { screen: "AHASAScore", name: "AHASA Score", category: "Neurology" },
+  { screen:
+
+ "AHASAScore", name: "AHASA Score", category: "Neurology" },
   { screen: "ApacheII", name: "Apache II Score", category: "Neurology" },
   { screen: "CHADSVASc", name: "CHA2DS2-VASc Score", category: "Neurology" },
   { screen: "CheckBox", name: "CheckBox", category: "Neurology" },
@@ -166,7 +167,7 @@ const calculatorMetadata = [
   { screen: "GAD7", name: "GAD-7 Score", category: "Neurology" },
   { screen: "GCS", name: "Glasgow Coma Scale", category: "Neurology" },
   { screen: "APGARScore", name: "APGAR Score", category: "Obstetrics" },
-  { screen: "AmnioticFluidIndex", name: "AmnioticFluid Index", category: "Obstetrics" },
+  { screen: "AmnioticFluidIndex", name: "Amniotic Fluid Index", category: "Obstetrics" },
   { screen: "BishopScore", name: "Bishop Score", category: "Obstetrics" },
   { screen: "EstimatedDueDate", name: "Estimated Due Date", category: "Obstetrics" },
   { screen: "EstimatedFetalWeight", name: "Estimated Fetal Weight", category: "Obstetrics" },
@@ -379,4 +380,3 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 }
-

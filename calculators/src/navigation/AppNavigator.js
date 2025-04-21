@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 
 // Main screen
@@ -117,9 +117,11 @@ import HASBLED from "../components/calculators/cardiovascular/HASBLED";
 import TIMI from "../components/calculators/cardiovascular/TIMI";
 
 const Stack = createStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+const Tab = createBottomTabNavigator();
 
+// Define calculator metadata with categories
 const calculatorMetadata = [
+  // General
   { screen: "BMICalculator", name: "BMI Calculator", category: "General" },
   { screen: "BMRCalculator", name: "BMR Calculator", category: "General" },
   { screen: "BodyFatPercentageCalculator", name: "Body Fat Percentage", category: "General" },
@@ -129,6 +131,7 @@ const calculatorMetadata = [
   { screen: "IdealBodyWeightCalculator", name: "Ideal Body Weight", category: "General" },
   { screen: "MifflinStJeorCalculator", name: "Mifflin-St Jeor", category: "General" },
   { screen: "WaistCircumferenceCalculator", name: "Waist Circumference", category: "General" },
+  // Gastroenterology
   { screen: "AlvaradoScore", name: "Alvarado Score", category: "Gastroenterology" },
   { screen: "BISAPCalculator", name: "BISAP Score", category: "Gastroenterology" },
   { screen: "BarrettsEsophagusRisk", name: "Barrett's Esophagus Risk", category: "Gastroenterology" },
@@ -136,13 +139,15 @@ const calculatorMetadata = [
   { screen: "BristolStoolChart", name: "Bristol Stool Chart", category: "Gastroenterology" },
   { screen: "ChildPughScore", name: "Child-Pugh Score", category: "Gastroenterology" },
   { screen: "CrohnsDiseaseActivity", name: "Crohn's Disease Activity", category: "Gastroenterology" },
- noen { screen: "FIB4Calculator", name: "FIB-4 Score", category: "Gastroenterology" },
+  { screen: "FIB4Calculator", name: "FIB-4 Score", category: "Gastroenterology" },
   { screen: "GERDQualityOfLife", name: "GERD Quality of Life", category: "Gastroenterology" },
   { screen: "GERDSeverityScore", name: "GERD Severity Score", category: "Gastroenterology" },
   { screen: "GIBleedingRisk", name: "GI Bleeding Risk", category: "Gastroenterology" },
+  // ICU
   { screen: "APACHE", name: "APACHE Score", category: "ICU" },
   { screen: "QSOFAScoreCalculator", name: "qSOFA Score", category: "ICU" },
   { screen: "SOFACalculator", name: "SOFA Score", category: "ICU" },
+  // Nephrology
   { screen: "CKDEpiCalculator", name: "CKD-EPI Calculator", category: "Nephrology" },
   { screen: "ChronicKidneyDiseaseStageCalculator", name: "CKD Stage", category: "Nephrology" },
   { screen: "CreatinineClearanceCalculator", name: "Creatinine Clearance", category: "Nephrology" },
@@ -153,10 +158,9 @@ const calculatorMetadata = [
   { screen: "NephroticSyndromeScore", name: "Nephrotic Syndrome Score", category: "Nephrology" },
   { screen: "UricAcidCalculator", name: "Uric Acid Calculator", category: "Nephrology" },
   { screen: "UrineProteinToCreatinineRatio", name: "Urine Protein to Creatinine Ratio", category: "Nephrology" },
+  // Neurology
   { screen: "ABCD2Score", name: "ABCD2 Score", category: "Neurology" },
-  { screen:
-
- "AHASAScore", name: "AHASA Score", category: "Neurology" },
+  { screen: "AHASAScore", name: "AHASA Score", category: "Neurology" },
   { screen: "ApacheII", name: "Apache II Score", category: "Neurology" },
   { screen: "CHADSVASc", name: "CHA2DS2-VASc Score", category: "Neurology" },
   { screen: "CheckBox", name: "CheckBox", category: "Neurology" },
@@ -166,6 +170,7 @@ const calculatorMetadata = [
   { screen: "EpilepsyRisk", name: "Epilepsy Risk", category: "Neurology" },
   { screen: "GAD7", name: "GAD-7 Score", category: "Neurology" },
   { screen: "GCS", name: "Glasgow Coma Scale", category: "Neurology" },
+  // Obstetrics
   { screen: "APGARScore", name: "APGAR Score", category: "Obstetrics" },
   { screen: "AmnioticFluidIndex", name: "Amniotic Fluid Index", category: "Obstetrics" },
   { screen: "BishopScore", name: "Bishop Score", category: "Obstetrics" },
@@ -176,6 +181,7 @@ const calculatorMetadata = [
   { screen: "HELLPSyndromeRisk", name: "HELLP Syndrome Risk", category: "Obstetrics" },
   { screen: "PreeclampsiaRisk", name: "Preeclampsia Risk", category: "Obstetrics" },
   { screen: "VBACRiskCalculator", name: "VBAC Risk Calculator", category: "Obstetrics" },
+  // Pulmonary
   { screen: "ACTCalculator", name: "ACT Calculator", category: "Pulmonary" },
   { screen: "BODECalculator", name: "BODE Index", category: "Pulmonary" },
   { screen: "CATCalculator", name: "CAT Calculator", category: "Pulmonary" },
@@ -187,6 +193,7 @@ const calculatorMetadata = [
   { screen: "PEFRCalculator", name: "PEFR Calculator", category: "Pulmonary" },
   { screen: "PERCCalculator", name: "PERC Calculator", category: "Pulmonary" },
   { screen: "PSICalculator", name: "PSI Calculator", category: "Pulmonary" },
+  // Orthopedics
   { screen: "ConstantMurleyScore", name: "Constant-Murley Score", category: "Orthopedics" },
   { screen: "FRAC", name: "FRAC Score", category: "Orthopedics" },
   { screen: "HarrisHipScore", name: "Harris Hip Score", category: "Orthopedics" },
@@ -194,6 +201,7 @@ const calculatorMetadata = [
   { screen: "OsteoporosisRiskCalculator", name: "Osteoporosis Risk", category: "Orthopedics" },
   { screen: "OswestryDisabilityIndex", name: "Oswestry Disability Index", category: "Orthopedics" },
   { screen: "WOMACCalculator", name: "WOMAC Calculator", category: "Orthopedics" },
+  // Cardiovascular
   { screen: "ASCVD", name: "ASCVD Risk", category: "Cardiovascular" },
   { screen: "CHA2DS2VASc", name: "CHA2DS2-VASc Score", category: "Cardiovascular" },
   { screen: "Framingham", name: "Framingham Risk", category: "Cardiovascular" },
@@ -202,16 +210,51 @@ const calculatorMetadata = [
   { screen: "TIMI", name: "TIMI Score", category: "Cardiovascular" },
 ];
 
+// Tab Navigator for Calculator Categories
 function CalculatorsTabNavigator({ route }) {
   const { allCalculators } = route.params;
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          switch (route.name) {
+            case "General":
+              iconName = "body";
+              break;
+            case "Gastroenterology":
+              iconName = "nutrition";
+              break;
+            case "ICU":
+              iconName = "medkit";
+              break;
+            case "Nephrology":
+              iconName = "water";
+              break;
+            case "Neurology":
+              iconName = "brain";
+              break;
+            case "Obstetrics":
+              iconName = "woman";
+              break;
+            case "Pulmonary":
+              iconName = "lungs";
+              break;
+            case "Orthopedics":
+              iconName = "fitness";
+              break;
+            case "Cardiovascular":
+              iconName = "heart";
+              break;
+            default:
+              iconName = "help";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#007AFF",
+        tabBarInactiveTintColor: "gray",
         tabBarScrollEnabled: true,
-        tabBarIndicatorStyle: { backgroundColor: "#007AFF" },
-        tabBarLabelStyle: { fontSize: 12, fontWeight: "600" },
-        tabBarStyle: { backgroundColor: "#FFF" },
-      }}
+      })}
     >
       <Tab.Screen
         name="General"
@@ -219,65 +262,73 @@ function CalculatorsTabNavigator({ route }) {
         initialParams={{ allCalculators }}
         options={{ title: "General" }}
       />
-      <Tab.Screen
-        name="Gastroenterology"
-        component={GastroenterologyCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: "Gastro" }}
-      />
+{/*
+<Tab.Screen
+  name="Gastroenterology"
+  component={GastroenterologyCalculators}
+  initialParams={{ allCalculators }}
+  options={{ title: "Gastroenterology" }}
+/>
+*/}
+{/*}
       <Tab.Screen
         name="ICU"
         component={ICUCalculators}
         initialParams={{ allCalculators }}
         options={{ title: "ICU" }}
       />
+      */}
       <Tab.Screen
         name="Nephrology"
         component={NephrologyCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "Nephro" }}
+        options={{ title: "Nephrology" }}
       />
       <Tab.Screen
         name="Neurology"
         component={NeurologyCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "Neuro" }}
+        options={{ title: "Neurology" }}
       />
       <Tab.Screen
         name="Obstetrics"
         component={ObstetricsCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "OB" }}
+        options={{ title: "Obstetrics" }}
       />
+      {/*
       <Tab.Screen
         name="Pulmonary"
         component={PulmonaryCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "Pulmo" }}
-      />
+        options={{ title: "Pulmonary" }}
+      />*/}
+      {/*
       <Tab.Screen
         name="Orthopedics"
         component={OrthopedicsCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "Ortho" }}
-      />
+        options={{ title: "Orthopedics" }}
+      />*/}
       <Tab.Screen
         name="Cardiovascular"
         component={CardiovascularCalculators}
         initialParams={{ allCalculators }}
-        options={{ title: "Cardio" }}
+        options={{ title: "Cardiovascular" }}
       />
     </Tab.Navigator>
   );
 }
 
+// Main Stack Navigator
 export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="ClinicalCalculators"
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false }} // Disable default header
       >
+        {/* Main Screen */}
         <Stack.Screen
           name="ClinicalCalculators"
           component={ClinicalCalculators}
@@ -293,11 +344,13 @@ export default function AppNavigator() {
           component={FavoritesCalculators}
           initialParams={{ allCalculators: calculatorMetadata }}
         />
+        {/* Tab Navigator for Categories */}
         <Stack.Screen
           name="Calculators"
           component={CalculatorsTabNavigator}
           initialParams={{ allCalculators: calculatorMetadata }}
         />
+        {/* General Calculators */}
         <Stack.Screen name="BMICalculator" component={BMICalculator} />
         <Stack.Screen name="BMRCalculator" component={BMRCalculator} />
         <Stack.Screen name="BodyFatPercentageCalculator" component={BodyFatPercentageCalculator} />
@@ -307,6 +360,7 @@ export default function AppNavigator() {
         <Stack.Screen name="IdealBodyWeightCalculator" component={IdealBodyWeightCalculator} />
         <Stack.Screen name="MifflinStJeorCalculator" component={MifflinStJeorCalculator} />
         <Stack.Screen name="WaistCircumferenceCalculator" component={WaistCircumferenceCalculator} />
+        {/* Gastroenterology Calculators */}
         <Stack.Screen name="AlvaradoScore" component={AlvaradoScore} />
         <Stack.Screen name="BISAPCalculator" component={BISAPCalculator} />
         <Stack.Screen name="BarrettsEsophagusRisk" component={BarrettsEsophagusRisk} />
@@ -318,9 +372,11 @@ export default function AppNavigator() {
         <Stack.Screen name="GERDQualityOfLife" component={GERDQualityOfLife} />
         <Stack.Screen name="GERDSeverityScore" component={GERDSeverityScore} />
         <Stack.Screen name="GIBleedingRisk" component={GIBleedingRisk} />
+        {/* ICU Calculators */}
         <Stack.Screen name="APACHE" component={APACHE} />
         <Stack.Screen name="QSOFAScoreCalculator" component={QSOFAScoreCalculator} />
         <Stack.Screen name="SOFACalculator" component={SOFACalculator} />
+        {/* Nephrology Calculators */}
         <Stack.Screen name="CKDEpiCalculator" component={CKDEpiCalculator} />
         <Stack.Screen name="ChronicKidneyDiseaseStageCalculator" component={ChronicKidneyDiseaseStageCalculator} />
         <Stack.Screen name="CreatinineClearanceCalculator" component={CreatinineClearanceCalculator} />
@@ -331,6 +387,7 @@ export default function AppNavigator() {
         <Stack.Screen name="NephroticSyndromeScore" component={NephroticSyndromeScore} />
         <Stack.Screen name="UricAcidCalculator" component={UricAcidCalculator} />
         <Stack.Screen name="UrineProteinToCreatinineRatio" component={UrineProteinToCreatinineRatio} />
+        {/* Neurology Calculators */}
         <Stack.Screen name="ABCD2Score" component={ABCD2Score} />
         <Stack.Screen name="AHASAScore" component={AHASAScore} />
         <Stack.Screen name="ApacheII" component={ApacheII} />
@@ -342,6 +399,7 @@ export default function AppNavigator() {
         <Stack.Screen name="EpilepsyRisk" component={EpilepsyRisk} />
         <Stack.Screen name="GAD7" component={GAD7} />
         <Stack.Screen name="GCS" component={GlasgowComaScale} />
+        {/* Obstetrics Calculators */}
         <Stack.Screen name="APGARScore" component={APGARScore} />
         <Stack.Screen name="AmnioticFluidIndex" component={AmnioticFluidIndex} />
         <Stack.Screen name="BishopScore" component={BishopScore} />
@@ -352,6 +410,7 @@ export default function AppNavigator() {
         <Stack.Screen name="HELLPSyndromeRisk" component={HELLPSyndromeRisk} />
         <Stack.Screen name="PreeclampsiaRisk" component={PreeclampsiaRisk} />
         <Stack.Screen name="VBACRiskCalculator" component={VBACRiskCalculator} />
+        {/* Pulmonary Calculators */}
         <Stack.Screen name="ACTCalculator" component={ACTCalculator} />
         <Stack.Screen name="BODECalculator" component={BODECalculator} />
         <Stack.Screen name="CATCalculator" component={CATCalculator} />
@@ -363,6 +422,7 @@ export default function AppNavigator() {
         <Stack.Screen name="PEFRCalculator" component={PEFRCalculator} />
         <Stack.Screen name="PERCCalculator" component={PERCCalculator} />
         <Stack.Screen name="PSICalculator" component={PSICalculator} />
+        {/* Orthopedics Calculators */}
         <Stack.Screen name="ConstantMurleyScore" component={ConstantMurleyScore} />
         <Stack.Screen name="FRAC" component={FRAC} />
         <Stack.Screen name="HarrisHipScore" component={HarrisHipScore} />
@@ -370,6 +430,7 @@ export default function AppNavigator() {
         <Stack.Screen name="OsteoporosisRiskCalculator" component={OsteoporosisRiskCalculator} />
         <Stack.Screen name="OswestryDisabilityIndex" component={OswestryDisabilityIndex} />
         <Stack.Screen name="WOMACCalculator" component={WOMACCalculator} />
+        {/* Cardiovascular Calculators */}
         <Stack.Screen name="ASCVD" component={ASCVD} />
         <Stack.Screen name="CHA2DS2VASc" component={CHA2DS2VASc} />
         <Stack.Screen name="Framingham" component={Framingham} />

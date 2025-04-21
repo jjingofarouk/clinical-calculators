@@ -2,6 +2,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+
+// Calculator category screens
 import GeneralCalculators from '../components/calculators/general/GeneralCalculators';
 import GastroenterologyCalculators from '../components/calculators/git/GastroenterologyCalculators';
 import ICUCalculators from '../components/calculators/icu/ICUCalculators';
@@ -15,85 +17,43 @@ import CardiovascularCalculators from '../components/calculators/cardiovascular/
 const Tab = createBottomTabNavigator();
 
 export default function CalculatorsTabNavigator({ route }) {
-  const { allCalculators } = route.params;
+  const allCalculators = route?.params?.allCalculators ?? [];
+
+  const getTabIcon = (routeName) => {
+    switch (routeName) {
+      case 'General': return 'body';
+      case 'Gastroenterology': return 'nutrition';
+      case 'ICU': return 'medkit';
+      case 'Nephrology': return 'water';
+      case 'Neurology': return 'pulse'; // using valid Ionicons fallback
+      case 'Obstetrics': return 'female';
+      case 'Pulmonary': return 'cloud'; // fallback for lungs
+      case 'Orthopedics': return 'walk'; // fallback for bone/ortho
+      case 'Cardiovascular': return 'heart';
+      default: return 'help-circle';
+    }
+  };
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          switch (route.name) {
-            case 'General': iconName = 'body'; break;
-            case 'Gastroenterology': iconName = 'nutrition'; break;
-            case 'ICU': iconName = 'medkit'; break;
-            case 'Nephrology': iconName = 'water'; break;
-            case 'Neurology': iconName = 'brain'; break;
-            case 'Obstetrics': iconName = 'woman'; break;
-            case 'Pulmonary': iconName = 'lungs'; break;
-            case 'Orthopedics': iconName = 'fitness'; break;
-            case 'Cardiovascular': iconName = 'heart'; break;
-            default: iconName = 'help';
-          }
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name={getTabIcon(route.name)} size={size} color={color} />
+        ),
         tabBarActiveTintColor: '#007AFF',
         tabBarInactiveTintColor: 'gray',
-        tabBarScrollEnabled: true,
+        headerShown: false,
       })}
     >
-      <Tab.Screen
-        name="General"
-        component={GeneralCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'General' }}
-      />
-      <Tab.Screen
-        name="Gastroenterology"
-        component={GastroenterologyCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Gastroenterology' }}
-      />
-      <Tab.Screen
-        name="ICU"
-        component={ICUCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'ICU' }}
-      />
-      <Tab.Screen
-        name="Nephrology"
-        component={NephrologyCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Nephrology' }}
-      />
-      <Tab.Screen
-        name="Neurology"
-        component={NeurologyCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Neurology' }}
-      />
-      <Tab.Screen
-        name="Obstetrics"
-        component={ObstetricsCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Obstetrics' }}
-      />
-      <Tab.Screen
-        name="Pulmonary"
-        component={PulmonaryCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Pulmonary' }}
-      />
-      <Tab.Screen
-        name="Orthopedics"
-        component={OrthopedicsCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Orthopedics' }}
-      />
-      <Tab.Screen
-        name="Cardiovascular"
-        component={CardiovascularCalculators}
-        initialParams={{ allCalculators }}
-        options={{ title: 'Cardiovascular' }}
-      />
+      <Tab.Screen name="General" component={GeneralCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Gastroenterology" component={GastroenterologyCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="ICU" component={ICUCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Nephrology" component={NephrologyCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Neurology" component={NeurologyCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Obstetrics" component={ObstetricsCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Pulmonary" component={PulmonaryCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Orthopedics" component={OrthopedicsCalculators} initialParams={{ allCalculators }} />
+      <Tab.Screen name="Cardiovascular" component={CardiovascularCalculators} initialParams={{ allCalculators }} />
     </Tab.Navigator>
   );
 }

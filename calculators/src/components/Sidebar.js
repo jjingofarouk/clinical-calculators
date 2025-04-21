@@ -30,7 +30,7 @@ export default function Sidebar({ navigation, activeRoute = 'Main' }) {
         {
           href: 'ICU',
           label: 'ICU',
-          icon: 'medkit',
+          icon: 'medical-bag',
           category: 'ICU',
         },
         {
@@ -42,7 +42,7 @@ export default function Sidebar({ navigation, activeRoute = 'Main' }) {
         {
           href: 'Orthopedics',
           label: 'Orthopedics',
-          icon: 'fitness',
+          icon: 'bone',
           category: 'Orthopedics',
         },
       ],

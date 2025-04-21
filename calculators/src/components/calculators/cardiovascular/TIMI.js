@@ -153,9 +153,10 @@ const TIMICalculator = () => {
             style={styles.checkboxContainer}
             onPress={() => handleRiskFactorToggle(factor)}
           >
-            <Text style={styles.checkboxLabel}>
-              {formValues.cardiacRiskFactors.includes(factor) ? '☑' : '☐'} {factor}
-            </Text>
+<Text style={styles.checkboxLabel}>
+  {`${formValues.cardiacRiskFactors.includes(factor) ? '☑' : '☐'} ${factor}`}
+</Text>
+
           </TouchableOpacity>
         )
       )}

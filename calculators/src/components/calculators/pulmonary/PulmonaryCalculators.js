@@ -15,7 +15,7 @@ import BODECalculator from "./BODECalculator";
 import ACTCalculator from "./ACTCalculator";
 import CATCalculator from "./CATCalculator";
 import PEFRCalculator from "./PEFRCalculator";
-import MMRC_Calculator from "./MMRC_Calculator";
+import MMRC_Calculator from "./MMRCCalculator";
 
 const PulmonaryCalculators = () => {
   const calculators = [

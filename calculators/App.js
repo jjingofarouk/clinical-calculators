@@ -1,7 +1,7 @@
 // src/App.js
 import React from 'react';
-import AppNavigator from './navigation/AppNavigator';
-import { persistNavigationState, loadNavigationState } from './utils/navigationPersistence';
+import AppNavigator from './src/navigation/AppNavigator';
+import { persistNavigationState, loadNavigationState } from './src/utils/navigationPersistence';
 
 export default function App() {
   return (

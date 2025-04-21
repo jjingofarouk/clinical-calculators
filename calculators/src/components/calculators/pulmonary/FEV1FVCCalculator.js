@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 
-const FEV1FVC_Calculator = () => {
+const FEV1FVCCalculator = () => {
   const [fev1, setFEV1] = useState("");
   const [fvc, setFVC] = useState("");
   const [ratio, setRatio] = useState("");
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FEV1FVC_Calculator;
+export default FEV1FVCCalculator;

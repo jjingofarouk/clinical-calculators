@@ -5,133 +5,59 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  TextInput,
   SafeAreaView,
   StatusBar,
-  Platform,
+  ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 // Calculator categories with metadata
 const calculatorCategories = [
-  {
-    id: "general",
-    label: "General",
-    icon: "calculator",
-    color: "#2ECC71",
-    description: "BMI, BMR, caloric needs",
-    screen: "GeneralCalculators",
-  },
-  {
-    id: "cardiovascular",
-    label: "Cardiovascular",
-    icon: "heart-pulse",
-    color: "#FF4757",
-    description: "ASCVD, CHADSVASC, HASBLED",
-    screen: "CardiovascularCalculators",
-  },
-  {
-    id: "neurology",
-    label: "Neurology",
-    icon: "brain",
-    color: "#5352ED",
-    description: "GCS, NIHSS, mRS",
-    screen: "NeurologyCalculators",
-  },
-  {
-    id: "pulmonary",
-    label: "Pulmonary",
-    icon: "lungs",
-    color: "#1E90FF",
-    description: "BODE, CURB-65, asthma",
-    screen: "PulmonaryCalculators",
-  },
-  {
-    id: "gastrointestinal",
-    label: "Gastroenterology",
-    icon: "stomach",
-    color: "#FF6B6B",
-    description: "Alvarado, Child-Pugh, FIB-4",
-    screen: "GastroenterologyCalculators",
-  },
-  {
-    id: "obstetrics",
-    label: "Obstetrics",
-    icon: "baby-face-outline",
-    color: "#FF9FF3",
-    description: "Due date, Bishop, Apgar",
-    screen: "ObstetricsCalculators",
-  },
-  {
-    id: "orthopedics",
-    label: "Orthopedics",
-    icon: "bone",
-    color: "#FFA502",
-    description: "Fracture risk, Ottawa rules",
-    screen: "OrthopedicsCalculators",
-  },
-  {
-    id: "nephrology",
-    label: "Nephrology",
-    icon: "water",
-    color: "#747D8C",
-    description: "eGFR, creatinine, KDIGO",
-    screen: "NephrologyCalculators",
-  },
+  { id: "general", label: "General", icon: "calculator", color: "#2ECC71", description: "BMI, BMR, caloric needs", screen: "General" },
+  { id: "cardiovascular", label: "Cardiovascular", icon: "heart-pulse", color: "#FF4757", description: "ASCVD, CHADSVASC, HASBLED", screen: "Cardiovascular" },
+  { id: "neurology", label: "Neurology", icon: "brain", color: "#5352ED", description: "GCS, NIHSS, mRS", screen: "Neurology" },
+  { id: "pulmonary", label: "Pulmonary", icon: "lungs", color: "#1E90FF", description: "BODE, CURB-65, asthma", screen: "Pulmonary" },
+  { id: "gastroenterology", label: "Gastroenterology", icon: "stomach", color: "#FF6B6B", description: "Alvarado, Child-Pugh, FIB-4", screen: "Gastroenterology" },
+  { id: "obstetrics", label: "Obstetrics", icon: "baby-face-outline", color: "#FF9FF3", description: "Due date, Bishop, Apgar", screen: "Obstetrics" },
+  { id: "orthopedics", label: "Orthopedics", icon: "bone", color: "#FFA502", description: "Fracture risk, Ottawa rules", screen: "Orthopedics" },
+  { id: "nephrology", label: "Nephrology", icon: "water", color: "#747D8C", description: "eGFR, creatinine, KDIGO", screen: "Nephrology" },
+  { id: "icu", label: "ICU", icon: "medkit", color: "#E84393", description: "APACHE, SOFA, qSOFA", screen: "ICU" },
 ];
 
-// All calculators for search
-const allCalculators = [
-  // General
-  { name: "BMR Calculator", category: "General", screen: "BMRCalculator" },
-  { name: "Body Fat Percentage", category: "General", screen: "BodyFatPercentageCalculator" },
-  { name: "Caloric Needs", category: "General", screen: "CaloricNeedsCalculator" },
-  { name: "Energy Expenditure", category: "General", screen: "EnergyExpenditureCalculator" },
-  { name: "Harris-Benedict", category: "General", screen: "HarrisBenedictCalculator" },
-  { name: "Ideal Body Weight", category: "General", screen: "IdealBodyWeightCalculator" },
-  { name: "Mifflin-St Jeor", category: "General", screen: "MifflinStJeorCalculator" },
-  { name: "Waist Circumference", category: "General", screen: "WaistCircumferenceCalculator" },
-  // Cardiovascular
-  { name: "ASCVD Risk", category: "Cardiovascular", screen: "ASCVDCalculator" },
-  { name: "CHADSVASC Score", category: "Cardiovascular", screen: "CHADSVASCCalculator" },
-  { name: "HASBLED Score", category: "Cardiovascular", screen: "HASBLEDCalculator" },
-  { name: "NYHA Classification", category: "Cardiovascular", screen: "NYHAClassification" },
-  // Neurology
-  { name: "Glasgow Coma Scale", category: "Neurology", screen: "GlasgowComaScale" },
-  { name: "NIH Stroke Scale", category: "Neurology", screen: "NIHStrokeScale" },
-  { name: "Modified Rankin Scale", category: "Neurology", screen: "ModifiedRankinScale" },
-  // Pulmonary
-  { name: "Asthma Severity Index", category: "Pulmonary", screen: "AsthmaSeverityIndex" },
-  { name: "BODE Index", category: "Pulmonary", screen: "BODEIndex" },
-  { name: "CURB-65 Score", category: "Pulmonary", screen: "CURB65Calculator" },
-  // Gastroenterology
-  { name: "Alvarado Score", category: "Gastroenterology", screen: "AlvaradoScore" },
-  { name: "Barrett's Esophagus Risk", category: "Gastroenterology", screen: "BarrettsEsophagusRisk" },
-  { name: "BISAP Score", category: "Gastroenterology", screen: "BISAPCalculator" },
-  { name: "Bowel Cancer Screening", category: "Gastroenterology", screen: "BowelCancerScreening" },
-  { name: "Bristol Stool Chart", category: "Gastroenterology", screen: "BristolStoolChart" },
-  { name: "Child-Pugh Score", category: "Gastroenterology", screen: "ChildPughScore" },
-  { name: "Crohn's Disease Activity", category: "Gastroenterology", screen: "CrohnsDiseaseActivity" },
-  { name: "FIB-4 Score", category: "Gastroenterology", screen: "FIB4Calculator" },
-  // Obstetrics
-  { name: "Due Date Calculator", category: "Obstetrics", screen: "DueDateCalculator" },
-  { name: "Bishop Score", category: "Obstetrics", screen: "BishopScore" },
-  { name: "Apgar Score", category: "Obstetrics", screen: "ApgarScore" },
-  // Orthopedics
-  { name: "Fracture Risk Assessment", category: "Orthopedics", screen: "FractureRiskAssessment" },
-  { name: "Ottawa Ankle Rules", category: "Orthopedics", screen: "OttawaAnkleRules" },
-  { name: "Knee Injury Score", category: "Orthopedics", screen: "KneeInjuryScore" },
-  // Nephrology
-  { name: "eGFR Calculator", category: "Nephrology", screen: "EGFRCalculator" },
-  { name: "Creatinine Clearance", category: "Nephrology", screen: "CreatinineClearance" },
-  { name: "KDIGO Stage", category: "Nephrology", screen: "KDIGOStage" },
-];
-
-const ClinicalCalculators = () => {
+// Custom Header Component
+const CustomHeader = () => {
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = useState("");
+
+  return (
+    <View style={styles.header}>
+      <Text style={styles.headerTitle}>Clinical Calculators</Text>
+      <View style={styles.headerButtons}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SearchCalculators")}
+          style={styles.headerButton}
+          accessible
+          accessibilityLabel="Search calculators"
+        >
+          <MaterialCommunityIcons name="magnify" size={24} color="#2F3542" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("FavoritesCalculators")}
+          style={styles.headerButton}
+          accessible
+          accessibilityLabel="Favorite calculators"
+        >
+          <MaterialCommunityIcons name="star" size={24} color="#FFD700" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const ClinicalCalculators = ({ route }) => {
+  const { allCalculators } = route.params; // Dynamic list from AppNavigator
+  const navigation = useNavigation();
   const [recentCalculators, setRecentCalculators] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
@@ -160,7 +86,10 @@ const ClinicalCalculators = () => {
       await AsyncStorage.setItem("recentCalculators", JSON.stringify(updatedRecents));
       setRecentCalculators(updatedRecents);
 
-      navigation.navigate(isCategory ? item.screen : item.screen);
+      navigation.navigate(isCategory ? "Calculators" : item.screen, {
+        screen: isCategory ? item.screen : undefined,
+        params: { allCalculators },
+      });
     } catch (error) {
       console.error("Error navigating:", error);
     }
@@ -178,23 +107,18 @@ const ClinicalCalculators = () => {
     }
   };
 
-  const filteredItems = searchQuery
-    ? allCalculators.filter(
-        (calc) =>
-          calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          calc.category.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : calculatorCategories;
-
   const renderItem = ({ item }) => {
     const isCategory = !item.category;
+    const category = isCategory
+      ? calculatorCategories.find((cat) => cat.id === item.id)
+      : calculatorCategories.find((cat) => cat.label.toLowerCase() === item.category.toLowerCase());
     return (
       <TouchableOpacity
-        style={[styles.card, { backgroundColor: item.color + "15" }]}
+        style={[styles.card, { backgroundColor: category.color + "15" }]}
         onPress={() => handleNavigation(item, isCategory)}
       >
         <View style={styles.cardContent}>
-          <MaterialCommunityIcons name={item.icon} size={28} color={item.color} />
+          <MaterialCommunityIcons name={category.icon} size={28} color={category.color} />
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>{isCategory ? item.label : item.name}</Text>
             <Text style={styles.cardDescription}>
@@ -230,51 +154,20 @@ const ClinicalCalculators = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      <View style={styles.header}>
-        <Text style={styles.title}>Clinical Calculators</Text>
-        <View style={styles.searchContainer}>
-          <MaterialCommunityIcons
-            name="magnify"
-            size={20}
-            color="#747D8C"
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search calculators..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            accessible
-            accessibilityLabel="Search calculators"
-          />
-        </View>
-      </View>
-      <FlatList
-        data={[{ id: "main" }]}
-        renderItem={() =>
-          searchQuery ? (
-            renderSection("Search Results", filteredItems, true)
-          ) : (
-            <>
-              {favorites.length > 0 &&
-                renderSection(
-                  "Favorites",
-                  allCalculators.filter((calc) => favorites.includes(calc.screen))
-                )}
-              {recentCalculators.length > 0 &&
-                renderSection(
-                  "Recent",
-                  allCalculators.filter((calc) =>
-                    recentCalculators.includes(calc.screen)
-                  )
-                )}
-              {renderSection("Categories", calculatorCategories, true)}
-            </>
-          )
-        }
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.container}
-      />
+      <CustomHeader />
+      <ScrollView contentContainerStyle={styles.container}>
+        {favorites.length > 0 &&
+          renderSection(
+            "Favorites",
+            allCalculators.filter((calc) => favorites.includes(calc.screen))
+          )}
+        {recentCalculators.length > 0 &&
+          renderSection(
+            "Recent",
+            allCalculators.filter((calc) => recentCalculators.includes(calc.screen))
+          )}
+        {renderSection("Categories", calculatorCategories, true)}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -285,32 +178,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: 16,
     backgroundColor: "#FFF",
     borderBottomWidth: 1,
     borderBottomColor: "#F1F2F6",
   },
-  title: {
-    fontSize: 24,
+  headerTitle: {
+    fontSize: 20,
     fontWeight: "bold",
     color: "#2F3542",
-    marginBottom: 12,
   },
-  searchContainer: {
+  headerButtons: {
     flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F1F2F6",
-    borderRadius: 8,
-    paddingHorizontal: 12,
   },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    fontSize: 16,
-    color: "#2F3542",
+  headerButton: {
+    marginLeft: 16,
   },
   container: {
     padding: 16,

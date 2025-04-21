@@ -70,7 +70,7 @@ const SearchCalculators = ({ route }) => {
   };
 
   const renderCalculator = ({ item }) => {
-    const { icon, color } = getIcon RheinPulseIcon(item.category);
+    const { icon, color } = getIconAndColor(item.category);
     return (
       <TouchableOpacity
         style={styles.card}
@@ -83,8 +83,9 @@ const SearchCalculators = ({ route }) => {
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>{item.name}</Text>
             <Text style={styles.cardCategory}>{item.category}</Text>
-          </View>
-        </TouchableOpacity>
+            </View>
+            </View>
+            </TouchableOpacity>
       );
     };
 

@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   FlatList,
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-// All calculators for search
+// All calculators for favorites
 const allCalculators = [
   // General
   { name: "BMR Calculator", category: "General", screen: "BMRCalculator", icon: "calculator" },
@@ -59,19 +59,42 @@ const allCalculators = [
   { name: "KDIGO Stage", category: "Nephrology", screen: "KDIGOStage", icon: "water" },
 ];
 
-const SearchCalculators = () => {
+const FavoritesCalculators = () => {
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [favorites, setFavorites] = useState([]);
 
-  const filteredCalculators = allCalculators.filter(
-    (calc) =>
-      calc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      calc.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    loadFavorites();
+  }, []);
+
+  const loadFavorites = async () => {
+    try {
+      const favoriteData = await AsyncStorage.getItem("favoriteCalculators");
+      if (favoriteData) {
+        setFavorites(JSON.parse(favoriteData));
+      }
+    } catch (error) {
+      console.error("Error loading favorites:", error);
+    }
+  };
+
+  const toggleFavorite = async (calculator) => {
+    try {
+      const updatedFavorites = favorites.includes(calculator.screen)
+        ? favorites.filter((fav) => fav !== calculator.screen)
+        : [...favorites, calculator.screen];
+      await AsyncStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
+      setFavorites(updatedFavorites);
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+    }
+  };
 
   const handleNavigation = (calculator) => {
     navigation.navigate(calculator.screen);
   };
+
+  const favoriteCalculators = allCalculators.filter((calc) => favorites.includes(calc.screen));
 
   const renderCalculator = ({ item }) => (
     <TouchableOpacity
@@ -81,11 +104,14 @@ const SearchCalculators = () => {
       accessibilityLabel={`${item.name} in ${item.category}`}
     >
       <View style={styles.cardContent}>
-        <MaterialCommunityIcons name={item.icon} size=28 color="#2F3542" />
+        <MaterialCommunityIcons name={item.icon} size={28} color="#2F3542" />
         <View style={styles.cardText}>
           <Text style={styles.cardTitle}>{item.name}</Text>
           <Text style={styles.cardCategory}>{item.category}</Text>
         </View>
+        <TouchableOpacity onPress={() => toggleFavorite(item)}>
+          <MaterialCommunityIcons name="star" size={24} color="#FFD700" />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -94,32 +120,15 @@ const SearchCalculators = () => {
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       <View style={styles.header}>
-        <Text style={styles.title}>Search Calculators</Text>
-        <View style={styles.searchContainer}>
-          <MaterialCommunityIcons
-            name="magnify"
-            size={20}
-            color="#747D8C"
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search calculators..."
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            autoFocus
-            accessible
-            accessibilityLabel="Search calculators input"
-          />
-        </View>
+        <Text style={styles.title}>Favorite Calculators</Text>
       </View>
       <FlatList
-        data={filteredCalculators}
+        data={favoriteCalculators}
         renderItem={renderCalculator}
         keyExtractor={(item) => item.screen}
         contentContainerStyle={styles.container}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No calculators found</Text>
+          <Text style={styles.emptyText}>No favorite calculators yet</Text>
         }
       />
     </SafeAreaView>
@@ -141,23 +150,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#2F3542",
-    marginBottom: 12,
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F1F2F6",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-  },
-  searchIcon: {
-    marginRight: 8,
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    fontSize: 16,
-    color: "#2F3542",
   },
   container: {
     padding: 16,
@@ -166,6 +158,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
+     marginBottom: 12,
     backgroundColor: "#FFF",
     elevation: 2,
     shadowColor: "#000",
@@ -176,6 +169,7 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   cardText: {
     flex: 1,
@@ -199,4 +193,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchCalculators;
+export default FavoritesCalculators;

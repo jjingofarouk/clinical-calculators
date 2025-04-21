@@ -64,7 +64,6 @@ import AHASAScore from '../components/calculators/neurology/AHASAScore';
 import ApacheII from '../components/calculators/neurology/ApacheII';
 import CHADSVASc from '../components/calculators/neurology/CHADSVASc';
 import CheckBox from '../components/calculators/neurology/CheckBox';
-import CheckboxCopy from '../components/calculators/neurology/CheckboxCopy';
 import DenverII from '../components/calculators/neurology/DenverII';
 import EDSS from '../components/calculators/neurology/EDSS';
 import EQ5D from '../components/calculators/neurology/EQ5D';
@@ -229,7 +228,6 @@ export default function AppNavigator() {
         <Stack.Screen name="ApacheII" component={ApacheII} options={{ title: 'Apache II Score' }} />
         <Stack.Screen name="CHADSVASc" component={CHADSVASc} options={{ title: 'CHA2DS2-VASc Score' }} />
         <Stack.Screen name="CheckBox" component={CheckBox} options={{ title: 'CheckBox' }} />
-        <Stack.Screen name="CheckboxCopy" component={CheckboxCopy} options={{ title: 'Checkbox Copy' }} />
         <Stack.Screen name="DenverII" component={DenverII} options={{ title: 'Denver II' }} />
         <Stack.Screen name="EDSS" component={EDSS} options={{ title: 'EDSS Score' }} />
         <Stack.Screen name="EQ5D" component={EQ5D} options={{ title: 'EQ-5D Score' }} />

@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // Import calculator components (kept from original)
-import CardiovascularCalculators from "../../../../cardiovascular/CardiovascularCalculators";
+import CardiovascularCalculators from "./cardiovascular/CardiovascularCalculators";
 import NeurologyCalculators from "./neurology/NeurologyCalculators";
 import PulmonaryCalculators from "./pulmonary/PulmonaryCalculators";
 import GastroenterologyCalculators from "./git/GastroenterologyCalculators";

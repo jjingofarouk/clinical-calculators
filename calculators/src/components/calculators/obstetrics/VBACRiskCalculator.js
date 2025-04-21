@@ -10,7 +10,7 @@ import {
   Modal,
   Dimensions,
 } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect';
+import CustomSelect from '../../../utils/CustomSelect';
 
 const { width } = Dimensions.get('window');
 

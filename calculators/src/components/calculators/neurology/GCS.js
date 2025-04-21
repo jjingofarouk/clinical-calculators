@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect';
+import CustomSelect from '../../../utils/CustomSelect';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export const GlasgowComaScale = () => {

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect';
+import CustomSelect from '../../../utils/CustomSelect';
 
 const MMRCCalculator = () => {
   const [score, setScore] = useState('');

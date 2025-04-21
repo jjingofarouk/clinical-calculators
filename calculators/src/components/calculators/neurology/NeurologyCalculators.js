@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput } from "react-native";
-import { GlasgowComaScale } from "./GCS";
+import GlasgowComaScale from "./GCS";
 import NIHStrokeScale from './NIHStrokeScale';
 import { PHQ9 } from './PHQ9';
 import { GAD7 } from './GAD7';

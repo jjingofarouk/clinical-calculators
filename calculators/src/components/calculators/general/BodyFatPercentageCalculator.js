@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect'; // Import your custom select component
+import CustomSelect from '../../../utils/CustomSelect'; // Import your custom select component
 
 const BodyFatPercentageCalculator = () => {
   const [waist, setWaist] = useState('');

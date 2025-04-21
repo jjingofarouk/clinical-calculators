@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabsNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import { Ionicons } from '@expo/vector-icons';
 
 // Main screen
@@ -60,16 +61,16 @@ import UrineProteinToCreatinineRatio from '../components/calculators/nephrology/
 
 // Neurology calculators
 import ABCD2Score from '../components/calculators/neurology/ABCD2Score';
-import AHASAScore from '../components/calculators/neurology/AHASAScore';
+import { AHASAScore } from '../components/calculators/neurology/AHASAScore';
 import ApacheII from '../components/calculators/neurology/ApacheII';
-import CHADSVASc from '../components/calculators/neurology/CHADSVASc';
+import { CHADSVASc } from '../components/calculators/neurology/CHADSVASc';
 import CheckBox from '../components/calculators/neurology/CheckBox';
-import DenverII from '../components/calculators/neurology/DenverII';
-import EDSS from '../components/calculators/neurology/EDSS';
+import { DenverII } from '../components/calculators/neurology/DenverII';
+import { EDSS } from '../components/calculators/neurology/EDSS';
 import EQ5D from '../components/calculators/neurology/EQ5D';
-import EpilepsyRisk from '../components/calculators/neurology/EpilepsyRisk';
-import GAD7 from '../components/calculators/neurology/GAD7';
-import GCS from '../components/calculators/neurology/GCS';
+import { EpilepsyRisk } from '../components/calculators/neurology/EpilepsyRisk';
+import { GAD7 } from '../components/calculators/neurology/GAD7';
+import GlasgowComaScale  from '../components/calculators/neurology/GCS';
 
 // Obstetrics calculators
 import APGARScore from '../components/calculators/obstetrics/APGARScore';
@@ -112,14 +113,13 @@ import CHA2DS2VASc from '../components/calculators/cardiovascular/CHA2DS2VASc';
 import Framingham from '../components/calculators/cardiovascular/Framingham';
 import GRACE from '../components/calculators/cardiovascular/GRACE';
 import HASBLED from '../components/calculators/cardiovascular/HASBLED';
-import OtherCardio from '../components/calculators/cardiovascular/OtherCardio';
 import TIMI from '../components/calculators/cardiovascular/TIMI';
 
 
 
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabsNavigator();
+const Tab = createBottomTabNavigator();
 
 // Tab Navigator for Calculator Categories
 function CalculatorsTabNavigator() {
@@ -233,7 +233,7 @@ export default function AppNavigator() {
         <Stack.Screen name="EQ5D" component={EQ5D} options={{ title: 'EQ-5D Score' }} />
         <Stack.Screen name="EpilepsyRisk" component={EpilepsyRisk} options={{ title: 'Epilepsy Risk' }} />
         <Stack.Screen name="GAD7" component={GAD7} options={{ title: 'GAD-7 Score' }} />
-        <Stack.Screen name="GCS" component={GCS} options={{ title: 'Glasgow Coma Scale' }} />
+        <Stack.Screen name="GCS" component={GlasgowComaScale} options={{ title: 'Glasgow Coma Scale' }} />
         {/* Obstetrics Calculators */}
         <Stack.Screen name="APGARScore" component={APGARScore} options={{ title: 'APGAR Score' }} />
         <Stack.Screen name="AmnioticFluidIndex" component={AmnioticFluidIndex} options={{ title: 'Amniotic Fluid Index' }} />
@@ -245,7 +245,7 @@ export default function AppNavigator() {
         <Stack.Screen name="HELLPSyndromeRisk" component={HELLPSyndromeRisk} options={{ title: 'HELLP Syndrome Risk' }} />
         <Stack.Screen name="PreeclampsiaRisk" component={PreeclampsiaRisk} options={{ title: 'Preeclampsia Risk' }} />
         <Stack.Screen name="VBACRiskCalculator" component={VBACRiskCalculator} options={{ title: 'VBAC Risk Calculator' }} />
-        {/* Pulmonary Calculators */}
+
         <Stack.Screen name="ACTCalculator" component={ACTCalculator} options={{ title: 'ACT Calculator' }} />
         <Stack.Screen name="BODECalculator" component={BODECalculator} options={{ title: 'BODE Index' }} />
         <Stack.Screen name="CATCalculator" component={CATCalculator} options={{ title: 'CAT Calculator' }} />
@@ -257,16 +257,12 @@ export default function AppNavigator() {
         <Stack.Screen name="PEFRCalculator" component={PEFRCalculator} options={{ title: 'PEFR Calculator' }} />
         <Stack.Screen name="PERCCalculator" component={PERCCalculator} options={{ title: 'PERC Calculator' }} />
         <Stack.Screen name="PSICalculator" component={PSICalculator} options={{ title: 'PSI Calculator' }} />
-        
-        // Add to Stack.Navigator in src/navigation/AppNavigator.js
-<Stack.Screen name="ASCVD" component={ASCVD} options={{ title: 'ASCVD Risk' }} />
+        <Stack.Screen name="ASCVD" component={ASCVD} options={{ title: 'ASCVD Risk' }} />
 <Stack.Screen name="CHA2DS2VASc" component={CHA2DS2VASc} options={{ title: 'CHA2DS2-VASc Score' }} />
 <Stack.Screen name="Framingham" component={Framingham} options={{ title: 'Framingham Risk' }} />
 <Stack.Screen name="GRACE" component={GRACE} options={{ title: 'GRACE Score' }} />
 <Stack.Screen name="HASBLED" component={HASBLED} options={{ title: 'HAS-BLED Score' }} />
-<Stack.Screen name="OtherCardio" component={OtherCardio} options={{ title: 'Other Cardio' }} />
 <Stack.Screen name="TIMI" component={TIMI} options={{ title: 'TIMI Score' }} />
-
 
         {/* Orthopedics Calculators */}
         <Stack.Screen name="ConstantMurleyScore" component={ConstantMurleyScore} options={{ title: 'Constant-Murley Score' }} />

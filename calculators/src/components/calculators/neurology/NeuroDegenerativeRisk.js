@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import CustomSelect from "../../../../utils/CustomSelect";  // Make sure to import CustomSelect
+import CustomSelect from "../../../utils/CustomSelect";  // Make sure to import CustomSelect
 
 export const NeuroDegenerativeRisk = () => {
   const [age, setAge] = useState("40");

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect'; // Assuming CustomSelect is in the same directory
+import CustomSelect from '../../../utils/CustomSelect'; // Assuming CustomSelect is in the same directory
 
 const RockallScore = () => {
   const [clinicalData, setClinicalData] = useState({

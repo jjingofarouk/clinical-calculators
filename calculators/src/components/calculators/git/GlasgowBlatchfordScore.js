@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import CustomSelect from '../../../../utils/CustomSelect'; // Using the provided custom select
+import CustomSelect from '../../../utils/CustomSelect'; // Using the provided custom select
 
 const GlasgowBlatchfordScore = () => {
   // Enhanced state management

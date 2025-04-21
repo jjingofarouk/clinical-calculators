@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
-import CustomSelect from "../../../../utils/CustomSelect";
+import CustomSelect from "../../../utils/CustomSelect";
 
 const BishopScore = () => {
   const [dilation, setDilation] = useState("");

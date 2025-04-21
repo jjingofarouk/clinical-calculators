@@ -1,3 +1,4 @@
+// ClinicalCalculators.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -8,12 +9,12 @@ import {
   SafeAreaView,
   StatusBar,
   ScrollView,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-// Calculator categories with metadata
 const calculatorCategories = [
   { id: "general", label: "General", icon: "calculator", color: "#2ECC71", description: "BMI, BMR, caloric needs", screen: "General" },
   { id: "cardiovascular", label: "Cardiovascular", icon: "heart-pulse", color: "#FF4757", description: "ASCVD, CHADSVASC, HASBLED", screen: "Cardiovascular" },
@@ -26,7 +27,6 @@ const calculatorCategories = [
   { id: "icu", label: "ICU", icon: "medkit", color: "#E84393", description: "APACHE, SOFA, qSOFA", screen: "ICU" },
 ];
 
-// Custom Header Component
 const CustomHeader = () => {
   const navigation = useNavigation();
 
@@ -56,14 +56,27 @@ const CustomHeader = () => {
 };
 
 const ClinicalCalculators = ({ route }) => {
-  const { allCalculators } = route.params; // Dynamic list from AppNavigator
+  const { allCalculators } = route.params;
   const navigation = useNavigation();
   const [recentCalculators, setRecentCalculators] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCalculators, setFilteredCalculators] = useState([]);
 
   useEffect(() => {
     loadRecentsAndFavorites();
   }, []);
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = allCalculators.filter((calc) =>
+        calc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredCalculators(filtered);
+    } else {
+      setFilteredCalculators([]);
+    }
+  }, [searchQuery, allCalculators]);
 
   const loadRecentsAndFavorites = async () => {
     try {
@@ -156,17 +169,29 @@ const ClinicalCalculators = ({ route }) => {
       <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
       <CustomHeader />
       <ScrollView contentContainerStyle={styles.container}>
-        {favorites.length > 0 &&
-          renderSection(
-            "Favorites",
-            allCalculators.filter((calc) => favorites.includes(calc.screen))
-          )}
-        {recentCalculators.length > 0 &&
-          renderSection(
-            "Recent",
-            allCalculators.filter((calc) => recentCalculators.includes(calc.screen))
-          )}
-        {renderSection("Categories", calculatorCategories, true)}
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search calculators..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        {searchQuery ? (
+          renderSection("Search Results", filteredCalculators, true)
+        ) : (
+          <>
+            {favorites.length > 0 &&
+              renderSection(
+                "Favorites",
+                allCalculators.filter((calc) => favorites.includes(calc.screen))
+              )}
+            {recentCalculators.length > 0 &&
+              renderSection(
+                "Recent",
+                allCalculators.filter((calc) => recentCalculators.includes(calc.screen))
+              )}
+            {renderSection("Categories", calculatorCategories, true)}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -199,6 +224,13 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
+  },
+  searchInput: {
+    backgroundColor: "#F1F2F6",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
   },
   section: {
     marginBottom: 20,

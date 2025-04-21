@@ -106,6 +106,19 @@ import OsteoporosisRiskCalculator from '../components/calculators/ortho/Osteopor
 import OswestryDisabilityIndex from '../components/calculators/ortho/OswestryDisabilityIndex';
 import WOMACCalculator from '../components/calculators/ortho/WOMACCalculator';
 
+// Add to imports in src/navigation/AppNavigator.js
+import CardiovascularCalculators from '../components/calculators/cardiovascular/CardiovascularCalculators';
+import ASCVD from '../components/calculators/cardiovascular/ASCVD';
+import CHA2DS2VASc from '../components/calculators/cardiovascular/CHA2DS2VASc';
+import Framingham from '../components/calculators/cardiovascular/Framingham';
+import GRACE from '../components/calculators/cardiovascular/GRACE';
+import HASBLED from '../components/calculators/cardiovascular/HASBLED';
+import OtherCardio from '../components/calculators/cardiovascular/OtherCardio';
+import TIMI from '../components/calculators/cardiovascular/TIMI';
+
+
+
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabsNavigator();
 
@@ -159,6 +172,7 @@ function CalculatorsTabNavigator() {
       <Tab.Screen name="Obstetrics" component={ObstetricsCalculators} options={{ title: 'Obstetrics' }} />
       <Tab.Screen name="Pulmonary" component={PulmonaryCalculators} options={{ title: 'Pulmonary' }} />
       <Tab.Screen name="Orthopedics" component={OrthopedicsCalculators} options={{ title: 'Orthopedics' }} />
+      <Tab.Screen name="Cardiovascular" component={CardiovascularCalculators} options={{ title: 'Cardiovascular' }} />
     </Tab.Navigator>
   );
 }
@@ -245,6 +259,17 @@ export default function AppNavigator() {
         <Stack.Screen name="PEFRCalculator" component={PEFRCalculator} options={{ title: 'PEFR Calculator' }} />
         <Stack.Screen name="PERCCalculator" component={PERCCalculator} options={{ title: 'PERC Calculator' }} />
         <Stack.Screen name="PSICalculator" component={PSICalculator} options={{ title: 'PSI Calculator' }} />
+        
+        // Add to Stack.Navigator in src/navigation/AppNavigator.js
+<Stack.Screen name="ASCVD" component={ASCVD} options={{ title: 'ASCVD Risk' }} />
+<Stack.Screen name="CHA2DS2VASc" component={CHA2DS2VASc} options={{ title: 'CHA2DS2-VASc Score' }} />
+<Stack.Screen name="Framingham" component={Framingham} options={{ title: 'Framingham Risk' }} />
+<Stack.Screen name="GRACE" component={GRACE} options={{ title: 'GRACE Score' }} />
+<Stack.Screen name="HASBLED" component={HASBLED} options={{ title: 'HAS-BLED Score' }} />
+<Stack.Screen name="OtherCardio" component={OtherCardio} options={{ title: 'Other Cardio' }} />
+<Stack.Screen name="TIMI" component={TIMI} options={{ title: 'TIMI Score' }} />
+
+
         {/* Orthopedics Calculators */}
         <Stack.Screen name="ConstantMurleyScore" component={ConstantMurleyScore} options={{ title: 'Constant-Murley Score' }} />
         <Stack.Screen name="FRAC" component={FRAC} options={{ title: 'FRAC Score' }} />

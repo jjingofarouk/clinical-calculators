@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import { client } from './apollo';
 
 // Import Clinical Calculators Component
-import ClinicalCalculators from './src/components/ClinicalCalculators';
+import ClinicalCalculators from './src/ClinicalCalculators';
 
 export default function App() {
   return (

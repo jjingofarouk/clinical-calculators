@@ -1,13 +1,13 @@
 // App.js
 import React from 'react';
 import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
-import ClinicalCalculators from './src/components/calculators/ClinicalCalculators';
+import CardiovascularCalculators from './src/components/calculators/cardiovascular/CardiovascularCalculators';
 
 export default function App() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor="#004C54" />
-      <ClinicalCalculators />
+      <CardiovascularCalculators />
     </SafeAreaView>
   );
 }

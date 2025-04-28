@@ -1,17 +1,29 @@
-// src/App.js
-import 'react-native-gesture-handler'; // must be at the top
 import React from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import AppNavigator from './src/navigation/AppNavigator';
-import { persistNavigationState, loadNavigationState } from './src/utils/navigationPersistence';
+import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
+import { Provider } from 'react-redux';
+import store from './store';
+import { ApolloProvider } from '@apollo/client';
+import { client } from './apollo';
+
+// Import Clinical Calculators Component
+import ClinicalCalculators from './src/components/ClinicalCalculators';
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppNavigator
-        persistNavigationState={persistNavigationState}
-        loadNavigationState={loadNavigationState}
-      />
-    </GestureHandlerRootView>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <SafeAreaView style={styles.safeArea}>
+          <StatusBar barStyle="light-content" backgroundColor="#004C54" />
+          <ClinicalCalculators />
+        </SafeAreaView>
+      </ApolloProvider>
+    </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#004C54',
+  },
+});

@@ -1,7 +1,7 @@
 // App.js
 import React from 'react';
 import { StatusBar, SafeAreaView, StyleSheet } from 'react-native';
-import CHADSVASCCalculator from './src/components/calculators/cardiovascular/CHADSVASCCalculator';
+import CHADSVASCCalculator from './src/components/calculators/neurology/CHADSVASc';
 
 export default function App() {
   return (

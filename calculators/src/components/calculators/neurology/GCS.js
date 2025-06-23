@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect';
-import { MaterialIcons } from '@expo/vector-icons';
 
-export const GlasgowComaScale = () => {
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Container,
+  Divider,
+  Modal,
+  Chip,
+} from '@mui/material';
+import { motion } from 'framer-motion';
+import Select from 'react-select';
+import { Info, X } from 'lucide-react';
+
+const GlasgowComaScale = () => {
   const [eyeOpening, setEyeOpening] = useState(null);
   const [verbalResponse, setVerbalResponse] = useState(null);
   const [motorResponse, setMotorResponse] = useState(null);
   const [showGuidelines, setShowGuidelines] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
   const [timestamp] = useState(new Date());
 
   const totalScore = (eyeOpening || 0) + (verbalResponse || 0) + (motorResponse || 0);
 
   const CLINICAL_GUIDELINES = {
     assessment: `
-    Key Assessment Points:
-    • Assess eye opening first
-    • Test verbal response before painful stimuli
-    • Assess best motor response last
-    • Document any factors affecting assessment (e.g., intubation)
-    • Always use standardized painful stimuli
-    • Record actual responses, not just scores
+      Key Assessment Points:
+      • Assess eye opening first
+      • Test verbal response before painful stimuli
+      • Assess best motor response last
+      • Document any factors affecting assessment (e.g., intubation)
+      • Always use standardized painful stimuli
+      • Record actual responses, not just scores
     `,
     interventions: {
       mild: [
         'Neurological observations every 2-4 hours',
         'Monitor for deterioration',
         'Consider CT scan if indicated',
-        'Review medication history'
+        'Review medication history',
       ],
       moderate: [
         'Hourly neurological observations',
         'Immediate CT scan',
         'Consider neurosurgical consult',
         'Ensure airway protection',
-        'Monitor ICP if indicated'
+        'Monitor ICP if indicated',
       ],
       severe: [
         'Immediate airway assessment',
@@ -43,8 +54,8 @@ export const GlasgowComaScale = () => {
         'Urgent CT scan',
         'Neurosurgical evaluation',
         'ICU admission',
-        'Continuous ICP monitoring'
-      ]
+        'Continuous ICP monitoring',
+      ],
     },
     confounding: [
       'Alcohol intoxication',
@@ -53,45 +64,45 @@ export const GlasgowComaScale = () => {
       'Hypothermia',
       'Non-neurological trauma',
       'Language barriers',
-      'Intubation status'
-    ]
+      'Intubation status',
+    ],
   };
 
   const gradeGCS = (score) => {
     if (score === 15) {
       return {
         grade: 'Normal',
-        color: '#4CAF50',
+        color: 'success.main',
         guidance: 'Fully alert and oriented. No neurological impairment.',
-        interventions: []
+        interventions: [],
       };
     } else if (score >= 14) {
       return {
         grade: 'Mild impairment',
-        color: '#4CAF50',
+        color: 'success.main',
         guidance: 'Alert with mild neurological impairment. Further evaluation needed.',
-        interventions: CLINICAL_GUIDELINES.interventions.mild
+        interventions: CLINICAL_GUIDELINES.interventions.mild,
       };
     } else if (score >= 9) {
       return {
         grade: 'Moderate impairment',
-        color: '#FFC107',
+        color: 'warning.main',
         guidance: 'Moderate impairment present. Requires close monitoring.',
-        interventions: CLINICAL_GUIDELINES.interventions.moderate
+        interventions: CLINICAL_GUIDELINES.interventions.moderate,
       };
     } else if (score >= 3) {
       return {
         grade: 'Severe impairment',
-        color: '#F44336',
+        color: 'error.main',
         guidance: 'Severe impairment. Immediate intervention required.',
-        interventions: CLINICAL_GUIDELINES.interventions.severe
+        interventions: CLINICAL_GUIDELINES.interventions.severe,
       };
     } else {
       return {
         grade: 'No response',
-        color: '#000000',
+        color: 'grey.900',
         guidance: 'No response. Critical intervention required.',
-        interventions: CLINICAL_GUIDELINES.interventions.severe
+        interventions: CLINICAL_GUIDELINES.interventions.severe,
       };
     }
   };
@@ -123,267 +134,158 @@ export const GlasgowComaScale = () => {
   const { grade, color, guidance, interventions } = gradeGCS(totalScore);
 
   const renderAssessmentSection = (title, options, value, setValue) => (
-    <View style={styles.assessmentSection}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <CustomSelect
-        options={options}
-        value={value}
-        placeholder={`Select ${title}`}
-        onSelect={(item) => setValue(item.value)}
-        renderOption={(item) => (
-          <View style={styles.optionContainer}>
-            <Text style={styles.optionTitle}>{item.label}</Text>
-            <Text style={styles.optionDetails}>{item.details}</Text>
-          </View>
-        )}
-      />
-    </View>
+    <Card className="mb-4 shadow-sm">
+      <CardContent>
+        <Typography className="font-semibold text-gray-900 mb-4">
+          {title}
+        </Typography>
+        <Select
+          options={options}
+          value={options.find(opt => opt.value === value) || null}
+          placeholder={`Select ${title}`}
+          onChange={(item) => setValue(item.value)}
+          formatOptionLabel={(item) => (
+            <Box className="flex flex-col">
+              <Typography className="font-medium text-gray-900">
+                {item.label}
+              </Typography>
+              <Typography className="text-sm text-gray-500">
+                {item.details}
+              </Typography>
+            </Box>
+          )}
+          className="text-gray-900"
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderColor: '#E2E8F0',
+              '&:hover': { borderColor: '#004C54' },
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '8px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            }),
+            option: (base, { isSelected }) => ({
+              ...base,
+              backgroundColor: isSelected ? '#004C54' : '#FFFFFF',
+              color: isSelected ? '#FFFFFF' : '#333333',
+              '&:hover': {
+                backgroundColor: isSelected ? '#004C54' : '#F5F7FA',
+              },
+            }),
+          }}
+        />
+      </CardContent>
+    </Card>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Glasgow Coma Scale</Text>
-        <TouchableOpacity 
-          style={styles.guidelineButton}
-          onPress={() => setShowGuidelines(true)}
-        >
-          <MaterialIcons name="info-outline" size={24} color="#fff" />
-          <Text style={styles.guidelineButtonText}>Guidelines</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.timeStamp}>
-        <Text style={styles.timeStampText}>
-          Assessment Time: {timestamp.toLocaleTimeString()}
-        </Text>
-      </View>
-
-      {renderAssessmentSection('Eye Opening', eyeOpeningOptions, eyeOpening, setEyeOpening)}
-      {renderAssessmentSection('Verbal Response', verbalResponseOptions, verbalResponse, setVerbalResponse)}
-      {renderAssessmentSection('Motor Response', motorResponseOptions, motorResponse, setMotorResponse)}
-
-      <View style={[styles.scoreCard, { backgroundColor: color + '15' }]}>
-        <Text style={styles.totalScore}>Total GCS Score: {totalScore}/15</Text>
-        <Text style={[styles.gradeText, { color }]}>{grade}</Text>
-        <Text style={styles.guidanceText}>{guidance}</Text>
-      </View>
-
-      <View style={styles.interventionsContainer}>
-        <Text style={styles.interventionsTitle}>Recommended Interventions:</Text>
-        {interventions?.map((intervention, index) => (
-          <View key={index} style={styles.interventionItem}>
-            <MaterialIcons name="arrow-right" size={20} color="#004C54" />
-            <Text style={styles.interventionText}>{intervention}</Text>
-          </View>
-        ))}
-      </View>
-
-      <Modal
-        visible={showGuidelines}
-        animationType="slide"
-        transparent={true}
+    <Container maxWidth="md" className="py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Clinical Guidelines</Text>
-            
-            <Text style={styles.modalSubtitle}>Assessment Protocol</Text>
-            <Text style={styles.modalText}>{CLINICAL_GUIDELINES.assessment}</Text>
-            
-            <Text style={styles.modalSubtitle}>Confounding Factors</Text>
+        <Box className="flex justify-between items-center bg-gray-900 text-white p-4 rounded-lg mb-4">
+          <Typography variant="h4" className="font-bold">
+            Glasgow Coma Scale
+          </Typography>
+          <Button
+            variant="contained"
+            className="bg-white/20 text-white"
+            startIcon={<Info />}
+            onClick={() => setShowGuidelines(true)}
+          >
+            Guidelines
+          </Button>
+        </Box>
+
+        <Box className="bg-gray-100 p-2 rounded-lg mb-4">
+          <Typography className="text-gray-700">
+            Assessment Time: {timestamp.toLocaleTimeString()}
+          </Typography>
+        </Box>
+
+        {renderAssessmentSection('Eye Opening', eyeOpeningOptions, eyeOpening, setEyeOpening)}
+        {renderAssessmentSection('Verbal Response', verbalResponseOptions, verbalResponse, setVerbalResponse)}
+        {renderAssessmentSection('Motor Response', motorResponseOptions, motorResponse, setMotorResponse)}
+
+        <Card className="mb-4 shadow-sm">
+          <CardContent sx={{ bgcolor: `${color}15` }}>
+            <Typography variant="h5" className="font-bold text-center text-gray-900 mb-2">
+              Total GCS Score: {totalScore}/15
+            </Typography>
+            <Chip
+              label={grade}
+              sx={{ bgcolor: color, color: 'white' }}
+              className="mb-2"
+            />
+            <Typography className="text-center text-gray-600">
+              {guidance}
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card className="mb-4 shadow-sm">
+          <CardContent>
+            <Typography className="font-semibold text-gray-900 mb-4">
+              Recommended Interventions:
+            </Typography>
+            {interventions.map((intervention, index) => (
+              <Box key={index} className="flex items-center mb-2">
+                <Typography className="text-gray-700 mr-2">•</Typography>
+                <Typography className="text-gray-700">{intervention}</Typography>
+              </Box>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Modal
+          open={showGuidelines}
+          onClose={() => setShowGuidelines(false)}
+        >
+          <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg p-6 w-11/12 max-w-lg max-h-[80vh] overflow-y-auto">
+            <Box className="flex justify-between items-center mb-4">
+              <Typography variant="h6" className="font-bold text-gray-900">
+                Clinical Guidelines
+              </Typography>
+              <Button onClick={() => setShowGuidelines(false)}>
+                <X className="text-gray-700" />
+              </Button>
+            </Box>
+
+            <Typography className="font-semibold text-gray-900 mb-2">
+              Assessment Protocol
+            </Typography>
+            <Typography className="text-gray-600 mb-4 whitespace-pre-line">
+              {CLINICAL_GUIDELINES.assessment}
+            </Typography>
+
+            <Divider className="my-4" />
+
+            <Typography className="font-semibold text-gray-900 mb-2">
+              Confounding Factors
+            </Typography>
             {CLINICAL_GUIDELINES.confounding.map((factor, index) => (
-              <Text key={index} style={styles.modalListItem}>• {factor}</Text>
+              <Typography key={index} className="text-gray-600 mb-1">
+                • {factor}
+              </Typography>
             ))}
 
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={() => setShowGuidelines(false)}
+            <Button
+              fullWidth
+              variant="contained"
+              className="bg-gray-900 text-white mt-6"
+              onClick={() => setShowGuidelines(false)}
             >
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    </ScrollView>
+              Close
+            </Button>
+          </Box>
+        </Modal>
+      </motion.div>
+    </Container>
   );
 };
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-  header: {
-    backgroundColor: '#004C54',
-    padding: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  timeStamp: {
-    padding: 8,
-    backgroundColor: '#E8EDF1',
-  },
-  timeStampText: {
-    color: '#004C54',
-    fontSize: 14,
-  },
-  assessmentSection: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    marginBottom: 8,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#004C54',
-    marginBottom: 12,
-  },
-  optionContainer: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E8EDF1',
-  },
-  optionTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#004C54',
-  },
-  optionDetails: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-  scoreCard: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  totalScore: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#004C54',
-    textAlign: 'center',
-  },
-  gradeText: {
-    fontSize: 20,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  guidanceText: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  interventionsContainer: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  interventionsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#004C54',
-    marginBottom: 12,
-  },
-  interventionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  interventionText: {
-    fontSize: 16,
-    color: '#333',
-    marginLeft: 8,
-    flex: 1,
-  },
-  guidelineButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    padding: 8,
-    borderRadius: 4,
-  },
-  guidelineButtonText: {
-    color: '#FFFFFF',
-    marginLeft: 4,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    padding: 20,
-    width: '90%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#004C54',
-    marginBottom: 16,
-  },
-  modalSubtitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#004C54',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#333',
-    lineHeight: 24,
-  },
-  modalListItem: {
-    fontSize: 16,
-    color: '#333',
-    marginLeft: 8,
-    marginVertical: 4,
-  },
-  closeButton: {
-    backgroundColor: '#004C54',
-    padding: 12,
-    borderRadius: 4,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '500',
-  },
-});
 
 export default GlasgowComaScale;

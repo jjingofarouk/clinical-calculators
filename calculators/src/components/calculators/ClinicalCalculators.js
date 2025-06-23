@@ -1,63 +1,50 @@
-// ClinicalCalculators.js
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-  TextInput,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigate, useLocation } from "react-router-dom";
+import { LucideIcon, Search, Star } from "lucide-react";
+import { TextField, IconButton, Box, Typography, Card, CardContent, Grid } from "@mui/material";
 
 const calculatorCategories = [
-  { id: "general", label: "General", icon: "calculator", color: "#2ECC71", description: "BMI, BMR, caloric needs", screen: "General" },
-  { id: "cardiovascular", label: "Cardiovascular", icon: "heart-pulse", color: "#FF4757", description: "ASCVD, CHADSVASC, HASBLED", screen: "Cardiovascular" },
-  { id: "neurology", label: "Neurology", icon: "brain", color: "#5352ED", description: "GCS, NIHSS, mRS", screen: "Neurology" },
-  { id: "pulmonary", label: "Pulmonary", icon: "lungs", color: "#1E90FF", description: "BODE, CURB-65, asthma", screen: "Pulmonary" },
-  { id: "gastroenterology", label: "Gastroenterology", icon: "stomach", color: "#FF6B6B", description: "Alvarado, Child-Pugh, FIB-4", screen: "Gastroenterology" },
-  { id: "obstetrics", label: "Obstetrics", icon: "baby-face-outline", color: "#FF9FF3", description: "Due date, Bishop, Apgar", screen: "Obstetrics" },
-  { id: "orthopedics", label: "Orthopedics", icon: "bone", color: "#FFA502", description: "Fracture risk, Ottawa rules", screen: "Orthopedics" },
-  { id: "nephrology", label: "Nephrology", icon: "water", color: "#747D8C", description: "eGFR, creatinine, KDIGO", screen: "Nephrology" },
-  { id: "icu", label: "ICU", icon: "medkit", color: "#E84393", description: "APACHE, SOFA, qSOFA", screen: "ICU" },
+  { id: "general", label: "General", icon: "Calculator", color: "#2ECC71", description: "BMI, BMR, caloric needs", screen: "General" },
+  { id: "cardiovascular", label: "Cardiovascular", icon: "Heart", color: "#FF4757", description: "ASCVD, CHADSVASC, HASBLED", screen: "Cardiovascular" },
+  { id: "neurology", label: "Neurology", icon: "Brain", color: "#5352ED", description: "GCS, NIHSS, mRS", screen: "Neurology" },
+  { id: "pulmonary", label: "Pulmonary", icon: "Wind", color: "#1E90FF", description: "BODE, CURB-65, asthma", screen: "Pulmonary" },
+  { id: "gastroenterology", label: "Gastroenterology", icon: "Stethoscope", color: "#FF6B6B", description: "Alvarado, Child-Pugh, FIB-4", screen: "Gastroenterology" },
+  { id: "obstetrics", label: "Obstetrics", icon: "Baby", color: "#FF9FF3", description: "Due date, Bishop, Apgar", screen: "Obstetrics" },
+  { id: "orthopedics", label: "Orthopedics", icon: "Bone", color: "#FFA502", description: "Fracture risk, Ottawa rules", screen: "Orthopedics" },
+  { id: "nephrology", label: "Nephrology", icon: "Droplet", color: "#747D8C", description: "eGFR, creatinine, KDIGO", screen: "Nephrology" },
+  { id: "icu", label: "ICU", icon: "Activity", color: "#E84393", description: "APACHE, SOFA, qSOFA", screen: "ICU" },
 ];
 
 const CustomHeader = () => {
-  const navigation = useNavigation();
+  const navigate = useNavigate();
 
   return (
-    <View style={styles.header}>
-      <Text style={styles.headerTitle}>Clinical Calculators</Text>
-      <View style={styles.headerButtons}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("SearchCalculators")}
-          style={styles.headerButton}
-          accessible
-          accessibilityLabel="Search calculators"
+    <Box className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+      <Typography variant="h5" className="font-bold text-gray-800">
+        Clinical Calculators
+      </Typography>
+      <Box className="flex gap-4">
+        <IconButton
+          onClick={() => navigate("/search-calculators")}
+          aria-label="Search calculators"
         >
-          <MaterialCommunityIcons name="magnify" size={24} color="#2F3542" />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("FavoritesCalculators")}
-          style={styles.headerButton}
-          accessible
-          accessibilityLabel="Favorite calculators"
+          <Search size={24} className="text-gray-800" />
+        </IconButton>
+        <IconButton
+          onClick={() => navigate("/favorites-calculators")}
+          aria-label="Favorite calculators"
         >
-          <MaterialCommunityIcons name="star" size={24} color="#FFD700" />
-        </TouchableOpacity>
-      </View>
-    </View>
+          <Star size={24} className="text-yellow-400" />
+        </IconButton>
+      </Box>
+    </Box>
   );
 };
 
-const ClinicalCalculators = ({ route }) => {
-  const { allCalculators } = route.params;
-  const navigation = useNavigation();
+const ClinicalCalculators = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const allCalculators = location.state?.allCalculators || [];
   const [recentCalculators, setRecentCalculators] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -80,8 +67,8 @@ const ClinicalCalculators = ({ route }) => {
 
   const loadRecentsAndFavorites = async () => {
     try {
-      const recentData = await AsyncStorage.getItem("recentCalculators");
-      const favoriteData = await AsyncStorage.getItem("favoriteCalculators");
+      const recentData = localStorage.getItem("recentCalculators");
+      const favoriteData = localStorage.getItem("favoriteCalculators");
       if (recentData) setRecentCalculators(JSON.parse(recentData));
       if (favoriteData) setFavorites(JSON.parse(favoriteData));
     } catch (error) {
@@ -96,12 +83,11 @@ const ClinicalCalculators = ({ route }) => {
         id,
         ...recentCalculators.filter((calc) => calc !== id),
       ].slice(0, 5);
-      await AsyncStorage.setItem("recentCalculators", JSON.stringify(updatedRecents));
+      localStorage.setItem("recentCalculators", JSON.stringify(updatedRecents));
       setRecentCalculators(updatedRecents);
 
-      navigation.navigate(isCategory ? "Calculators" : item.screen, {
-        screen: isCategory ? item.screen : undefined,
-        params: { allCalculators },
+      navigate(isCategory ? `/calculators/${item.screen}` : `/${item.screen}`, {
+        state: { allCalculators },
       });
     } catch (error) {
       console.error("Error navigating:", error);
@@ -113,67 +99,79 @@ const ClinicalCalculators = ({ route }) => {
       const updatedFavorites = favorites.includes(calculator.screen)
         ? favorites.filter((fav) => fav !== calculator.screen)
         : [...favorites, calculator.screen];
-      await AsyncStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
+      localStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
       setFavorites(updatedFavorites);
     } catch (error) {
       console.error("Error updating favorites:", error);
     }
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = (item) => {
     const isCategory = !item.category;
     const category = isCategory
       ? calculatorCategories.find((cat) => cat.id === item.id)
       : calculatorCategories.find((cat) => cat.label.toLowerCase() === item.category.toLowerCase());
+    const IconComponent = LucideIcon[category.icon] || LucideIcon.Calculator;
+
     return (
-      <TouchableOpacity
-        style={[styles.card, { backgroundColor: category.color + "15" }]}
-        onPress={() => handleNavigation(item, isCategory)}
+      <Card
+        className="mb-3 cursor-pointer hover:shadow-md transition-shadow"
+        sx={{ backgroundColor: `${category.color}15`, borderRadius: 3 }}
+        onClick={() => handleNavigation(item, isCategory)}
       >
-        <View style={styles.cardContent}>
-          <MaterialCommunityIcons name={category.icon} size={28} color={category.color} />
-          <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>{isCategory ? item.label : item.name}</Text>
-            <Text style={styles.cardDescription}>
-              {isCategory ? item.description : item.category}
-            </Text>
-          </View>
+        <CardContent className="flex items-center justify-between">
+          <Box className="flex items-center gap-3">
+            <IconComponent size={28} style={{ color: category.color }} />
+            <Box>
+              <Typography variant="subtitle1" className="font-semibold text-gray-800">
+                {isCategory ? item.label : item.name}
+              </Typography>
+              <Typography variant="caption" className="text-gray-500">
+                {isCategory ? item.description : item.category}
+              </Typography>
+            </Box>
+          </Box>
           {!isCategory && (
-            <TouchableOpacity onPress={() => toggleFavorite(item)}>
-              <MaterialCommunityIcons
-                name={favorites.includes(item.screen) ? "star" : "star-outline"}
+            <IconButton onClick={(e) => { e.stopPropagation(); toggleFavorite(item); }}>
+              <Star
                 size={24}
-                color={favorites.includes(item.screen) ? "#FFD700" : "#747D8C"}
+                className={favorites.includes(item.screen) ? "text-yellow-400" : "text-gray-400"}
+                fill={favorites.includes(item.screen) ? "#FFD700" : "none"}
               />
-            </TouchableOpacity>
+            </IconButton>
           )}
-        </View>
-      </TouchableOpacity>
+        </CardContent>
+      </Card>
     );
   };
 
   const renderSection = (title, data, showAll = false) => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <FlatList
-        data={showAll ? data : data.slice(0, 5)}
-        renderItem={renderItem}
-        keyExtractor={(item) => (item.id || item.screen)}
-        scrollEnabled={false}
-      />
-    </View>
+    <Box className="mb-5">
+      <Typography variant="h6" className="font-semibold text-gray-800 mb-3">
+        {title}
+      </Typography>
+      <Grid container spacing={2}>
+        {(showAll ? data : data.slice(0, 5)).map((item) => (
+          <Grid item xs={12} key={item.id || item.screen}>
+            {renderItem(item)}
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
+    <Box className="min-h-screen bg-white">
       <CustomHeader />
-      <ScrollView contentContainerStyle={styles.container}>
-        <TextInput
-          style={styles.searchInput}
+      <Box className="p-4">
+        <TextField
+          fullWidth
+          variant="outlined"
           placeholder="Search calculators..."
           value={searchQuery}
-          onChangeText={setSearchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="mb-4"
+          sx={{ backgroundColor: "#F1F2F6", borderRadius: 2 }}
         />
         {searchQuery ? (
           renderSection("Search Results", filteredCalculators, true)
@@ -192,84 +190,9 @@ const ClinicalCalculators = ({ route }) => {
             {renderSection("Categories", calculatorCategories, true)}
           </>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </Box>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 16,
-    backgroundColor: "#FFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F2F6",
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#2F3542",
-  },
-  headerButtons: {
-    flexDirection: "row",
-  },
-  headerButton: {
-    marginLeft: 16,
-  },
-  container: {
-    padding: 16,
-  },
-  searchInput: {
-    backgroundColor: "#F1F2F6",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#2F3542",
-    marginBottom: 12,
-  },
-  card: {
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  cardContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  cardText: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#2F3542",
-  },
-  cardDescription: {
-    fontSize: 12,
-    color: "#747D8C",
-    marginTop: 4,
-  },
-});
 
 export default ClinicalCalculators;

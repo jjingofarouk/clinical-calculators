@@ -1,55 +1,46 @@
 import React from 'react';
-import { Box, Typography, Grid, Card, CardActionArea, CardContent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Heart, Brain, Wind, Stethoscope, Baby, Bone, Droplet, Activity, Calculator } from 'lucide-react';
 
 const categories = [
-  { label: 'General', icon: Calculator, color: '#2ECC71', path: '/calculators/General', description: 'BMI, BMR, etc.' },
-  { label: 'Cardiovascular', icon: Heart, color: '#FF4757', path: '/calculators/Cardiovascular', description: 'ASCVD, CHADSVASC' },
-  { label: 'Neurology', icon: Brain, color: '#5352ED', path: '/calculators/Neurology', description: 'GCS, NIHSS' },
-  { label: 'Pulmonary', icon: Wind, color: '#1E90FF', path: '/calculators/Pulmonary', description: 'BODE, CURB-65' },
-  { label: 'Gastroenterology', icon: Stethoscope, color: '#FF6B6B', path: '/calculators/Gastroenterology', description: 'Child-Pugh, FIB-4' },
-  { label: 'Obstetrics', icon: Baby, color: '#FF9FF3', path: '/calculators/Obstetrics', description: 'Due date, Bishop' },
-  { label: 'Orthopedics', icon: Bone, color: '#FFA502', path: '/calculators/Orthopedics', description: 'Ottawa rules' },
-  { label: 'Nephrology', icon: Droplet, color: '#747D8C', path: '/calculators/Nephrology', description: 'eGFR, KDIGO' },
-  { label: 'ICU', icon: Activity, color: '#E84393', path: '/calculators/ICU', description: 'SOFA, APACHE' },
+  { label: 'General', icon: Calculator, color: '#0f766e', path: '/calculators/General', description: 'BMI, BMR, etc.' },
+  { label: 'Cardiovascular', icon: Heart, color: '#ef4444', path: '/calculators/Cardiovascular', description: 'ASCVD, CHADSVASC' },
+  { label: 'Neurology', icon: Brain, color: '#6366f1', path: '/calculators/Neurology', description: 'GCS, NIHSS' },
+  { label: 'Pulmonary', icon: Wind, color: '#3b82f6', path: '/calculators/Pulmonary', description: 'BODE, CURB-65' },
+  { label: 'Gastroenterology', icon: Stethoscope, color: '#f97316', path: '/calculators/Gastroenterology', description: 'Child-Pugh, FIB-4' },
+  { label: 'Obstetrics', icon: Baby, color: '#ec4899', path: '/calculators/Obstetrics', description: 'Due date, Bishop' },
+  { label: 'Orthopedics', icon: Bone, color: '#eab308', path: '/calculators/Orthopedics', description: 'Ottawa rules' },
+  { label: 'Nephrology', icon: Droplet, color: '#64748b', path: '/calculators/Nephrology', description: 'eGFR, KDIGO' },
+  { label: 'ICU', icon: Activity, color: '#10b981', path: '/calculators/ICU', description: 'SOFA, APACHE' },
 ];
 
-const Home = () => {
+export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <Box className="p-6 bg-white min-h-screen">
-      <Typography variant="h4" gutterBottom className="font-bold text-gray-800">
-        Clinical Calculators
-      </Typography>
-      <Typography variant="body1" className="mb-6 text-gray-600">
+    <div className="min-h-screen bg-white px-4 py-6 md:px-8">
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">Clinical Calculators</h1>
+      <p className="text-gray-600 mb-6">
         Quickly access a range of evidence-based medical calculators by category.
-      </Typography>
+      </p>
 
-      <Grid container spacing={3}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {categories.map((cat) => (
-          <Grid item xs={12} sm={6} md={4} key={cat.label}>
-            <Card>
-              <CardActionArea onClick={() => navigate(cat.path)}>
-                <CardContent className="flex gap-4 items-center">
-                  <cat.icon size={32} style={{ color: cat.color }} />
-                  <Box>
-                    <Typography variant="h6" className="font-semibold text-gray-800">
-                      {cat.label}
-                    </Typography>
-                    <Typography variant="body2" className="text-gray-600">
-                      {cat.description}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
+          <div
+            key={cat.label}
+            className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer"
+            onClick={() => navigate(cat.path)}
+          >
+            <div className="flex items-center gap-4 p-4">
+              <cat.icon size={32} style={{ color: cat.color }} />
+              <div>
+                <h2 className="text-lg font-semibold text-gray-800">{cat.label}</h2>
+                <p className="text-sm text-gray-600">{cat.description}</p>
+              </div>
+            </div>
+          </div>
         ))}
-      </Grid>
-    </Box>
+      </div>
+    </div>
   );
-};
-
-export default Home;
+}

@@ -1,24 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, Typography, TextField, Button, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 const CLINICAL_THEME = {
-  primary: '#2E5C8A',      // Professional medical blue
-  secondary: '#557BA8',    // Lighter blue for accents
-  background: '#FFFFFF',   // Clean white background
-  surface: '#F8F9FA',     // Slight off-white for cards
-  error: '#D32F2F',       // Error red
-  text: '#333333',        // Dark gray for text
-  textLight: '#666666',   // Medium gray for secondary text
-  border: '#DDDDDD',      // Light gray for borders
-  success: '#2E7D32',     // Success green
+  primary: '#2E3052',
+  secondary: '#557BA8',
+  background: '#FFFFFF',
+  surface: '#F8FAFC',
+  error: '#D32F2F',
+  text: '#333333',
+  textLight: '#666666',
+  border: '#DDDDDD',
+  success: '#2E7D32',
 };
 
 const DYSPNEA_SCALE = [
@@ -69,20 +62,21 @@ const BODECalculator = () => {
     const { bmi, fev1Percentage, dyspnea, sixMinuteWalk } = inputs;
     let totalScore = 0;
 
-    // BMI Scoring (B)
+    if (!bmi || !fev1Percentage || dyspnea === '' || !sixMinuteWalk) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
     if (parseFloat(bmi) <= 21) totalScore += 1;
 
-    // Airflow Obstruction - FEV1 Scoring (O)
     const fev1 = parseFloat(fev1Percentage);
     if (fev1 >= 65) totalScore += 0;
     else if (fev1 >= 50 && fev1 < 65) totalScore += 1;
     else if (fev1 >= 36 && fev1 < 50) totalScore += 2;
     else if (fev1 < 36) totalScore += 3;
 
-    // Dyspnea Scoring (D)
     totalScore += parseInt(dyspnea);
 
-    // Exercise Capacity - 6MWD Scoring (E)
     const walkDistance = parseInt(sixMinuteWalk);
     if (walkDistance >= 350) totalScore += 0;
     else if (walkDistance >= 250 && walkDistance < 350) totalScore += 1;
@@ -92,290 +86,173 @@ const BODECalculator = () => {
     setScore(totalScore);
   }, [inputs]);
 
-  const ClinicalSection = ({ title, children }) => (
-    <View style={styles.clinicalSection}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      {children}
-    </View>
-  );
-
-  const InputField = ({ label, value, field, placeholder, info }) => (
-    <View style={styles.inputContainer}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      {info && <Text style={styles.inputInfo}>{info}</Text>}
-      <TextInput
-        style={styles.input}
-        value={value}
-        onChangeText={(text) => setInputs(prev => ({ ...prev, [field]: text }))}
-        placeholder={placeholder}
-        keyboardType="numeric"
-        placeholderTextColor={CLINICAL_THEME.textLight}
-      />
-    </View>
-  );
-
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>BODE Index Calculator</Text>
-          <Text style={styles.subtitle}>Clinical Assessment Tool for COPD Prognosis</Text>
-        </View>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-4">
+          BODE Index Calculator
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600 text-center mb-8">
+          Clinical Assessment Tool for COPD Prognosis
+        </Typography>
 
         {showGuidance && (
-          <View style={styles.guidanceContainer}>
-            <ClinicalSection title="Important Clinical Guidance">
-              <Text style={styles.warningText}>Do not use during acute exacerbations or to guide therapy</Text>
-              
-              <Text style={styles.guidanceHeader}>Exclusion Criteria:</Text>
+          <Card className="shadow-lg mb-6">
+            <CardContent className="p-6">
+              <Typography variant="h6" className="font-semibold text-gray-800 mb-4">
+                Important Clinical Guidance
+              </Typography>
+              <Typography variant="body2" className="text-red-600 font-semibold mb-4">
+                Do not use during acute exacerbations or to guide therapy
+              </Typography>
+              <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                Exclusion Criteria:
+              </Typography>
               {CLINICAL_GUIDANCE.exclusions.map((item, index) => (
-                <Text key={index} style={styles.guidanceText}>• {item}</Text>
+                <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                  • {item}
+                </Typography>
               ))}
-
-              <Text style={styles.guidanceHeader}>Appropriate Usage:</Text>
+              <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                Appropriate Usage:
+              </Typography>
               {CLINICAL_GUIDANCE.usage.map((item, index) => (
-                <Text key={index} style={styles.guidanceText}>• {item}</Text>
+                <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                  • {item}
+                </Typography>
               ))}
-            </ClinicalSection>
-          </View>
+            </CardContent>
+          </Card>
         )}
 
-        <View style={styles.form}>
-          <InputField
-            label="Body Mass Index (BMI)"
-            value={inputs.bmi}
-            field="bmi"
-            placeholder="Enter BMI"
-            info="Points: ≤21 kg/m² = 1 point, >21 kg/m² = 0 points"
-          />
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="space-y-6">
+              <Box>
+                <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                  Body Mass Index (BMI)
+                </Typography>
+                <Typography variant="body2" className="text-gray-600 mb-2">
+                  Points: ≤21 kg/m² = 1 point, >21 kg/m² = 0 points
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={inputs.bmi}
+                  onChange={(e) => setInputs(prev => ({ ...prev, bmi: e.target.value }))}
+                  placeholder="Enter BMI"
+                  variant="outlined"
+                />
+              </Box>
 
-          <InputField
-            label="FEV₁ (% of predicted)"
-            value={inputs.fev1Percentage}
-            field="fev1Percentage"
-            placeholder="Enter FEV₁ percentage"
-            info="≥65%: 0pts | 50-64%: 1pt | 36-49%: 2pts | ≤35%: 3pts"
-          />
+              <Box>
+                <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                  FEV₁ (% of predicted)
+                </Typography>
+                <Typography variant="body2" className="text-gray-600 mb-2">
+                  ≥65%: 0pts | 50-64%: 1pt | 36-49%: 2pts | ≤35%: 3pts
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={inputs.fev1Percentage}
+                  onChange={(e) => setInputs(prev => ({ ...prev, fev1Percentage: e.target.value }))}
+                  placeholder="Enter FEV₁ percentage"
+                  variant="outlined"
+                />
+              </Box>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>mMRC Dyspnea Scale (0-4)</Text>
-            <Text style={styles.inputInfo}>Select appropriate score based on symptoms</Text>
-            {DYSPNEA_SCALE.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={[
-                  styles.dyspneaOption,
-                  inputs.dyspnea === index.toString() && styles.dyspneaOptionSelected
-                ]}
-                onPress={() => setInputs(prev => ({ ...prev, dyspnea: index.toString() }))}
+              <Box>
+                <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                  mMRC Dyspnea Scale (0-4)
+                </Typography>
+                <Typography variant="body2" className="text-gray-600 mb-2">
+                  Select appropriate score based on symptoms
+                </Typography>
+                <RadioGroup
+                  value={inputs.dyspnea}
+                  onChange={(e) => setInputs(prev => ({ ...prev, dyspnea: e.target.value }))}
+                >
+                  {DYSPNEA_SCALE.map((item, index) => (
+                    <FormControlLabel
+                      key={index}
+                      value={index.toString()}
+                      control={<Radio />}
+                      label={`Score ${item.score}: ${item.description}`}
+                      className="mb-2"
+                    />
+                  ))}
+                </RadioGroup>
+              </Box>
+
+              <Box>
+                <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                  6-Minute Walk Distance (meters)
+                </Typography>
+                <Typography variant="body2" className="text-gray-600 mb-2">
+                  ≥350m: 0pts | 250-349m: 1pt | 150-249m: 2pts | <150m: 3pts
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={inputs.sixMinuteWalk}
+                  onChange={(e) => setInputs(prev => ({ ...prev, sixMinuteWalk: e.target.value }))}
+                  placeholder="Enter distance in meters"
+                  variant="outlined"
+                />
+              </Box>
+
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-4"
+                onClick={calculateBODEIndex}
               >
-                <Text style={styles.dyspneaScore}>Score {item.score}:</Text>
-                <Text style={styles.dyspneaDescription}>{item.description}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                Calculate BODE Index
+              </Button>
 
-          <InputField
-            label="6-Minute Walk Distance (meters)"
-            value={inputs.sixMinuteWalk}
-            field="sixMinuteWalk"
-            placeholder="Enter distance in meters"
-            info="≥350m: 0pts | 250-349m: 1pt | 150-249m: 2pts | <150m: 3pts"
-          />
-
-          <TouchableOpacity
-            style={styles.calculateButton}
-            onPress={calculateBODEIndex}
-          >
-            <Text style={styles.calculateButtonText}>Calculate BODE Index</Text>
-          </TouchableOpacity>
-
-          {score !== null && (
-            <View style={styles.resultCard}>
-              <Text style={styles.scoreText}>BODE Index Score: {score}</Text>
-              <Text style={styles.riskText}>
-                Risk Assessment: {CLINICAL_GUIDANCE.interpretation[score].risk}
-              </Text>
-              <Text style={styles.survivalText}>
-                {CLINICAL_GUIDANCE.interpretation[score].survival}
-              </Text>
-              <View style={styles.disclaimerBox}>
-                <Text style={styles.disclaimer}>
-                  Clinical Application:
-                </Text>
-                <Text style={styles.disclaimerText}>
-                  • Use for prognostic assessment only{'\n'}
-                  • Do not use to guide therapy{'\n'}
-                  • Higher scores indicate increased risk of mortality{'\n'}
-                  • Consider in conjunction with other clinical factors{'\n'}
-                  • Reassess periodically in stable patients
-                </Text>
-              </View>
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+              {score !== null && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 p-4 rounded-lg bg-white border border-gray-200 shadow-sm"
+                >
+                  <Typography variant="h6" className="font-bold text-gray-800">
+                    BODE Index Score: {score}
+                  </Typography>
+                  <Typography variant="body1" className="text-gray-800 mt-2">
+                    Risk Assessment: {CLINICAL_GUIDANCE.interpretation[score].risk}
+                  </Typography>
+                  <Typography variant="body2" className="text-gray-600 mt-1">
+                    {CLINICAL_GUIDANCE.interpretation[score].survival}
+                  </Typography>
+                  <Box className="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
+                      Clinical Application:
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                      • Use for prognostic assessment only<br />
+                      • Do not use to guide therapy<br />
+                      • Higher scores indicate increased risk of mortality<br />
+                      • Consider in conjunction with other clinical factors<br />
+                      • Reassess periodically in stable patients
+                    </Typography>
+                  </Box>
+                </motion.div>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: CLINICAL_THEME.background,
-  },
-  container: {
-    flex: 1,
-  },
-  header: {
-    padding: 20,
-    backgroundColor: CLINICAL_THEME.primary,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.background,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: CLINICAL_THEME.background,
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  guidanceContainer: {
-    padding: 15,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderBottomWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-  },
-  clinicalSection: {
-    marginBottom: 15,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.primary,
-    marginBottom: 10,
-  },
-  warningText: {
-    color: CLINICAL_THEME.error,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  guidanceHeader: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: CLINICAL_THEME.text,
-    marginTop: 10,
-    marginBottom: 5,
-  },
-  guidanceText: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-    marginBottom: 3,
-  },
-  form: {
-    padding: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: CLINICAL_THEME.text,
-    marginBottom: 5,
-  },
-  inputInfo: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-    marginBottom: 5,
-  },
-  input: {
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 5,
-    padding: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-    color: CLINICAL_THEME.text,
-  },
-  dyspneaOption: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-    borderRadius: 5,
-    marginBottom: 5,
-    backgroundColor: CLINICAL_THEME.surface,
-  },
-  dyspneaOptionSelected: {
-    backgroundColor: CLINICAL_THEME.primary + '15',
-    borderColor: CLINICAL_THEME.primary,
-  },
-  dyspneaScore: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.text,
-    marginBottom: 3,
-  },
-  dyspneaDescription: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-  },
-  calculateButton: {
-    backgroundColor: CLINICAL_THEME.primary,
-    padding: 18,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  calculateButtonText: {
-    color: CLINICAL_THEME.background,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  resultCard: {
-    marginTop: 20,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 5,
-    padding: 20,
-    borderLeftWidth: 4,
-    borderLeftColor: CLINICAL_THEME.primary,
-  },
-  scoreText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.primary,
-    marginBottom: 10,
-  },
-  riskText: {
-    fontSize: 18,
-    color: CLINICAL_THEME.text,
-    marginBottom: 5,
-  },
-  survivalText: {
-    fontSize: 16,
-    color: CLINICAL_THEME.textLight,
-    marginBottom: 15,
-  },
-  disclaimerBox: {
-    backgroundColor: CLINICAL_THEME.background,
-    padding: 15,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  disclaimer: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.text,
-    marginBottom: 5,
-  },
-  disclaimerText: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-    lineHeight: 20,
-  },
-});
 
 export default BODECalculator;

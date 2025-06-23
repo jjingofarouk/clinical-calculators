@@ -16,7 +16,7 @@ const ChildPughScore = () => {
     { grade: 0, description: 'Normal consciousness, personality, neurological examination' },
     { grade: 1, description: 'Restless, sleep disturbed, irritable/agitated, tremor' },
     { grade: 2, description: 'Lethargic, time-disoriented, inappropriate behavior, asterixis' },
-    { grade: 3', description: 'Somnolent, stuporous, place-disoriented, hyperactive reflexes' },
+    { grade: 3, description: 'Somnolent, stuporous, place-disoriented, hyperactive reflexes' },
     { grade: 4, description: 'Unrousable coma, no personality/behavior, decerebrate' },
   ];
 

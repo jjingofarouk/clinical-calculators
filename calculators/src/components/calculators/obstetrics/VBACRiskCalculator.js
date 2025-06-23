@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react";
+import { motion } from 'framer-motion';
+import { Info, X } from 'lucide-react';
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  Divider,
   Modal,
-  Dimensions,
-} from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect';
-
-const { width } = Dimensions.get('window');
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
+import Select from 'react-select';
 
 const VBACRiskCalculator = () => {
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -76,10 +77,8 @@ const VBACRiskCalculator = () => {
   const calculateScore = () => {
     let score = 0;
 
-    // Age scoring
     if (patientData.age === 'under40') score += 2;
 
-    // Vaginal birth history scoring
     switch (patientData.vaginalBirthHistory) {
       case 'beforeAndAfter':
         score += 4;
@@ -94,10 +93,8 @@ const VBACRiskCalculator = () => {
         break;
     }
 
-    // Previous C-section reason scoring
     if (patientData.previousCSection === 'other') score += 1;
 
-    // Cervical effacement scoring
     switch (patientData.cervicalEffacement) {
       case 'high':
         score += 2;
@@ -109,10 +106,8 @@ const VBACRiskCalculator = () => {
         break;
     }
 
-    // Cervical dilation scoring
     if (patientData.cervicalDilation === 'yes') score += 1;
 
-    // Calculate success probability based on Flamm model
     const successProbability = Math.min(Math.round((score / 10) * 100), 100);
 
     return {
@@ -145,250 +140,176 @@ const VBACRiskCalculator = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>VBAC Success Calculator</Text>
-          <Text style={styles.subtitle}>Flamm Scoring Model</Text>
-        </View>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <div className="text-center mb-8">
+          <Typography variant="h4" className="font-bold text-gray-800">
+            VBAC Success Calculator
+          </Typography>
+          <Typography variant="subtitle1" className="text-gray-600 mt-2">
+            Flamm Scoring Model
+          </Typography>
+        </div>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Patient Assessment</Text>
-          <View style={styles.separator} />
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Typography variant="h6" className="font-semibold text-gray-800 mb-4">
+              Patient Assessment
+            </Typography>
+            <Divider className="mb-6" />
 
-          <View style={styles.fieldContainer}>
-            <CustomSelect
-              options={ageOptions}
-              placeholder="Select maternal age"
-              onSelect={(item) => handleInputChange('age', item.value)}
-              label="Maternal Age"
-            />
-          </View>
+            <div className="space-y-6">
+              <div>
+                <Typography variant="body2" className="mb-2 font-medium">
+                  Maternal Age
+                </Typography>
+                <Select
+                  options={ageOptions}
+                  placeholder="Select maternal age"
+                  onChange={(item) => handleInputChange('age', item.value)}
+                  className="w-full"
+                />
+              </div>
 
-          <View style={styles.fieldContainer}>
-            <CustomSelect
-              options={vaginalBirthOptions}
-              placeholder="Select vaginal birth history"
-              onSelect={(item) => handleInputChange('vaginalBirthHistory', item.value)}
-              label="Vaginal Birth History"
-            />
-          </View>
+              <div>
+                <Typography variant="body2" className="mb-2 font-medium">
+                  Vaginal Birth History
+                </Typography>
+                <Select
+                  options={vaginalBirthOptions}
+                  placeholder="Select vaginal birth history"
+                  onChange={(item) => handleInputChange('vaginalBirthHistory', item.value)}
+                  className="w-full"
+                />
+              </div>
 
-          <View style={styles.fieldContainer}>
-            <CustomSelect
-              options={previousCSectionOptions}
-              placeholder="Select previous C-section reason"
-              onSelect={(item) => handleInputChange('previousCSection', item.value)}
-              label="Previous C-section Reason"
-            />
-          </View>
+              <div>
+                <Typography variant="body2" className="mb-2 font-medium">
+                  Previous C-section Reason
+                </Typography>
+                <Select
+                  options={previousCSectionOptions}
+                  placeholder="Select previous C-section reason"
+                  onChange={(item) => handleInputChange('previousCSection', item.value)}
+                  className="w-full"
+                />
+              </div>
 
-          <View style={styles.fieldContainer}>
-            <CustomSelect
-              options={effacementOptions}
-              placeholder="Select cervical effacement"
-              onSelect={(item) => handleInputChange('cervicalEffacement', item.value)}
-              label="Cervical Effacement at Admission"
-            />
-          </View>
+              <div>
+                <Typography variant="body2" className="mb-2 font-medium">
+                  Cervical Effacement at Admission
+                </Typography>
+                <Select
+                  options={effacementOptions}
+                  placeholder="Select cervical effacement"
+                  onChange={(item) => handleInputChange('cervicalEffacement', item.value)}
+                  className="w-full"
+                />
+              </div>
 
-          <View style={styles.fieldContainer}>
-            <CustomSelect
-              options={dilationOptions}
-              placeholder="Select cervical dilation"
-              onSelect={(item) => handleInputChange('cervicalDilation', item.value)}
-              label="Cervical Dilation at Admission"
-            />
-          </View>
+              <div>
+                <Typography variant="body2" className="mb-2 font-medium">
+                  Cervical Dilation at Admission
+                </Typography>
+                <Select
+                  options={dilationOptions}
+                  placeholder="Select cervical dilation"
+                  onChange={(item) => handleInputChange('cervicalDilation', item.value)}
+                  className="w-full"
+                />
+              </div>
 
-          <TouchableOpacity
-            style={styles.calculateButton}
-            onPress={() => setResult(calculateScore())}
-          >
-            <Text style={styles.calculateButtonText}>Calculate Success Probability</Text>
-          </TouchableOpacity>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-6"
+                onClick={() => setResult(calculateScore())}
+              >
+                Calculate Success Probability
+              </Button>
 
-          {result && (
-            <View style={[styles.resultContainer, { backgroundColor: result.color + '20' }]}>
-              <Text style={[styles.resultTitle, { color: result.color }]}>
-                VBAC Success Probability: {result.probability}%
-              </Text>
-              <Text style={styles.resultScore}>Flamm Score: {result.score}</Text>
-              <Text style={styles.resultRecommendation}>{result.recommendation}</Text>
-              
-              <View style={styles.criticalActionsContainer}>
-                <Text style={styles.criticalActionsTitle}>Critical Actions:</Text>
-                {criticalActions.map((action, index) => (
-                  <Text key={index} style={styles.criticalAction}>
-                    • {action}
-                  </Text>
-                ))}
-              </View>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+              {result && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 p-4 rounded-lg"
+                  style={{ backgroundColor: `${result.color}20` }}
+                >
+                  <Typography
+                    variant="h6"
+                    className="font-bold"
+                    style={{ color: result.color }}
+                  >
+                    VBAC Success Probability: {result.probability}%
+                  </Typography>
+                  <Typography variant="body1" className="mt-2">
+                    Flamm Score: {result.score}
+                  </Typography>
+                  <Typography variant="body2" className="mt-2 text-gray-700">
+                    {result.recommendation}
+                  </Typography>
+
+                  <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+                    <Typography variant="subtitle2" className="font-semibold mb-2">
+                      Critical Actions:
+                    </Typography>
+                    <List>
+                      {criticalActions.map((action, index) => (
+                        <ListItem key={index} disablePadding>
+                          <ListItemText
+                            primary={`• ${action}`}
+                            primaryTypographyProps={{ variant: 'body2' }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <Modal
-        visible={showInfoModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowInfoModal(false)}
+        open={showInfoModal}
+        onClose={() => setShowInfoModal(false)}
+        className="flex items-center justify-center"
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setShowInfoModal(false)}
+        <motion.div
+          initial={{ scale: 0.8 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.2 }}
+          className="bg-white rounded-lg p-6 w-full max-w-md mx-4"
         >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>{activeInfoContent}</Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => setShowInfoModal(false)}
-            >
-              <Text style={styles.modalButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
+          <div className="flex justify-between items-center mb-4">
+            <Typography variant="h6">Information</Typography>
+            <Button onClick={() => setShowInfoModal(false)}>
+              <X size={24} />
+            </Button>
+          </div>
+          <Typography variant="body1" className="mb-4">
+            {activeInfoContent}
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => setShowInfoModal(false)}
+          >
+            Close
+          </Button>
+        </motion.div>
       </Modal>
-    </SafeAreaView>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F6F8',
-  },
-  scrollContainer: {
-    padding: 16,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#E0E0E0',
-    marginBottom: 16,
-  },
-  fieldContainer: {
-    marginBottom: 16,
-  },
-  calculateButton: {
-    backgroundColor: '#3498DB',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  calculateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  resultContainer: {
-    marginTop: 20,
-    padding: 16,
-    borderRadius: 8,
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  resultScore: {
-    fontSize: 16,
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  resultRecommendation: {
-    fontSize: 14,
-    color: '#34495E',
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  criticalActionsContainer: {
-    marginTop: 16,
-    padding: 16,
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    borderRadius: 8,
-  },
-  criticalActionsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  criticalAction: {
-    fontSize: 14,
-    color: '#34495E',
-    lineHeight: 20,
-    marginBottom: 4,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.8,
-    maxWidth: 400,
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#2C3E50',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  modalButton: {
-    backgroundColor: '#3498DB',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
 
 export default VBACRiskCalculator;

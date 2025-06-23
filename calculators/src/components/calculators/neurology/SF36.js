@@ -1,104 +1,101 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Container,
+  Card,
+  CardContent,
+} from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const SF36 = () => {
+const SF36 = () => {
   const [scores, setScores] = useState({
-    physicalFunctioning: 0,
-    roleLimitations: 0,
-    bodilyPain: 0,
-    generalHealth: 0,
-    vitality: 0,
-    socialFunctioning: 0,
-    mentalHealth: 0,
+    physicalFunctioning: '',
+    roleLimitations: '',
+    bodilyPain: '',
+    generalHealth: '',
+    vitality: '',
+    socialFunctioning: '',
+    mentalHealth: '',
   });
 
   const handleScoreChange = (scoreName, value) => {
-    setScores({ ...scores, [scoreName]: value });
+    const numericValue = parseInt(value,  if (value === ''0 || (!isNaN(value)numericValue && numericValue >= 0 && value <= 100)) {
+      setScores({ ...scores, [scoreName]: value });
+    }
   };
 
   const calculateScore = () => {
-    const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    const totalScore = Object.values(scores)
+      .reduce((a, b) => a + (parseInt(b) || 0), 0);
     return totalScore;
   };
 
+  const domains = [
+    { label: 'Physical Functioning', key: 'physicalFunctioning' },
+    { label: 'Role Limitations', key: 'roleLimitations' },
+    { label: 'Bodily Pain', key: 'bodilyPain' },
+    { label: 'General Health', key: 'generalHealth' },
+    { label: 'Vitality', key: 'vitality' },
+    { label: 'Social Functioning', key: 'socialFunctioning' },
+    { label: 'Mental Health', key: 'mentalHealth' },
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>SF-36 (Health-Related Quality of Life)</Text>
+    <Container maxWidth="sm" className="py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Typography variant="h4" className="font-bold text-center text-gray-900 mb-6">
+          SF-36 (Health-Related Quality of Life)
+        </Typography>
 
-      <Text>Physical Functioning:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.physicalFunctioning.toString()}
-        onChangeText={(value) => handleScoreChange("physicalFunctioning", value)}
-      />
+        <Card className="mb-4 shadow-sm">
+          <CardContent>
+            {domains.map(({ label, key }) => (
+              <Box key={key} className="mb-4">
+                <Typography className="font-semibold text-gray-900 mb-2">
+                  {label}
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  variant="outlined"
+                  value={scores[key]}
+                  onChange={(e) => handleScoreChange(key, e.target.value)}
+                  placeholder="0-100"
+                  InputProps={{
+                    inputProps: { min: 0, max: 100 },
+                    sx: {
+                      borderRadius: '8px',
+                      bgcolor: '#F5F7FA',
+                    },
+                  }}
+                />
+              </Box>
+            ))}
 
-      <Text>Role Limitations:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.roleLimitations.toString()}
-        onChangeText={(value) => handleScoreChange("roleLimitations", value)}
-      />
+            <Button
+              fullWidth
+              variant="contained"
+              className="bg-gray-900 text-white mt-4"
+              onClick={calculateScore}
+            >
+              Calculate SF-36 Total Score
+            </Button>
 
-      <Text>Bodily Pain:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.bodilyPain.toString()}
-        onChangeText={(value) => handleScoreChange("bodilyPain", value)}
-      />
-
-      <Text>General Health:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.generalHealth.toString()}
-        onChangeText={(value) => handleScoreChange("generalHealth", value)}
-      />
-
-      <Text>Vitality:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.vitality.toString()}
-        onChangeText={(value) => handleScoreChange("vitality", value)}
-      />
-
-      <Text>Social Functioning:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.socialFunctioning.toString()}
-        onChangeText={(value) => handleScoreChange("socialFunctioning", value)}
-      />
-
-      <Text>Mental Health:</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        value={scores.mentalHealth.toString()}
-        onChangeText={(value) => handleScoreChange("mentalHealth", value)}
-      />
-
-      <Button title="Calculate SF-36 Total Score" onPress={calculateScore} />
-      <Text>Total SF-36 Score: {calculateScore()}</Text>
-    </View>
+            <Typography className="text-center text-gray-900 font-semibold mt-4">
+              Total SF-36 Score: {calculateScore()}
+            </Typography>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    borderWidth: 1,
-    padding: 5,
-    marginBottom: 10,
-  },
-});
+export default SF36;

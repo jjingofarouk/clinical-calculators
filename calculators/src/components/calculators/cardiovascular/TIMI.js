@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { Box, Typography, TextField, Switch, Button, FormControlLabel, Checkbox } from '@mui/material';
 
 const calculateTIMI = ({
   age,
@@ -70,7 +61,7 @@ const TIMICalculator = () => {
 
   const handleCalculate = () => {
     if (!formValues.age || !formValues.anginaEpisodesLast24Hours) {
-      Alert.alert('Error', 'Please fill out all required fields.');
+      alert('Please fill out all required fields.');
       return;
     }
 
@@ -78,166 +69,130 @@ const TIMICalculator = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>TIMI Calculator</Text>
+    <Box className="min-h-screen bg-gray-200 p-5">
+      <Typography variant="h4" className="font-bold text-gray-900 mb-5">
+        TIMI Calculator
+      </Typography>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Age:</Text>
-        <TextInput
-          style={styles.input}
+      <Box className="w-full bg-white rounded-lg p-5 mb-5">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Age:
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
           placeholder="Enter age"
-          keyboardType="numeric"
           value={formValues.age}
-          onChangeText={(value) => setFormValues((prev) => ({ ...prev, age: value }))}
+          onChange={(e) => setFormValues((prev) => ({ ...prev, age: e.target.value }))}
+          variant="outlined"
+          className="mb-4"
+          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
-      </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Aspirin use in the last 7 days:</Text>
-        <Switch
-          value={formValues.aspirinUseLast7Days}
-          onValueChange={(value) =>
-            setFormValues((prev) => ({ ...prev, aspirinUseLast7Days: value }))
-          }
-        />
-      </View>
+        <Box className="flex items-center mb-4">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+            Aspirin use in the last 7 days:
+          </Typography>
+          <Switch
+            checked={formValues.aspirinUseLast7Days}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, aspirinUseLast7Days: e.target.checked }))
+            }
+          />
+        </Box>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Angina episodes in the last 24 hours:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter number"
-          keyboardType="numeric"
-          value={formValues.anginaEpisodesLast24Hours}
-          onChangeText={(value) =>
-            setFormValues((prev) => ({ ...prev, anginaEpisodesLast24Hours: value }))
-          }
-        />
-      </View>
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Angina episodes in the last 24 hours:
+        </Typography>
+          <TextField
+            fullWidth
+            type="number"
+            placeholder="Enter number"
+            value={formValues.anginaEpisodesLast24Hours}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, anginaEpisodesLast24Hours: e.target.value }))
+            }
+            variant="outlined"
+            className="mb-4"
+            sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          />
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>ST changes (≥0.5 mm):</Text>
-        <Switch
-          value={formValues.stChanges}
-          onValueChange={(value) =>
-            setFormValues((prev) => ({ ...prev, stChanges: value }))
-          }
-        />
-      </View>
+        <Box className="flex items-center mb-4">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+            ST changes (≥0.5 mm):
+          </Typography>
+          <Switch
+            checked={formValues.stChanges}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, stChanges: e.target.checked }))
+            }
+          />
+        </Box>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Elevated cardiac biomarkers:</Text>
-        <Switch
-          value={formValues.elevatedBiomarkers}
-          onValueChange={(value) =>
-            setFormValues((prev) => ({ ...prev, elevatedBiomarkers: value }))
-          }
-        />
-      </View>
+        <Box className="flex items-center mb-4">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+            Elevated cardiac biomarkers:
+          </Typography>
+          <Switch
+            checked={formValues.elevatedBiomarkers}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, elevatedBiomarkers: e.target.checked }))
+            }
+          />
+        </Box>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Known coronary artery disease:</Text>
-        <Switch
-          value={formValues.coronaryArteryDisease}
-          onValueChange={(value) =>
-            setFormValues((prev) => ({ ...prev, coronaryArteryDisease: value }))
-          }
-        />
-      </View>
+        <Box className="flex items-center mb-4">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+            Known coronary artery disease:
+          </Typography>
+          <Switch
+            checked={formValues.coronaryArteryDisease}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, coronaryArteryDisease: e.target.checked }))
+            }
+          />
+        </Box>
 
-      <Text style={styles.subHeader}>Cardiac Risk Factors:</Text>
-      {['Hypertension', 'Smoking', 'Low HDL Cholesterol', 'Diabetes Mellitus', 'Family History of Premature CAD'].map(
-        (factor) => (
-          <TouchableOpacity
-            key={factor}
-            style={styles.checkboxContainer}
-            onPress={() => handleRiskFactorToggle(factor)}
-          >
-<Text style={styles.checkboxLabel}>
-  {`${formValues.cardiacRiskFactors.includes(factor) ? '☑' : '☐'} ${factor}`}
-</Text>
+        <Typography variant="h6" className="font-bold text-orange-500 mb-3 mt-5">
+          Cardiac Risk Factors:
+        </Typography>
+        {['Hypertension', 'Smoking', 'Low HDL Cholesterol', 'Diabetes Mellitus', 'Family History of Premature CAD'].map(
+          (factor) => (
+            <FormControlLabel
+              key={factor}
+              control={
+                <Checkbox
+                  checked={formValues.cardiacRiskFactors.includes(factor)}
+                  onChange={() => handleRiskFactorToggle(factor)}
+                />
+              }
+              label={factor}
+              className="mb-2 text-gray-900"
+            />
+          )
+        )}
 
-          </TouchableOpacity>
-        )
-      )}
+        <Button
+          variant="contained"
+          onClick={handleCalculate}
+          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg mt-4"
+        >
+          Calculate TIMI
+        </Button>
 
-      <TouchableOpacity style={styles.button} onPress={handleCalculate}>
-        <Text style={styles.buttonText}>Calculate TIMI</Text>
-      </TouchableOpacity>
-
-      {result && (
-        <View style={styles.result}>
-          <Text style={styles.resultText}>TIMI Score: {result.score}</Text>
-          <Text style={styles.resultText}>Risk: {result.risk}</Text>
-        </View>
-      )}
-    </ScrollView>
+        {result && (
+          <Box className="mt-5 p-4 bg-orange-500 rounded-lg">
+            <Typography variant="body1" className="text-white">
+              TIMI Score: {result.score}
+            </Typography>
+            <Typography variant="body1" className="text-white">
+              Risk: {result.risk}
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: '#DFE4E5', // Hospital-inspired background
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#002432',
-  },
-  inputGroup: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#002432',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#27C7B8',
-    borderRadius: 5,
-    padding: 10,
-    backgroundColor: '#FFFFFF',
-  },
-  subHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    color: '#F78837',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  checkboxLabel: {
-    fontSize: 16,
-    color: '#002432',
-  },
-  button: {
-    backgroundColor: '#27C7B8',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  result: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#F78837',
-    borderRadius: 5,
-  },
-  resultText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-  },
-});
 
 export default TIMICalculator;

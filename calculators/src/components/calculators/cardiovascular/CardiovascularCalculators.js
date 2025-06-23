@@ -52,8 +52,8 @@ const CardiovascularCalculators = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-200">
-      <Box className="p-3 bg-white border-b border-gray-300">
+    <Box className="min-h-screen bg-white p-6">
+      <Box className="p-6 bg-white border-b border-gray-300">
         <TextField
           fullWidth
           variant="outlined"
@@ -74,6 +74,7 @@ const CardiovascularCalculators = () => {
           backgroundColor: '#F9FAFB',
           borderBottom: 1,
           borderColor: '#E5E7EB',
+          padding: '0 24px',
           '& .MuiTab-root': {
             borderRadius: 3,
             margin: '0 6px',
@@ -108,7 +109,7 @@ const CardiovascularCalculators = () => {
         ))}
       </Tabs>
 
-      <Box className="p-4">
+      <Box className="p-6">
         {renderCalculator()}
       </Box>
     </Box>

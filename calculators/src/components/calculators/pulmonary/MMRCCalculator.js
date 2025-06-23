@@ -1,215 +1,132 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  SafeAreaView,
-} from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect';
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, Typography, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const MMRCCalculator = () => {
   const [score, setScore] = useState('');
   const [showGuidelines, setShowGuidelines] = useState(false);
 
   const dyspneaOptions = [
-    {
-      value: '0',
-      label: 'Grade 0 - Dyspnea only with strenuous exercise',
-    },
-    {
-      value: '1',
-      label: 'Grade 1 - Dyspnea when hurrying or walking up a slight hill',
-    },
-    {
-      value: '2',
-      label: 'Grade 2 - Walks slower than people of same age due to breathlessness',
-    },
-    {
-      value: '3',
-      label: 'Grade 3 - Stops for breath after walking 100 yards or few minutes',
-    },
-    {
-      value: '4',
-      label: 'Grade 4 - Too breathless to leave house or dress',
-    },
+    { value: '0', label: 'Grade 0 - Dyspnea only with strenuous exercise' },
+    { value: '1', label: 'Grade 1 - Dyspnea when hurrying or walking up a slight hill' },
+    { value: '2', label: 'Grade 2 - Walks slower than people of same age due to breathlessness' },
+    { value: '3', label: 'Grade 3 - Stops for breath after walking 100 yards or few minutes' },
+    { value: '4', label: 'Grade 4 - Too breathless to leave house or dress' },
   ];
 
   const getResultInterpretation = () => {
     if (!score) return null;
-    
     const interpretations = {
-      '0': 'Minimal respiratory limitation',
+      '0': 'Minimal impact on respiratory function',
       '1': 'Mild respiratory limitation',
       '2': 'Moderate respiratory limitation',
       '3': 'Severe respiratory limitation',
-      '4': 'Very severe respiratory limitation',
+      '4': 'Very severe impact on respiratory capacity'
     };
-    
     return interpretations[score];
   };
 
-  const handleSelectGrade = (item) => {
-    setScore(item.value);
-  };
-
-  const ResultCard = () => (
-    score ? (
-      <View style={styles.resultCard}>
-        <Text style={styles.resultTitle}>Assessment Result</Text>
-        <Text style={styles.scoreText}>mMRC Grade: {score}</Text>
-        <Text style={styles.interpretationText}>{getResultInterpretation()}</Text>
-        <Text style={styles.descriptionText}>
-          {dyspneaOptions.find(option => option.value === score)?.label}
-        </Text>
-      </View>
-    ) : null
-  );
-
-  const Guidelines = () => (
-    <View style={styles.guidelinesContainer}>
-      <Text style={styles.guidelineTitle}>Clinical Guidelines</Text>
-      <Text style={styles.guidelineText}>
-        • Score ≥2 may indicate need for further assessment including spirometry
-      </Text>
-      <Text style={styles.guidelineText}>
-        • Consider GOLD staging for COPD patients
-      </Text>
-      <Text style={styles.guidelineText}>
-        • Evaluate need for pulmonary rehabilitation
-      </Text>
-    </View>
-  );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.contentContainer}>
-          <Text style={styles.title}>mMRC Dyspnea Scale</Text>
-          <Text style={styles.subtitle}>
-            Assess breathlessness severity in respiratory conditions
-          </Text>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-2">
+          mMRC Dyspnea Score
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600 text-center mb-8">
+          Assess breathlessness severity in respiratory conditions
+        </Typography>
 
-          <View style={styles.selectContainer}>
-            <CustomSelect
-              options={dyspneaOptions}
-              placeholder="Select Dyspnea Level"
-              onSelect={handleSelectGrade}
-              label="Dyspnea Grade"
-            />
-          </View>
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="mb-6">
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="dyspnea-select-label">Select Dyspnea Grade</InputLabel>
+                <Select
+                  labelId="dyspnea-select-label"
+                  value={score}
+                  onChange={(e) => setScore(e.target.value)}
+                  label="Select Dyspnea Grade"
+                >
+                  {dyspneaOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-          <ResultCard />
+            {score && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6"
+              >
+                <Card className="shadow-md">
+                  <CardContent className="p-6">
+                    <Typography variant="h6" className="font-bold text-gray-800 mb-4">
+                      Assessment Result
+                    </Typography>
+                    <Typography variant="h5" className="font-bold text-blue-600 mb-2">
+                      mMRC Grade: {score}
+                    </Typography>
+                    <Typography variant="body1" className="font-medium text-gray-800 mb-2">
+                      {getResultInterpretation()}
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                      {dyspneaOptions.find(option => option.value === score)?.label}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
 
-          <TouchableOpacity
-            style={styles.guidelineButton}
-            onPress={() => setShowGuidelines(!showGuidelines)}
-          >
-            <Text style={styles.guidelineButtonText}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="mt-6"
+              onClick={() => setShowGuidelines(!showGuidelines)}
+            >
               {showGuidelines ? 'Hide Guidelines' : 'Show Clinical Guidelines'}
-            </Text>
-          </TouchableOpacity>
+            </Button>
 
-          {showGuidelines && <Guidelines />}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            {showGuidelines && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="mt-6"
+              >
+                <Card className="shadow-md">
+                  <CardContent className="p-6">
+                    <Typography variant="h6" className="font-bold text-gray-800 mb-4">
+                      Clinical Guidelines
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600 mb-2">
+                      • Score ≥2 may indicate need for further assessment including spirometry
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600 mb-2">
+                      • Consider GOLD staging for COPD patients
+                    </Typography>
+                    <Typography variant="body2" className="text-gray-600">
+                      • Evaluate need for pulmonary rehabilitation
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f6fa',
-  },
-  contentContainer: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  selectContainer: {
-    marginBottom: 20,
-  },
-  resultCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3498db',
-    marginBottom: 8,
-  },
-  interpretationText: {
-    fontSize: 16,
-    color: '#2c3e50',
-    marginBottom: 8,
-    fontWeight: '500',
-  },
-  descriptionText: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    lineHeight: 20,
-  },
-  guidelineButton: {
-    backgroundColor: '#3498db',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  guidelineButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  guidelinesContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  guidelineTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  guidelineText: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginBottom: 8,
-    lineHeight: 20,
-  },
-});
 
 export default MMRCCalculator;

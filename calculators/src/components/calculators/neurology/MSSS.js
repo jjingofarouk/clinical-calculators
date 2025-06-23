@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 
 export const MSSS = () => {
   const [motorFunction, setMotorFunction] = useState(0);
@@ -12,41 +17,58 @@ export const MSSS = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>MSSS (Multiple Sclerosis)</Text>
+    <Box
+      sx={{
+        padding: 3,
+        maxWidth: 400,
+        margin: "0 auto",
+        textAlign: "center",
+        backgroundColor: "#f9f9f9",
+        borderRadius: 2,
+        boxShadow: 3,
+      }}
+    >
+      <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+        MSSS (Multiple Sclerosis)
+      </Typography>
 
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Motor Function Score (0-6)"
-        value={motorFunction.toString()}
-        onChangeText={(text) => setMotorFunction(parseInt(text, 10))}
+      <TextField
+        label="Motor Function Score (0-6)"
+        type="number"
+        value={motorFunction}
+        onChange={(event) => setMotorFunction(parseInt(event.target.value, 10))}
+        fullWidth
+        margin="normal"
+        variant="outlined"
       />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Cognitive Status Score (0-6)"
-        value={cognitiveStatus.toString()}
-        onChangeText={(text) => setCognitiveStatus(parseInt(text, 10))}
+      <TextField
+        label="Cognitive Status Score (0-6)"
+        type="number"
+        value={cognitiveStatus}
+        onChange={(event) => setCognitiveStatus(parseInt(event.target.value, 10))}
+        fullWidth
+        margin="normal"
+        variant="outlined"
       />
-      <Button title="Calculate Total Score" onPress={calculateScore} />
-      {totalScore !== null && <Text>Total MSSS Score: {totalScore}</Text>}
-    </View>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={calculateScore}
+        sx={{ marginTop: 2 }}
+      >
+        Calculate Total Score
+      </Button>
+      {totalScore !== null && (
+        <Typography
+          sx={{
+            marginTop: 2,
+            fontWeight: "bold",
+            color: "primary.main",
+          }}
+        >
+          Total MSSS Score: {totalScore}
+        </Typography>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    borderWidth: 1,
-    padding: 10,
-    marginBottom: 20,
-  },
-});

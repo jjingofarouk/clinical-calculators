@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CssBaseline, Box, Typography } from '@mui/material';
 
 // Pages
-import Home from './components/Home';
+import Home from './Home';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
 import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';

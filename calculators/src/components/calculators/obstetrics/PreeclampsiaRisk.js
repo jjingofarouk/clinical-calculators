@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { Box, TextField, Button, Typography, Alert, Switch, FormControlLabel } from "@mui/material";
 
 const PreeclampsiaRisk = () => {
   const [age, setAge] = useState("");
@@ -23,7 +23,9 @@ const PreeclampsiaRisk = () => {
       isNaN(parsedSystolicBP) ||
       isNaN(parsedDiastolicBP)
     ) {
-      Alert.alert("Invalid Input", "Please enter valid numeric values for all parameters.");
+      setRisk(
+        <Alert severity="error">Please enter valid numeric values for all parameters.</Alert>
+      );
       return;
     }
 
@@ -47,137 +49,101 @@ const PreeclampsiaRisk = () => {
 
     // Determine risk level
     if (riskScore >= 8) {
-      setRisk("High Risk");
+      setRisk(
+        <Alert severity="warning">High Risk</Alert>
+      );
     } else if (riskScore >= 4) {
-      setRisk("Moderate Risk");
+      setRisk(
+        <Alert severity="info">Moderate Risk</Alert>
+      );
     } else {
-      setRisk("Low Risk");
+      setRisk(
+        <Alert severity="success">Low Risk</Alert>
+      );
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Preeclampsia Risk Calculator</Text>
+    <Box sx={{ maxWidth: 600, mx: "auto", p: 3, bgcolor: "background.paper", borderRadius: 2, boxShadow: 1 }}>
+      <Typography variant="h4" align="center" sx={{ mb: 3 }}>
+        Preeclampsia Risk Calculator
+      </Typography>
 
       {/* Input for Age */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Age (years):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={age}
-          onChangeText={(value) => setAge(value)}
-          placeholder="Enter age"
-        />
-      </View>
+      <TextField
+        fullWidth
+        label="Age (years)"
+        variant="outlined"
+        type="number"
+        value={age}
+        onChange={(e) => setAge(e.target.value)}
+        placeholder="Enter age"
+        sx={{ mb: 2 }}
+      />
 
       {/* Input for BMI */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>BMI (kg/m²):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={bmi}
-          onChangeText={(value) => setBmi(value)}
-          placeholder="Enter BMI"
-        />
-      </View>
+      <TextField
+        fullWidth
+        label="BMI (kg/m²)"
+        variant="outlined"
+        type="number"
+        value={bmi}
+        onChange={(e) => setBmi(e.target.value)}
+        placeholder="Enter BMI"
+        sx={{ mb: 2 }}
+      />
 
       {/* Input for Systolic Blood Pressure */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Systolic Blood Pressure (mmHg):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={systolicBP}
-          onChangeText={(value) => setSystolicBP(value)}
-          placeholder="Enter systolic BP"
-        />
-      </View>
+      <TextField
+        fullWidth
+        label="Systolic Blood Pressure (mmHg)"
+        variant="outlined"
+        type="number"
+        value={systolicBP}
+        onChange={(e) => setSystolicBP(e.target.value)}
+        placeholder="Enter systolic BP"
+        sx={{ mb: 2 }}
+      />
 
       {/* Input for Diastolic Blood Pressure */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Diastolic Blood Pressure (mmHg):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={diastolicBP}
-          onChangeText={(value) => setDiastolicBP(value)}
-          placeholder="Enter diastolic BP"
-        />
-      </View>
+      <TextField
+        fullWidth
+        label="Diastolic Blood Pressure (mmHg)"
+        variant="outlined"
+        type="number"
+        value={diastolicBP}
+        onChange={(e) => setDiastolicBP(e.target.value)}
+        placeholder="Enter diastolic BP"
+        sx={{ mb: 2 }}
+      />
 
       {/* History of Preeclampsia */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>History of Preeclampsia (Yes/No):</Text>
-        <Button
-          title={hasHistory ? "Yes" : "No"}
-          onPress={() => setHasHistory(!hasHistory)}
-          color={hasHistory ? "green" : "gray"}
-        />
-      </View>
+      <FormControlLabel
+        control={<Switch checked={hasHistory} onChange={() => setHasHistory(!hasHistory)} />}
+        label="History of Preeclampsia"
+        sx={{ mb: 2 }}
+      />
 
       {/* Multiple Pregnancy */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Multiple Pregnancy (Yes/No):</Text>
-        <Button
-          title={multiplePregnancy ? "Yes" : "No"}
-          onPress={() => setMultiplePregnancy(!multiplePregnancy)}
-          color={multiplePregnancy ? "green" : "gray"}
-        />
-      </View>
+      <FormControlLabel
+        control={<Switch checked={multiplePregnancy} onChange={() => setMultiplePregnancy(!multiplePregnancy)} />}
+        label="Multiple Pregnancy"
+        sx={{ mb: 2 }}
+      />
 
       {/* Calculate Button */}
-      <Button title="Calculate Risk" onPress={calculateRisk} />
+      <Button variant="contained" color="primary" fullWidth onClick={calculateRisk} sx={{ mb: 3 }}>
+        Calculate Risk
+      </Button>
 
       {/* Display the result */}
       {risk && (
-        <View style={styles.result}>
-          <Text style={styles.resultText}>Preeclampsia Risk: {risk}</Text>
-        </View>
+        <Box sx={{ mt: 2 }}>
+          {risk}
+        </Box>
       )}
-    </View>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
-  },
-  result: {
-    marginTop: 20,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 5,
-    borderColor: "#ccc",
-    borderWidth: 1,
-  },
-  resultText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});
 
 export default PreeclampsiaRisk;

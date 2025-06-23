@@ -2,15 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles for clinical calculators */
+/* Apply global layout and font */
 body {
-  @apply bg-white text-gray-900 p-4;
+  @apply bg-white text-gray-900 font-sans antialiased;
 }
 
+/* Calculator card styling */
 .card {
-  @apply rounded-lg shadow-md p-4 bg-white;
+  @apply rounded-lg shadow-md p-4 bg-white border border-gray-200;
 }
 
+/* Section headers */
 .header {
-  @apply text-gray-600 font-bold text-lg;
+  @apply text-teal-600 font-semibold text-xl mb-2;
+}
+
+/* Teal button styling */
+.btn-primary {
+  @apply bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition;
 }

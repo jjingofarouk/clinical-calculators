@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput } from "react-native";
+import { Tab, Tabs, Box, TextField, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 import GFRCalculator from "./GFRCalculator";
 import CKDEpiCalculator from "./CKDEpiCalculator";
 import CreatinineClearanceCalculator from "./CreatinineClearanceCalculator";
@@ -9,156 +10,117 @@ import ElectrolyteCalculator from "./ElectrolyteImbalanceCalculator";
 import UricAcidCalculator from "./UricAcidCalculator";
 
 const NephrologyCalculators = () => {
-  const [selectedCalculator, setSelectedCalculator] = useState("GFR Calculator");
-  const [searchQuery, setSearchQuery] = useState("");
+	const [selectedCalculator, setSelectedCalculator] = useState("GFR Calculator");
+	const [searchQuery, setSearchQuery] = useState("");
 
-  const calculators = [
-    "GFR Calculator",
-    "CKD-EPI Calculator",
-    "Creatinine Clearance Calculator",
-    "Urine Protein to Creatinine Ratio",
-    "Chronic Kidney Disease Stage Calculator",
-    "Electrolyte Calculator",
-    "Uric Acid Calculator",
-  ];
+	const calculators = [
+		"GFR Calculator",
+		"CKD-EPI Calculator",
+		"Creatinine Clearance Calculator",
+		"Urine Protein to Creatinine Ratio",
+		"Chronic Kidney Disease Stage Calculator",
+		"Electrolyte Calculator",
+		"Uric Acid Calculator",
+	];
 
-  const filteredCalculators = calculators.filter((calculator) =>
-    calculator.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+	const filteredCalculators = calculators.filter((calculator) =>
+		calculator.toLowerCase().includes(searchQuery.toLowerCase())
+	);
 
-  const renderCalculator = () => {
-    switch (selectedCalculator) {
-      case "GFR Calculator":
-        return <GFRCalculator />;
-      case "CKD-EPI Calculator":
-        return <CKDEpiCalculator />;
-      case "Creatinine Clearance Calculator":
-        return <CreatinineClearanceCalculator />;
-      case "Urine Protein to Creatinine Ratio":
-        return <UrineProteinToCreatinineRatio />;
-      case "Chronic Kidney Disease Stage Calculator":
-        return <ChronicKidneyDiseaseStageCalculator />;
-      case "Electrolyte Calculator":
-        return <ElectrolyteCalculator />;
-      case "Uric Acid Calculator":
-        return <UricAcidCalculator />;
+	const renderCalculator = () => {
+		switch (selectedCalculator) {
+			case "GFR Calculator":
+				return <GFRCalculator />;
+			case "CKD-EPI Calculator":
+				return <CKDEpiCalculator />;
+			case "Creatinine Clearance Calculator":
+				return <CreatinineClearanceCalculator />;
+			case "Urine Protein to Creatinine Ratio":
+				return <UrineProteinToCreatinineRatio />;
+			case "Chronic Kidney Disease Stage Calculator":
+				return <ChronicKidneyDiseaseStageCalculator />;
+			case "Electrolyte Calculator":
+				return <ElectrolyteCalculator />;
+			case "Uric Acid Calculator":
+				return <UricAcidCalculator />;
+			default:
+				return (
+					<Typography variant="body1" className="text-center text-gray-500 mt-8">
+						Select a calculator to get started
+					</Typography>
+				);
+		}
+	};
 
-      default:
-        return <Text style={styles.infoText}>Select a calculator to get started</Text>;
-    }
-  };
+	return (
+		<div className="min-h-screen bg-gray-100">
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				className="max-w-4xl mx-auto"
+			>
+				<Box className="p-4">
+					{/* Search Bar */}
+					<Box className="mb-4">
+						<TextField
+							fullWidth
+							variant="outlined"
+							placeholder="Search calculators..."
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+							sx={{
+								"& .MuiOutlinedInput-root": {
+									borderRadius: "8px",
+									backgroundColor: "#FFFFFF",
+								},
+							}}
+						/>
+					</Box>
 
-  return (
-    <View style={styles.container}>
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search calculators..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholderTextColor="#6B7280"
-        />
-      </View>
+					{/* Calculator Tabs */}
+					<Tabs
+						value={selectedCalculator}
+						onChange={(e, newValue) => setSelectedCalculator(newValue)}
+						variant="scrollable"
+						scrollButtons="auto"
+						sx={{
+							backgroundColor: "#F9FAFB",
+							borderBottom: "1px solid #E5E7EB",
+							"& .MuiTab-root": {
+								borderRadius: "12px",
+								mx: 1,
+								my: 1,
+								backgroundColor: "#FFFFFF",
+								border: "1px solid #E5E7EB",
+								color: "#1F2937",
+								"&.Mui-selected": {
+									backgroundColor: "#27C7B8",
+									color: "#FFFFFF",
+									border: "none",
+									boxShadow:
+										"0 2px 4px rgba(39, 199, 184, 0.2)",
+								},
+							},
+							"& .MuiTabs-indicator": {
+								display: "none",
+							},
+						}}
+					>
+						{filteredCalculators.map((calculator) => (
+							<Tab
+								key={calculator}
+								label={calculator}
+								value={calculator}
+							/>
+						))}
+					</Tabs>
 
-      {/* Calculator Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabContainer}>
-        {filteredCalculators.map((calculator) => (
-          <TouchableOpacity
-            key={calculator}
-            style={[
-              styles.tab,
-              selectedCalculator === calculator && styles.activeTab,
-            ]}
-            onPress={() => setSelectedCalculator(calculator)}
-          >
-            <Text
-              style={[
-                styles.tabText,
-                selectedCalculator === calculator && styles.activeTabText,
-              ]}
-            >
-              {calculator}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-
-      {/* Calculator Body */}
-      <ScrollView style={styles.bodyContainer}>{renderCalculator()}</ScrollView>
-    </View>
-  );
+					{/* Calculator Body */}
+					<Box className="p-4">{renderCalculator()}</Box>
+				</Box>
+			</motion.div>
+		</div>
+	);
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#DFE4E5",
-  },
-  searchContainer: {
-    padding: 12,
-    backgroundColor: "#F9FAFB",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
-  },
-  searchInput: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    fontSize: 14,
-    color: "#1F2937",
-  },
-  tabContainer: {
-    flexDirection: "row",
-    paddingVertical: 6,
-    backgroundColor: "#F9FAFB",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
-    maxHeight: 60,
-
-  },
-  tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    marginHorizontal: 6,
-    borderRadius: 12,
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
-  },
-  activeTab: {
-    backgroundColor: "#27C7B8",
-    borderWidth: 0,
-    shadowColor: "#27C7B8",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  tabText: {
-    fontSize: 14,
-    color: "#1F2937",
-  },
-  activeTabText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
-  },
-  bodyContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  infoText: {
-    fontSize: 16,
-    color: "#6B7280",
-    textAlign: "center",
-    marginTop: 20,
-  },
-});
 
 export default NephrologyCalculators;

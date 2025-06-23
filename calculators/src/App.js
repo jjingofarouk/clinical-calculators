@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CssBaseline, Box, Typography } from '@mui/material';
+import { CssBaseline, Typography } from '@mui/material';
 
 // Pages
 import Home from './Home';
@@ -18,20 +18,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <CssBaseline />
-      <Box
-        sx={{
-          flex: 1,
-          backgroundColor: '#ffffff',
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div className="w-full min-h-screen bg-white text-gray-900 px-2 sm:px-4 md:px-6 lg:px-8 font-sans">
         <Routes>
-          {/* Home Page */}
           <Route path="/" element={<Home />} />
-
-          {/* Calculator Categories */}
           <Route path="/calculators/General" element={<GeneralCalculators />} />
           <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
           <Route path="/calculators/Neurology" element={<NeurologyCalculators />} />
@@ -41,11 +30,9 @@ export default function App() {
           <Route path="/calculators/Orthopedics" element={<OrthopedicsCalculators />} />
           <Route path="/calculators/Nephrology" element={<NephrologyCalculators />} />
           <Route path="/calculators/ICU" element={<ICUCalculators />} />
-
-          {/* Fallback route */}
           <Route path="*" element={<Typography variant="h5">404 - Page Not Found</Typography>} />
         </Routes>
-      </Box>
+      </div>
     </BrowserRouter>
   );
 }

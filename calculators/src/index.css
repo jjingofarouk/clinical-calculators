@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global styles for clinical calculators */
+body {
+  @apply bg-background text-primary p-standardPadding;
+}
+
+.card {
+  @apply rounded-lg shadow-md p-4 bg-white;
+}
+
+.header {
+  @apply text-secondary font-bold text-lg;
+}

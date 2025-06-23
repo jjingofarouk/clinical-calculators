@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
-  ScrollView,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from "@react-navigation/native";
+  Box,
+  Typography,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Divider,
+  Button,
+  Card,
+  CardContent,
+  Alert,
+} from "@mui/material";
+import { ArrowBack, Star, StarBorder } from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
 
-// Calculator categories with metadata
 const calculatorCategories = [
   { id: "general", label: "General", icon: "calculator", color: "#2ECC71" },
   { id: "cardiovascular", label: "Cardiovascular", icon: "heart-pulse", color: "#FF4757" },
@@ -26,59 +29,32 @@ const calculatorCategories = [
   { id: "icu", label: "ICU", icon: "medkit", color: "#E84393" },
 ];
 
-// Custom Header Component
-const CustomHeader = () => {
-  const route = useRoute();
-  const navigation = useNavigation();
-
-  const getHeaderTitle = () => {
-    return route.name === "FavoritesCalculators" ? "Favorite Calculators" : route.name.replace(/([A-Z])/g, " $1").trim();
-  };
-
-  return (
-    <View style={styles.header}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <MaterialCommunityIcons name="arrow-left" size={24} color="#2F3542" />
-      </TouchableOpacity>
-      <Text style={styles.headerTitle}>{getHeaderTitle()}</Text>
-    </View>
-  );
-};
-
-const FavoritesCalculators = ({ route }) => {
-  const { allCalculators } = route.params; // Passed from AppNavigator
-  const navigation = useNavigation();
+const FavoritesCalculators = ({ allCalculators }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     loadFavorites();
   }, []);
 
-  const loadFavorites = async () => {
-    try {
-      const favoriteData = await AsyncStorage.getItem("favoriteCalculators");
-      if (favoriteData) {
-        setFavorites(JSON.parse(favoriteData));
-      }
-    } catch (error) {
-      console.error("Error loading favorites:", error);
+  const loadFavorites = () => {
+    const favoriteData = localStorage.getItem("favoriteCalculators");
+    if (favoriteData) {
+      setFavorites(JSON.parse(favoriteData));
     }
   };
 
-  const toggleFavorite = async (calculator) => {
-    try {
-      const updatedFavorites = favorites.includes(calculator.screen)
-        ? favorites.filter((fav) => fav !== calculator.screen)
-        : [...favorites, calculator.screen];
-      await AsyncStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
-      setFavorites(updatedFavorites);
-    } catch (error) {
-      console.error("Error updating favorites:", error);
-    }
+  const toggleFavorite = (calculator) => {
+    const updatedFavorites = favorites.includes(calculator.screen)
+      ? favorites.filter((fav) => fav !== calculator.screen)
+      : [...favorites, calculator.screen];
+    localStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
+    setFavorites(updatedFavorites);
   };
 
   const handleNavigation = (calculator) => {
-    navigation.navigate(calculator.screen);
+    navigate(calculator.screen);
   };
 
   const favoriteCalculators = allCalculators.filter((calc) => favorites.includes(calc.screen));
@@ -91,109 +67,53 @@ const FavoritesCalculators = ({ route }) => {
     };
   };
 
-  const renderCalculator = ({ item }) => {
-    const { icon, color } = getIconAndColor(item.category);
-    return (
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => handleNavigation(item)}
-        accessible
-        accessibilityLabel={`${item.name} in ${item.category}`}
-      >
-        <View style={styles.cardContent}>
-          <MaterialCommunityIcons name={icon} size={28} color={color} />
-          <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <Text style={styles.cardCategory}>{item.category}</Text>
-          </View>
-          <TouchableOpacity onPress={() => toggleFavorite(item)}>
-            <MaterialCommunityIcons name="star" size={24} color="#FFD700" />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFF" />
-      <CustomHeader />
-      <ScrollView contentContainerStyle={styles.container}>
-        <FlatList
-          data={favoriteCalculators}
-          renderItem={renderCalculator}
-          keyExtractor={(item) => item.screen}
-          scrollEnabled={false}
-          ListEmptyComponent={
-            <Text style={styles.emptyText}>No favorite calculators yet</Text>
-          }
-        />
-      </ScrollView>
-    </SafeAreaView>
+    <Box sx={{ maxWidth: 800, mx: "auto", p: 3 }}>
+      {/* Header */}
+      <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+        <IconButton onClick={() => navigate(-1)}>
+          <ArrowBack />
+        </IconButton>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          Favorite Calculators
+        </Typography>
+      </Box>
+
+      {favoriteCalculators.length === 0 ? (
+        <Alert severity="info" sx={{ textAlign: "center" }}>
+          No favorite calculators yet.
+        </Alert>
+      ) : (
+        <List>
+          {favoriteCalculators.map((item) => {
+            const { icon, color } = getIconAndColor(item.category);
+            return (
+              <React.Fragment key={item.screen}>
+                <ListItem
+                  button
+                  onClick={() => handleNavigation(item)}
+                  sx={{ borderRadius: 2, mb: 2 }}
+                >
+                  <ListItemAvatar>
+                    <Avatar sx={{ bgcolor: color }}>{icon}</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.name}
+                    secondary={item.category}
+                    sx={{ flexGrow: 1, textAlign: "left" }}
+                  />
+                  <IconButton onClick={() => toggleFavorite(item)}>
+                    {favorites.includes(item.screen) ? <Star /> : <StarBorder />}
+                  </IconButton>
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            );
+          })}
+        </List>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#FFF",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: "#FFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F2F6",
-  },
-  backButton: {
-    marginRight: 12,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#2F3542",
-    flex: 1,
-  },
-  container: {
-    padding: 16,
-  },
-  card: {
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    backgroundColor: "#FFF",
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  cardContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  cardText: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#2F3542",
-  },
-  cardCategory: {
-    fontSize: 12,
-    color: "#747D8C",
-    marginTop: 4,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: "#747D8C",
-    textAlign: "center",
-    marginTop: 20,
-  },
-});
 
 export default FavoritesCalculators;

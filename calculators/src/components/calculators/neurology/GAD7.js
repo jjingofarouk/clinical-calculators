@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -49,7 +48,7 @@ const GAD7 = () => {
       clinical: 'Assesses physical tension',
     },
     {
-      text: 'Being so restless that it\'s hard to sit still',
+      text: "Being so restless that it's hard to sit still",
       clinical: 'Evaluates psychomotor agitation',
     },
     {
@@ -228,6 +227,6 @@ const GAD7 = () => {
       </motion.div>
     </Container>
   );
-});
+};
 
 export default GAD7;

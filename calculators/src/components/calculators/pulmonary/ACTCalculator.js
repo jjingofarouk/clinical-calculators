@@ -1,24 +1,18 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, Typography, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 
 const CLINICAL_THEME = {
-  primary: '#2D3580',     // Medical navy blue
-  secondary: '#4B61DD',   // Accent blue
-  success: '#00A474',     // Medical green
-  warning: '#FF9F3E',     // Warning orange
-  danger: '#E53E3E',      // Alert red
-  background: '#FFFFFF',  
-  surface: '#F7FAFC',    
-  border: '#E2E8F0',     
-  text: '#1A202C',       
-  textLight: '#4A5568',  
+  primary: '#2D3580',
+  secondary: '#4B61DD',
+  success: '#00A474',
+  warning: '#FF9F3E',
+  danger: '#E53E3E',
+  background: '#FFFFFF',
+  surface: '#F7FAFC',
+  border: '#E2E8F0',
+  text: '#1A202C',
+  textLight: '#4A5568',
 };
 
 const QUESTIONS = [
@@ -106,262 +100,123 @@ const ACTCalculator = () => {
     };
   };
 
-  const Question = ({ question, index }) => (
-    <View style={styles.questionCard}>
-      <View style={styles.questionHeader}>
-        <Text style={styles.questionNumber}>Q{index + 1}</Text>
-        <Text style={styles.questionText}>{question.text}</Text>
-      </View>
-      
-      <View style={styles.optionsContainer}>
-        {question.options.map((option, idx) => (
-          <TouchableOpacity
-            key={idx}
-            style={[
-              styles.option,
-              answers[question.id] === option.value && styles.selectedOption
-            ]}
-            onPress={() => setAnswers(prev => ({ ...prev, [question.id]: option.value }))}
-          >
-            <Text style={[
-              styles.optionText,
-              answers[question.id] === option.value && styles.selectedOptionText
-            ]}>
-              {option.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.title}>Asthma Control Test™</Text>
-          <Text style={styles.subtitle}>Clinical Assessment Tool</Text>
-        </View>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-4">
+          Asthma Control Test™
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600 text-center mb-8">
+          Clinical Assessment Tool
+        </Typography>
 
-        <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Clinical Guidance</Text>
-          <Text style={styles.infoText}>
-            • Assessment period: Past 4 weeks{'\n'}
-            • Use for monitoring asthma control{'\n'}
-            • Validated for ages 12 and above{'\n'}
-            • Consider in conjunction with lung function tests
-          </Text>
-        </View>
+        <Card className="shadow-lg mb-6">
+          <CardContent className="p-6 bg-gray-50">
+            <Typography variant="h6" className="font-semibold text-gray-800 mb-4">
+              Clinical Guidance
+            </Typography>
+            <Typography variant="body2" className="text-gray-600">
+              • Assessment period: Past 4 weeks<br />
+              • Use for monitoring asthma control<br />
+              • Validated for ages 12 and above<br />
+              • Consider in conjunction with lung function tests
+            </Typography>
+          </CardContent>
+        </Card>
 
         {QUESTIONS.map((question, index) => (
-          <Question key={question.id} question={question} index={index} />
+          <Card key={question.id} className="shadow-lg mb-6">
+            <CardContent className="p-6">
+              <Box className="flex items-start mb-4">
+                <Typography className="font-bold text-gray-800 mr-4">
+                  Q{index + 1}
+                </Typography>
+                <Typography className="text-gray-800">
+                  {question.text}
+                </Typography>
+              </Box>
+              <RadioGroup
+                value={answers[question.id] || ''}
+                onChange={(e) => setAnswers(prev => ({ ...prev, [question.id]: Number(e.target.value) }))}
+              >
+                {question.options.map((option, idx) => (
+                  <FormControlLabel
+                    key={idx}
+                    value={option.value}
+                    control={<Radio />}
+                    label={option.label}
+                    className="mb-2"
+                  />
+                ))}
+              </RadioGroup>
+            </CardContent>
+          </Card>
         ))}
 
-        <TouchableOpacity
-          style={[
-            styles.calculateButton,
-            Object.keys(answers).length !== 5 && styles.calculateButtonDisabled
-          ]}
-          onPress={calculateScore}
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          className="mt-4"
+          onClick={calculateScore}
           disabled={Object.keys(answers).length !== 5}
         >
-          <Text style={styles.calculateButtonText}>
-            Calculate ACT Score
-          </Text>
-        </TouchableOpacity>
+          Calculate ACT Score
+        </Button>
 
         {score !== null && (
-          <View style={styles.resultSection}>
-            <View style={[
-              styles.scoreCard,
-              { borderLeftColor: getScoreInterpretation(score).color }
-            ]}>
-              <Text style={styles.scoreTitle}>ACT Score</Text>
-              <Text style={styles.scoreValue}>{score}/25</Text>
-              <Text style={[
-                styles.scoreStatus,
-                { color: getScoreInterpretation(score).color }
-              ]}>
-                {getScoreInterpretation(score).status}
-              </Text>
-            </View>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6"
+          >
+            <Card className="shadow-lg" style={{ borderLeft: `4px solid ${getScoreInterpretation(score).color}` }}>
+              <CardContent className="p-6 text-center">
+                <Typography variant="subtitle1" className="text-gray-600">
+                  ACT Score
+                </Typography>
+                <Typography variant="h3" className="font-bold text-gray-800">
+                  {score}/25
+                </Typography>
+                <Typography
+                  variant="h6"
+                  className="font-semibold"
+                  style={{ color: getScoreInterpretation(score).color }}
+                >
+                  {getScoreInterpretation(score).status}
+                </Typography>
+              </CardContent>
+            </Card>
 
-            <View style={styles.clinicalAdvice}>
-              <Text style={styles.adviceTitle}>Clinical Recommendations</Text>
-              <Text style={styles.adviceText}>
-                {getScoreInterpretation(score).advice}
-              </Text>
-            </View>
+            <Card className="shadow-lg mt-4">
+              <CardContent className="p-6">
+                <Typography variant="h6" className="font-semibold text-gray-800 mb-4">
+                  Clinical Recommendations
+                </Typography>
+                <Typography variant="body2" className="text-gray-600">
+                  {getScoreInterpretation(score).advice}
+                </Typography>
+              </CardContent>
+            </Card>
 
-            <View style={styles.disclaimer}>
-              <Text style={styles.disclaimerText}>
-                This tool is intended to support clinical decision-making and should be used in conjunction with other clinical assessments. Results should be documented in the patient's medical record.
-              </Text>
-            </View>
-          </View>
+            <Card className="shadow-lg mt-4">
+              <CardContent className="p-6">
+                <Typography variant="body2" className="text-gray-600 italic">
+                  This tool is intended to support clinical decision-making and should be used in conjunction with other clinical assessments. Results should be documented in the patient's medical record.
+                </Typography>
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: CLINICAL_THEME.background,
-  },
-  header: {
-    padding: 20,
-    backgroundColor: CLINICAL_THEME.primary,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.background,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: CLINICAL_THEME.background,
-    textAlign: 'center',
-    opacity: 0.9,
-  },
-  infoCard: {
-    margin: 15,
-    padding: 15,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    borderLeftColor: CLINICAL_THEME.secondary,
-  },
-  infoTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.text,
-    marginBottom: 8,
-  },
-  infoText: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-    lineHeight: 20,
-  },
-  questionCard: {
-    margin: 15,
-    padding: 15,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-  },
-  questionHeader: {
-    flexDirection: 'row',
-    marginBottom: 15,
-  },
-  questionNumber: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.primary,
-    marginRight: 10,
-  },
-  questionText: {
-    flex: 1,
-    fontSize: 16,
-    color: CLINICAL_THEME.text,
-    lineHeight: 22,
-  },
-  optionsContainer: {
-    marginTop: 10,
-  },
-  option: {
-    padding: 12,
-    marginVertical: 4,
-    backgroundColor: CLINICAL_THEME.background,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-  },
-  selectedOption: {
-    backgroundColor: CLINICAL_THEME.primary,
-    borderColor: CLINICAL_THEME.primary,
-  },
-  optionText: {
-    fontSize: 15,
-    color: CLINICAL_THEME.text,
-  },
-  selectedOptionText: {
-    color: CLINICAL_THEME.background,
-    fontWeight: '500',
-  },
-  calculateButton: {
-    margin: 15,
-    padding: 16,
-    backgroundColor: CLINICAL_THEME.primary,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  calculateButtonDisabled: {
-    opacity: 0.5,
-  },
-  calculateButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.background,
-  },
-  resultSection: {
-    margin: 15,
-  },
-  scoreCard: {
-    padding: 20,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    alignItems: 'center',
-  },
-  scoreTitle: {
-    fontSize: 16,
-    color: CLINICAL_THEME.textLight,
-    marginBottom: 5,
-  },
-  scoreValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.text,
-    marginBottom: 5,
-  },
-  scoreStatus: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  clinicalAdvice: {
-    marginTop: 15,
-    padding: 15,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 8,
-  },
-  adviceTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: CLINICAL_THEME.text,
-    marginBottom: 8,
-  },
-  adviceText: {
-    fontSize: 14,
-    color: CLINICAL_THEME.textLight,
-    lineHeight: 20,
-  },
-  disclaimer: {
-    marginTop: 15,
-    padding: 15,
-    backgroundColor: CLINICAL_THEME.surface,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: CLINICAL_THEME.border,
-  },
-  disclaimerText: {
-    fontSize: 12,
-    color: CLINICAL_THEME.textLight,
-    fontStyle: 'italic',
-  },
-});
 
 export default ACTCalculator;

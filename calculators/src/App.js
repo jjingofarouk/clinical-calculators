@@ -1,6 +1,6 @@
 import React from 'react';
 import { CssBaseline, Box } from '@mui/material';
-import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
+import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <CardiovascularCalculators />
+        <GeneralCalculators />
       </Box>
     </>
   );

@@ -11,7 +11,7 @@ import Home from './Home';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
 import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
-import GastroenterologyCalculators from './components/calculators/gastro/GastroenterologyCalculators';
+import GastroenterologyCalculators from './components/calculators/git/GastroenterologyCalculators';
 import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
 import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';

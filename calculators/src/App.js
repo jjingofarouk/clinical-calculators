@@ -6,7 +6,7 @@ import GeneralCalculators from './components/calculators/general/GeneralCalculat
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
 import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';
 import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
-import GastroenterologyCalculators from './components/calculators/gastroenterology/GastroenterologyCalculators';
+import GastroenterologyCalculators from './components/calculators/git/GastroenterologyCalculators';
 import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
 import OrthopedicsCalculators from './components/calculators/orthopedics/OrthopedicsCalculators';
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';

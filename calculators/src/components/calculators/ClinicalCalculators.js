@@ -1,27 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Search,
-  Star,
-  Calculator,
-  Heart,
-  Brain,
-  Wind,
-  Stethoscope,
-  Baby,
-  Bone,
-  Droplet,
-  Activity,
-} from "lucide-react";
-import {
-  TextField,
-  IconButton,
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-} from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Star } from 'lucide-react';
+import { TextField, IconButton, Box, Typography, Card, CardContent, Grid } from '@mui/material';
+import { Calculator, Heart, Brain, Wind, Stethoscope, Baby, Bone, Droplet, Activity } from 'lucide-react';
 
 // Icon map for dynamic rendering
 const iconMap = {
@@ -37,78 +18,15 @@ const iconMap = {
 };
 
 const calculatorCategories = [
-  {
-    id: "general",
-    label: "General",
-    icon: "Calculator",
-    color: "#2ECC71",
-    description: "BMI, BMR, caloric needs",
-    screen: "General",
-  },
-  {
-    id: "cardiovascular",
-    label: "Cardiovascular",
-    icon: "Heart",
-    color: "#FF4757",
-    description: "ASCVD, CHADSVASC, HASBLED",
-    screen: "Cardiovascular",
-  },
-  {
-    id: "neurology",
-    label: "Neurology",
-    icon: "Brain",
-    color: "#5352ED",
-    description: "GCS, NIHSS, mRS",
-    screen: "Neurology",
-  },
-  {
-    id: "pulmonary",
-    label: "Pulmonary",
-    icon: "Wind",
-    color: "#1E90FF",
-    description: "BODE, CURB-65, asthma",
-    screen: "Pulmonary",
-  },
-  {
-    id: "gastroenterology",
-    label: "Gastroenterology",
-    icon: "Stethoscope",
-    color: "#FF6B6B",
-    description: "Alvarado, Child-Pugh, FIB-4",
-    screen: "Gastroenterology",
-  },
-  {
-    id: "obstetrics",
-    label: "Obstetrics",
-    icon: "Baby",
-    color: "#FF9FF3",
-    description: "Due date, Bishop, Apgar",
-    screen: "Obstetrics",
-  },
-  {
-    id: "orthopedics",
-    label: "Orthopedics",
-    icon: "Bone",
-    color: "#FFA502",
-    description: "Fracture risk, Ottawa rules",
-    screen: "Orthopedics",
-  },
-  {
-    id: "nephrology",
-    label: "Nephrology",
-    icon: "Droplet",
-    color: "#747D8C",
-    description: "eGFR, creatinine, KDIGO",
-    screen: "Nephrology",
-  },
-  {
-    id: "icu",
-    label: "ICU",
-    icon: "Activity",
-    color: "#E84393",
-    description: "APACHE, SOFA, qSOFA",
-    screen: "ICU",
-  },
+  { id: 'general', label: 'General', icon: 'Calculator', color: '#2ECC71', description: 'BMI, BMR, caloric needs', screen: 'General' },
+  { id: 'cardiovascular', label: 'Cardiovascular', icon: 'Heart', color: '#FF4757', description: 'ASCVD, CHADSVASC, HASBLED', screen: 'Cardiovascular' },
+  { id: 'neurology', label: 'Neurology', icon: 'Brain', color: '#5352ED', description: 'GCS, NIHSS, mRS', screen: 'Neurology' },
+  { id: 'pulmonary', label: 'Pulmonary', icon: 'Wind', color: '#1E90FF', description: 'BODE, CURB-65, asthma', screen: 'Pulmonary' },
+  { id: 'gastroenterology', label: 'Gastroenterology', icon: 'Stethoscope', color: '#FF6B6B', description: 'Alvarado, Child-Pugh, FIB-4', screen: 'Gastroenterology' },
+  { id: 'obstetrics', label: 'Obstetrics', icon: 'Baby', color: '#FF9FF3', description: 'Due date, Bishop, Apgar', screen: 'Obstetrics' },
+  { id: 'orthopedics', label: 'Orthopedics', icon: 'Bone', color: '#FFA502', description: 'Fracture risk, Ottawa rules', screen: 'Orthopedics' },
+  { id: 'nephrology', label: 'Nephrology', icon: 'Droplet', color: '#747D8C', description: 'eGFR, creatinine, KDIGO', screen: 'Nephrology' },
+  { id: 'icu', label: 'ICU', icon: 'Activity', color: '#E84393', description: 'APACHE, SOFA, qSOFA', screen: 'ICU' },
 ];
 
 const CustomHeader = () => {
@@ -120,16 +38,10 @@ const CustomHeader = () => {
         Clinical Calculators
       </Typography>
       <Box className="flex gap-4">
-        <IconButton
-          onClick={() => navigate("/search-calculators")}
-          aria-label="Search calculators"
-        >
+        <IconButton onClick={() => navigate('/search-calculators')} aria-label="Search calculators">
           <Search size={24} className="text-gray-800" />
         </IconButton>
-        <IconButton
-          onClick={() => navigate("/favorites-calculators")}
-          aria-label="Favorite calculators"
-        >
+        <IconButton onClick={() => navigate('/favorites-calculators')} aria-label="Favorite calculators">
           <Star size={24} className="text-yellow-400" />
         </IconButton>
       </Box>
@@ -139,12 +51,10 @@ const CustomHeader = () => {
 
 const ClinicalCalculators = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const allCalculators = location.state?.allCalculators || [];
-  const [recentCalculators, setRecentCalculators] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredCalculators, setFilteredCalculators] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [recentCategories, setRecentCategories] = useState([]);
+  const [favoriteCategories, setFavoriteCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState(calculatorCategories);
 
   useEffect(() => {
     loadRecentsAndFavorites();
@@ -152,116 +62,101 @@ const ClinicalCalculators = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = allCalculators.filter((calc) =>
-        calc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = calculatorCategories.filter((cat) =>
+        cat.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        cat.description.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredCalculators(filtered);
+      setFilteredCategories(filtered);
     } else {
-      setFilteredCalculators([]);
+      setFilteredCategories(calculatorCategories);
     }
-  }, [searchQuery, allCalculators]);
+  }, [searchQuery]);
 
   const loadRecentsAndFavorites = async () => {
     try {
-      const recentData = localStorage.getItem("recentCalculators");
-      const favoriteData = localStorage.getItem("favoriteCalculators");
-      if (recentData) setRecentCalculators(JSON.parse(recentData));
-      if (favoriteData) setFavorites(JSON.parse(favoriteData));
+      const recentData = localStorage.getItem('recentCategories');
+      const favoriteData = localStorage.getItem('favoriteCategories');
+      if (recentData) setRecentCategories(JSON.parse(recentData));
+      if (favoriteData) setFavoriteCategories(JSON.parse(favoriteData));
     } catch (error) {
-      console.error("Error loading data:", error);
+      console.error('Error loading data:', error);
     }
   };
 
-  const handleNavigation = async (item, isCategory) => {
+  const handleNavigation = async (category) => {
     try {
-      const id = isCategory ? item.id : item.screen;
       const updatedRecents = [
-        id,
-        ...recentCalculators.filter((calc) => calc !== id),
+        category.id,
+        ...recentCategories.filter((id) => id !== category.id),
       ].slice(0, 5);
-      localStorage.setItem("recentCalculators", JSON.stringify(updatedRecents));
-      setRecentCalculators(updatedRecents);
-
-      navigate(isCategory ? `/calculators/${item.screen}` : `/${item.screen}`, {
-        state: { allCalculators },
-      });
+      localStorage.setItem('recentCategories', JSON.stringify(updatedRecents));
+      setRecentCategories(updatedRecents);
+      navigate(`/calculators/${category.screen}`);
     } catch (error) {
-      console.error("Error navigating:", error);
+      console.error('Error navigating:', error);
     }
   };
 
-  const toggleFavorite = async (calculator) => {
+  const toggleFavorite = async (category) => {
     try {
-      const updatedFavorites = favorites.includes(calculator.screen)
-        ? favorites.filter((fav) => fav !== calculator.screen)
-        : [...favorites, calculator.screen];
-      localStorage.setItem("favoriteCalculators", JSON.stringify(updatedFavorites));
-      setFavorites(updatedFavorites);
+      const updatedFavorites = favoriteCategories.includes(category.id)
+        ? favoriteCategories.filter((id) => id !== category.id)
+        : [...favoriteCategories, category.id];
+      localStorage.setItem('favoriteCategories', JSON.stringify(updatedFavorites));
+      setFavoriteCategories(updatedFavorites);
     } catch (error) {
-      console.error("Error updating favorites:", error);
+      console.error('Error updating favorites:', error);
     }
   };
 
-  const renderItem = (item) => {
-    const isCategory = !item.category;
-    const category = isCategory
-      ? calculatorCategories.find((cat) => cat.id === item.id)
-      : calculatorCategories.find(
-          (cat) => cat.label.toLowerCase() === item.category.toLowerCase()
-        );
-
-    const IconComponent = iconMap[category?.icon] || Calculator;
+  const renderCategoryCard = (category) => {
+    const IconComponent = iconMap[category.icon] || Calculator;
 
     return (
       <Card
+        key={category.id}
         className="mb-3 cursor-pointer hover:shadow-md transition-shadow"
         sx={{ backgroundColor: `${category.color}15`, borderRadius: 3 }}
-        onClick={() => handleNavigation(item, isCategory)}
+        onClick={() => handleNavigation(category)}
       >
         <CardContent className="flex items-center justify-between">
           <Box className="flex items-center gap-3">
             <IconComponent size={28} style={{ color: category.color }} />
             <Box>
               <Typography variant="subtitle1" className="font-semibold text-gray-800">
-                {isCategory ? item.label : item.name}
+                {category.label}
               </Typography>
               <Typography variant="caption" className="text-gray-500">
-                {isCategory ? item.description : item.category}
+                {category.description}
               </Typography>
             </Box>
           </Box>
-          {!isCategory && (
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavorite(item);
-              }}
-            >
-              <Star
-                size={24}
-                className={
-                  favorites.includes(item.screen)
-                    ? "text-yellow-400"
-                    : "text-gray-400"
-                }
-                fill={favorites.includes(item.screen) ? "#FFD700" : "none"}
-              />
-            </IconButton>
-          )}
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleFavorite(category);
+            }}
+          >
+            <Star
+              size={24}
+              className={favoriteCategories.includes(category.id) ? 'text-yellow-400' : 'text-gray-400'}
+              fill={favoriteCategories.includes(category.id) ? '#FFD700' : 'none'}
+            />
+          </IconButton>
         </CardContent>
       </Card>
     );
   };
 
-  const renderSection = (title, data, showAll = false) => (
+  const renderSection = (title, data) => (
     <Box className="mb-5">
       <Typography variant="h6" className="font-semibold text-gray-800 mb-3">
         {title}
       </Typography>
       <Grid container spacing={2}>
-        {(showAll ? data : data.slice(0, 5)).map((item) => (
-          <Grid item xs={12} key={item.id || item.screen}>
-            {renderItem(item)}
+        {data.map((category) => (
+          <Grid item xs={12} key={category.id}>
+            {renderCategoryCard(category)}
           </Grid>
         ))}
       </Grid>
@@ -275,27 +170,27 @@ const ClinicalCalculators = () => {
         <TextField
           fullWidth
           variant="outlined"
-          placeholder="Search calculators..."
+          placeholder="Search calculator groups..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="mb-4"
-          sx={{ backgroundColor: "#F1F2F6", borderRadius: 2 }}
+          sx={{ backgroundColor: '#F1F2F6', borderRadius: 2 }}
         />
         {searchQuery ? (
-          renderSection("Search Results", filteredCalculators, true)
+          renderSection('Search Results', filteredCategories)
         ) : (
           <>
-            {favorites.length > 0 &&
+            {favoriteCategories.length > 0 &&
               renderSection(
-                "Favorites",
-                allCalculators.filter((calc) => favorites.includes(calc.screen))
+                'Favorite Categories',
+                calculatorCategories.filter((cat) => favoriteCategories.includes(cat.id))
               )}
-            {recentCalculators.length > 0 &&
+            {recentCategories.length > 0 &&
               renderSection(
-                "Recent",
-                allCalculators.filter((calc) => recentCalculators.includes(calc.screen))
+                'Recent Categories',
+                calculatorCategories.filter((cat) => recentCategories.includes(cat.id))
               )}
-            {renderSection("Categories", calculatorCategories, true)}
+            {renderSection('All Categories', calculatorCategories)}
           </>
         )}
       </Box>

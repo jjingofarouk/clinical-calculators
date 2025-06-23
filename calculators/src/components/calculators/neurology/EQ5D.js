@@ -1,29 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal } from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect';
-import Slider from '@react-native-community/slider';
-import { MaterialIcons } from '@expo/vector-icons';
+import Select from 'react-select';
+import { Card, Typography, Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Slider } from '@mui/material';
+import { motion } from 'framer-motion';
+import InfoIcon from '@mui/icons-material/Info';
 
-// Define the missing GUIDANCE_TEXT constant
 const GUIDANCE_TEXT = {
   general: "Please indicate which statements best describe your health state today",
   visualAnalog: "We would like to know how good or bad your health is TODAY.\n• This scale is numbered from 0 to 100\n• 100 means the best health you can imagine\n• 0 means the worst health you can imagine"
 };
 
-export const EQ5D = () => {
-  const [dimensions, setDimensions] = useState({
-    mobility: "1",
-    selfCare: "1",
-    usualActivities: "1",
-    painDiscomfort: "1",
-    anxietyDepression: "1"
-  });
-  const [visualAnalogScore, setVisualAnalogScore] = useState(100);
-  const [score, setScore] = useState(null);
-  const [showInterpretationGuide, setShowInterpretationGuide] = useState(false);
-
-  const CLINICAL_INTERPRETATION = {
-    general: `The EQ-5D-5L provides three key metrics for patient health assessment:
+const CLINICAL_INTERPRETATION = {
+  general: `The EQ-5D-5L provides three key metrics for patient health assessment:
 
 1. Health State Profile (5-digit number)
 - Each digit represents severity (1-5) for each dimension
@@ -41,19 +28,19 @@ export const EQ5D = () => {
 - Negative values possible (states worse than death)
 - Country-specific value sets available`,
 
-    visualAnalog: `We would like to know how good or bad your health is TODAY.
+  visualAnalog: `We would like to know how good or bad your health is TODAY.
 • This scale is numbered from 0 to 100
 • 100 means the best health you can imagine
 • 0 means the worst health you can imagine`,
 
-    dimensionScoring: `Dimension Severity Levels:
+  dimensionScoring: `Dimension Severity Levels:
 1 = No problems
 2 = Slight problems
 3 = Moderate problems
 4 = Severe problems
 5 = Extreme problems/Unable to`,
 
-    clinicalRelevance: `Clinical Significance:
+  clinicalRelevance: `Clinical Significance:
 
 • Minimal Important Difference (MID):
 - Index Value: 0.037-0.069
@@ -64,7 +51,7 @@ export const EQ5D = () => {
 - VAS score drop >10 points
 - Index value drop >0.1`,
 
-    recommendations: `Treatment Considerations:
+  recommendations: `Treatment Considerations:
 
 • Score 1-2 in dimensions: 
 - Monitor and preventive care
@@ -78,45 +65,57 @@ export const EQ5D = () => {
 - Urgent intervention often required
 - Comprehensive care plan needed
 - Multi-disciplinary approach recommended`
-  };
+};
 
-  const dimensionOptions = {
-    mobility: [
-      { label: "I have no problems in walking about", value: "1" },
-      { label: "I have slight problems in walking about", value: "2" },
-      { label: "I have moderate problems in walking about", value: "3" },
-      { label: "I have severe problems in walking about", value: "4" },
-      { label: "I am unable to walk about", value: "5" }
-    ],
-    selfCare: [
-      { label: "I have no problems washing or dressing myself", value: "1" },
-      { label: "I have slight problems washing or dressing myself", value: "2" },
-      { label: "I have moderate problems washing or dressing myself", value: "3" },
-      { label: "I have severe problems washing or dressing myself", value: "4" },
-      { label: "I am unable to wash or dress myself", value: "5" }
-    ],
-    usualActivities: [
-      { label: "I have no problems doing my usual activities", value: "1" },
-      { label: "I have slight problems doing my usual activities", value: "2" },
-      { label: "I have moderate problems doing my usual activities", value: "3" },
-      { label: "I have severe problems doing my usual activities", value: "4" },
-      { label: "I am unable to do my usual activities", value: "5" }
-    ],
-    painDiscomfort: [
-      { label: "I have no pain or discomfort", value: "1" },
-      { label: "I have slight pain or discomfort", value: "2" },
-      { label: "I have moderate pain or discomfort", value: "3" },
-      { label: "I have severe pain or discomfort", value: "4" },
-      { label: "I have extreme pain or discomfort", value: "5" }
-    ],
-    anxietyDepression: [
-      { label: "I am not anxious or depressed", value: "1" },
-      { label: "I am slightly anxious or depressed", value: "2" },
-      { label: "I am moderately anxious or depressed", value: "3" },
-      { label: "I am severely anxious or depressed", value: "4" },
-      { label: "I am extremely anxious or depressed", value: "5" }
-    ]
-  };
+const dimensionOptions = {
+  mobility: [
+    { label: "I have no problems in walking about", value: "1" },
+    { label: "I have slight problems in walking about", value: "2" },
+    { label: "I have moderate problems in walking about", value: "3" },
+    { label: "I have severe problems in walking about", value: "4" },
+    { label: "I am unable to walk about", value: "5" }
+  ],
+  selfCare: [
+    { label: "I have no problems washing or dressing myself", value: "1" },
+    { label: "I have slight problems washing or dressing myself", value: "2" },
+    { label: "I have moderate problems washing or dressing myself", value: "3" },
+    { label: "I have severe problems washing or dressing myself", value: "4" },
+    { label: "I am unable to wash or dress myself", value: "5" }
+  ],
+  usualActivities: [
+    { label: "I have no problems doing my usual activities", value: "1" },
+    { label: "I have slight problems doing my usual activities", value: "2" },
+    { label: "I have moderate problems doing my usual activities", value: "3" },
+    { label: "I have severe problems doing my usual activities", value: "4" },
+    { label: "I am unable to do my usual activities", value: "5" }
+  ],
+  painDiscomfort: [
+    { label: "I have no pain or discomfort", value: "1" },
+    { label: "I have slight pain or discomfort", value: "2" },
+    { label: "I have moderate pain or discomfort", value: "3" },
+    { label: "I have severe pain or discomfort", value: "4" },
+    { label: "I have extreme pain or discomfort", value: "5" }
+  ],
+  anxietyDepression: [
+    { label: "I am not anxious or depressed", value: "1" },
+    { label: "I am slightly anxious or depressed", value: "2" },
+    { label: "I am moderately anxious or depressed", value: "3" },
+    { label: "I am severely anxious or depressed", value: "4" },
+    { label: "I am extremely anxious or depressed", value: "5" }
+  ]
+};
+
+const EQ5D = () => {
+  const [dimensions, setDimensions] = useState({
+    mobility: "1",
+    selfCare: "1",
+    usualActivities: "1",
+    painDiscomfort: "1",
+    anxietyDepression: "1"
+  });
+  const [visualAnalogScore, setVisualAnalogScore] = useState(100);
+  const [score, setScore] = useState(null);
+  const [showInterpretationGuide, setShowInterpretationGuide] = useState(false);
 
   const calculateScore = () => {
     const dimensionScore = Object.values(dimensions)
@@ -161,286 +160,176 @@ export const EQ5D = () => {
 
   const renderDimensionSection = (dimension, title, subtitle = '') => {
     return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-        {subtitle && <Text style={styles.sectionSubtitle}>{subtitle}</Text>}
-        <CustomSelect
+      <Card className="p-4 mb-4" sx={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>
+        <Typography variant="h6" className="font-bold mb-2">{title}</Typography>
+        {subtitle && <Typography variant="body2" className="text-gray-600 mb-2">{subtitle}</Typography>}
+        <Select
           options={dimensionOptions[dimension]}
-          value={dimensions[dimension]}
-          onValueChange={(value) => setDimensions(prev => ({ ...prev, [dimension]: value }))}
+          value={dimensionOptions[dimension].find(opt => opt.value === dimensions[dimension])}
+          onChange={(option) => setDimensions(prev => ({ ...prev, [dimension]: option.value }))}
+          styles={{
+            control: (base) => ({
+              ...base,
+              borderRadius: '5px',
+              borderColor: '#e0e0e0',
+              backgroundColor: '#fff',
+            }),
+            menu: (base) => ({
+              ...base,
+              borderRadius: '5px',
+            }),
+            option: (base, state) => ({
+              ...base,
+              backgroundColor: state.isSelected ? '#e3f2fd' : '#fff',
+              color: '#333',
+              '&:hover': {
+                backgroundColor: '#f0f0f0',
+              },
+            }),
+          }}
         />
-      </View>
+      </Card>
     );
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>EQ-5D-5L Clinical Assessment</Text>
-        <TouchableOpacity 
-          style={styles.infoButton}
-          onPress={() => setShowInterpretationGuide(true)}
-        >
-          <MaterialIcons name="info-outline" size={24} color="#2196F3" />
-          <Text style={styles.infoButtonText}>Clinical Guide</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.guidance}>
-        <Text style={styles.guidanceText}>{GUIDANCE_TEXT.general}</Text>
-      </View>
-
-      {renderDimensionSection('mobility', 'MOBILITY', 'Walking ability')}
-      {renderDimensionSection('selfCare', 'SELF-CARE', 'Washing and dressing')}
-      {renderDimensionSection('usualActivities', 'USUAL ACTIVITIES', 'e.g. work, study, housework, family or leisure activities')}
-      {renderDimensionSection('painDiscomfort', 'PAIN / DISCOMFORT')}
-      {renderDimensionSection('anxietyDepression', 'ANXIETY / DEPRESSION')}
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your health today</Text>
-        <Text style={styles.guidanceText}>{GUIDANCE_TEXT.visualAnalog}</Text>
-        <View style={styles.sliderContainer}>
-          <Text style={styles.sliderLabel}>0</Text>
-          <Slider
-            style={styles.slider}
-            value={visualAnalogScore}
-            onValueChange={setVisualAnalogScore}
-            minimumValue={0}
-            maximumValue={100}
-            step={1}
-            minimumTrackTintColor="#2196F3"
-            maximumTrackTintColor="#000000"
-          />
-          <Text style={styles.sliderLabel}>100</Text>
-        </View>
-        <Text style={styles.sliderValue}>Selected value: {visualAnalogScore}</Text>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={calculateScore}>
-        <Text style={styles.buttonText}>Calculate EQ-5D Score</Text>
-      </TouchableOpacity>
-
-      {score && (
-        <View style={styles.results}>
-          <Text style={styles.resultsTitle}>Clinical Assessment Results</Text>
-          
-          <View style={styles.resultSection}>
-            <Text style={styles.resultLabel}>Health State:</Text>
-            <Text style={styles.resultValue}>{score.healthState}</Text>
-            <Text style={styles.resultExplanation}>
-              5-digit profile representing severity in each dimension
-            </Text>
-          </View>
-
-          <View style={styles.resultSection}>
-            <Text style={styles.resultLabel}>EQ VAS Score:</Text>
-            <Text style={styles.resultValue}>{score.visualAnalog}/100</Text>
-            <Text style={styles.resultExplanation}>
-              Patient's self-rated health status
-            </Text>
-          </View>
-
-          <View style={styles.resultSection}>
-            <Text style={styles.resultLabel}>Utility Index:</Text>
-            <Text style={styles.resultValue}>{score.utilityScore.toFixed(3)}</Text>
-            <Text style={styles.resultExplanation}>
-              Population-weighted health state value
-            </Text>
-          </View>
-
-          <View style={styles.interpretationSection}>
-            <Text style={styles.interpretationTitle}>Clinical Interpretation:</Text>
-            {score.interpretation.map((note, index) => (
-              <Text key={index} style={styles.interpretationNote}>• {note}</Text>
-            ))}
-          </View>
-        </View>
-      )}
-
-      <Modal
-        visible={showInterpretationGuide}
-        animationType="slide"
-        transparent={true}
+    <div className="min-h-screen bg-gray-100 p-6">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="max-w-2xl mx-auto"
       >
-        <View style={styles.modalContainer}>
-          <ScrollView style={styles.modalContent}>
-            <Text style={styles.modalTitle}>EQ-5D-5L Clinical Interpretation Guide</Text>
-            
-            {Object.entries(CLINICAL_INTERPRETATION).map(([key, text]) => (
-              <View key={key} style={styles.modalSection}>
-                <Text style={styles.modalText}>{text}</Text>
-              </View>
-            ))}
-
-            <TouchableOpacity 
-              style={styles.closeButton}
-              onPress={() => setShowInterpretationGuide(false)}
+        <Card className="p-6" sx={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <Box className="flex justify-between items-center mb-4">
+            <Typography variant="h5" className="font-bold" sx={{ color: '#2c3e50' }}>
+              EQ-5D-5L Clinical Assessment
+            </Typography>
+            <Button
+              variant="outlined"
+              startIcon={<InfoIcon />}
+              onClick={() => setShowInterpretationGuide(true)}
+              sx={{ borderRadius: '10px' }}
             >
-              <Text style={styles.closeButtonText}>Close Guide</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </Modal>
-    </ScrollView>
+              Clinical Guide
+            </Button>
+          </Box>
+
+          <Typography variant="body1" className="text-gray-600 mb-4">
+            {GUIDANCE_TEXT.general}
+          </Typography>
+
+          {renderDimensionSection('mobility', 'MOBILITY', 'Walking ability')}
+          {renderDimensionSection('selfCare', 'SELF-CARE', 'Washing and dressing')}
+          {renderDimensionSection('usualActivities', 'USUAL ACTIVITIES', 'e.g. work, study, housework, family or leisure activities')}
+          {renderDimensionSection('painDiscomfort', 'PAIN / DISCOMFORT')}
+          {renderDimensionSection('anxietyDepression', 'ANXIETY / DEPRESSION')}
+
+          <Card className="p-4 mb-4" sx={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>
+            <Typography variant="h6" className="font-bold mb-2">Your health today</Typography>
+            <Typography variant="body2" className="text-gray-600 mb-2">{GUIDANCE_TEXT.visualAnalog}</Typography>
+            <Box className="flex items-center">
+              <Typography variant="body2" className="mr-2">0</Typography>
+              <Slider
+                value={visualAnalogScore}
+                onChange={(_, newValue) => setVisualAnalogScore(newValue)}
+                min={0}
+                max={100}
+                step={1}
+                sx={{
+                  flex: 1,
+                  mx: 2,
+                  '& .MuiSlider-rail': { backgroundColor: '#000' },
+                  '& .MuiSlider-track': { backgroundColor: '#2196F3' },
+                }}
+              />
+              <Typography variant="body2">100</Typography>
+            </Box>
+            <Typography variant="body2" className="text-center mt-2">
+              Selected value: {visualAnalogScore}
+            </Typography>
+          </Card>
+
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={calculateScore}
+            sx={{ borderRadius: '8px', py: 1.5, backgroundColor: '#2196F3' }}
+          >
+            Calculate EQ-5D Score
+          </Button>
+
+          {score && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4">
+              <Card className="p-4" sx={{ backgroundColor: '#f8f8f8', borderRadius: '10px' }}>
+                <Typography variant="h6" className="font-bold mb-3">Clinical Assessment Results</Typography>
+                
+                <Box className="mb-3">
+                  <Typography variant="subtitle2" className="font-semibold">Health State:</Typography>
+                  <Typography variant="h6" className="text-primary">{score.healthState}</Typography>
+                  <Typography variant="caption" className="text-gray-600">
+                    5-digit profile representing severity in each dimension
+                  </Typography>
+                </Box>
+
+                <Box className="mb-3">
+                  <Typography variant="subtitle2" className="font-semibold">EQ VAS Score:</Typography>
+                  <Typography variant="h6" className="text-primary">{score.visualAnalog}/100</Typography>
+                  <Typography variant="caption" className="text-gray-600">
+                    Patient's self-rated health status
+                  </Typography>
+                </Box>
+
+                <Box className="mb-3">
+                  <Typography variant="subtitle2" className="font-semibold">Utility Index:</Typography>
+                  <Typography variant="h6" className="text-primary">{score.utilityScore.toFixed(3)}</Typography>
+                  <Typography variant="caption" className="text-gray-600">
+                    Population-weighted health state value
+                  </Typography>
+                </Box>
+
+                <Box className="p-3 bg-gray-50 rounded-md">
+                  <Typography variant="subtitle2" className="font-semibold mb-2">Clinical Interpretation:</Typography>
+                  {score.interpretation.map((note, index) => (
+                    <Typography key={index} variant="body2" className="mb-1">• {note}</Typography>
+                  ))}
+                </Box>
+              </Card>
+            </motion.div>
+          )}
+        </Card>
+
+        <Dialog
+          open={showInterpretationGuide}
+          onClose={() => setShowInterpretationGuide(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle sx={{ fontWeight: 'bold', color: '#333' }}>
+            EQ-5D-5L Clinical Interpretation Guide
+          </DialogTitle>
+          <DialogContent>
+            {Object.entries(CLINICAL_INTERPRETATION).map(([key, text]) => (
+              <Box key={key} className="mb-4">
+                <Typography variant="body1" sx={{ lineHeight: 1.5, whiteSpace: 'pre-line' }}>
+                  {text}
+                </Typography>
+              </Box>
+            ))}
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setShowInterpretationGuide(false)}
+              color="primary"
+              sx={{ borderRadius: '10px' }}
+            >
+              Close Guide
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  infoButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  infoButtonText: {
-    marginLeft: 5,
-    color: '#2196F3',
-  },
-  guidance: {
-    marginBottom: 20,
-  },
-  guidanceText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#666',
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  sectionSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 10,
-  },
-  sliderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  slider: {
-    flex: 1,
-    height: 40,
-    marginHorizontal: 10,
-  },
-  sliderLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  sliderValue: {
-    textAlign: 'center',
-    fontSize: 16,
-    marginTop: 10,
-  },
-  button: {
-    backgroundColor: '#2196F3',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  results: {
-    padding: 20,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  resultsTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    maxHeight: '90%',
-    width: '90%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  modalSection: {
-    marginBottom: 20,
-  },
-  modalText: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  closeButton: {
-    backgroundColor: '#2196F3',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  resultSection: {
-    marginVertical: 10,
-  },
-  resultLabel: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  resultValue: {
-    fontSize: 18,
-    color: '#2196F3',
-  },
-  resultExplanation: {
-    fontSize: 14,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  interpretationSection: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#f8f8f8',
-    borderRadius: 5,
-  },
-  interpretationTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  interpretationNote: {
-    fontSize: 14,
-    marginBottom: 5,
-    lineHeight: 20,
-  },
-});
 
 export default EQ5D;

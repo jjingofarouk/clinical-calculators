@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import CustomSelect from "../../../utils/CustomSelect"; // Import your custom select component
+import { Box, Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 const IdealBodyWeightCalculator = () => {
   const [height, setHeight] = useState('');
@@ -10,7 +9,7 @@ const IdealBodyWeightCalculator = () => {
   const calculateIdealWeight = () => {
     let idealWeightValue;
     if (gender === 'male') {
-      idealWeightValue = 50 + 2.3 * ((height / 2.54) - 60); // Convert height from cm to inches
+      idealWeightValue = 50 + 2.3 * ((height / 2.54) - 60);
     } else {
       idealWeightValue = 45.5 + 2.3 * ((height / 2.54) - 60);
     }
@@ -18,74 +17,49 @@ const IdealBodyWeightCalculator = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Ideal Body Weight Calculator</Text>
+    <Box className="min-h-screen flex flex-col items-center justify-center p-5 bg-gray-100">
+      <Typography variant="h4" className="font-bold mb-5 text-gray-900">
+        Ideal Body Weight Calculator
+      </Typography>
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Height (cm)"
         value={height}
-        onChangeText={(text) => setHeight(text)}
-        keyboardType="numeric"
+        onChange={(e) => setHeight(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <CustomSelect
-        options={[
-          { label: 'Male', value: 'male' },
-          { label: 'Female', value: 'female' },
-        ]}
-        selectedValue={gender}
-        onValueChange={(value) => setGender(value)}
-        style={styles.select}
-      />
+      <FormControl fullWidth className="mb-5" sx={{ maxWidth: '400px' }}>
+        <InputLabel>Gender</InputLabel>
+        <Select
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          label="Gender"
+        >
+          <MenuItem value="male">Male</MenuItem>
+          <MenuItem value="female">Female</MenuItem>
+        </Select>
+      </FormControl>
 
-      <Button title="Calculate Ideal Weight" onPress={calculateIdealWeight} />
+      <Button
+        variant="contained"
+        onClick={calculateIdealWeight}
+        className="bg-teal-500 hover:bg-teal-600 text-white font-semibold py-2 px-4 rounded"
+      >
+        Calculate Ideal Weight
+      </Button>
 
-      {idealWeight && <Text style={styles.result}>Your Ideal Body Weight is: {idealWeight} kg</Text>}
-    </View>
+      {idealWeight && (
+        <Typography variant="h6" className="mt-5 font-bold text-teal-500">
+          Your Ideal Body Weight is: {idealWeight} kg
+        </Typography>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: '#f5f5f5', // Consistent background color
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#002432', // Consistent title color
-  },
-  input: {
-    height: 40,
-    borderColor: '#dfe4e5',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    width: '100%',
-    backgroundColor: '#ffffff', // Input background
-    color: '#002432', // Input text color
-  },
-  select: {
-    width: '100%',
-    marginBottom: 20,
-    backgroundColor: '#ffffff', // Dropdown background
-    borderWidth: 1,
-    borderColor: '#dfe4e5',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#27c7b8', // Highlighted result color
-  },
-});
 
 export default IdealBodyWeightCalculator;

@@ -1,25 +1,24 @@
-// src/components/Sidebar.js
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Animated,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
+  Box,
+  Typography,
+  IconButton,
+  Button,
+  Stack,
+  Divider,
+  Avatar,
+} from '@mui/material';
+import { Home, Calculator, Settings, ArrowRight } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
-export default function Sidebar({ navigation, activeRoute = 'Main' }) {
-  const insets = useSafeAreaInsets();
+export default function Sidebar({ activeRoute = 'Main' }) {
+  const navigate = useNavigate();
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const navItems = [
     {
       title: 'Calculators',
-      icon: 'calculator',
+      icon: <Calculator />,
       items: [
         {
           href: 'Gastroenterology',
@@ -50,8 +49,7 @@ export default function Sidebar({ navigation, activeRoute = 'Main' }) {
   ];
 
   const handlePress = (href) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    navigation.navigate('Main', { screen: 'Calculators', params: { screen: href } });
+    navigate(`/calculators/${href}`);
   };
 
   const renderNavItem = (item, isChild = false) => {
@@ -59,173 +57,96 @@ export default function Sidebar({ navigation, activeRoute = 'Main' }) {
     const isHovered = hoveredItem === item.href;
 
     return (
-      <TouchableOpacity
+      <Button
         key={item.href}
-        style={[
-          styles.navItem,
-          isChild && styles.childNavItem,
-          isActive && styles.activeNavItem,
-          isHovered && styles.hoveredNavItem,
-        ]}
-        onPress={() => handlePress(item.href)}
-        onPressIn={() => setHoveredItem(item.href)}
-        onPressOut={() => setHoveredItem(null)}
+        startIcon={<Avatar sx={{ bgcolor: isActive ? '#34d8c8' : 'rgba(255, 255, 255, 0.1)' }}>
+          {item.icon}
+        </Avatar>}
+        onClick={() => handlePress(item.href)}
+        onMouseEnter={() => setHoveredItem(item.href)}
+        onMouseLeave={() => setHoveredItem(null)}
+        sx={{
+          justifyContent: 'flex-start',
+          textTransform: 'none',
+          bgcolor: isActive 
+            ? 'rgba(52, 216, 200, 0.2)' 
+            : isHovered 
+            ? 'rgba(255, 255, 255, 0.1)' 
+            : 'transparent',
+          color: isActive ? '#fff' : '#f1f5f9',
+          width: '100%',
+          padding: 2,
+          borderRadius: 2,
+          '&:hover': {
+            bgcolor: 'rgba(255, 255, 255, 0.1)',
+          },
+        }}
       >
-        <Animated.View
-          style={[
-            styles.iconContainer,
-            isActive && styles.activeIconContainer,
-          ]}
-        >
-          <Icon
-            name={item.icon}
-            size={22}
-            color={isActive ? '#FFFFFF' : '#94A3B8'}
-          />
-        </Animated.View>
-        <Text
-          style={[
-            styles.navItemText,
-            isActive && styles.activeNavItemText,
-          ]}
-        >
-          {item.label}
-        </Text>
-        {isActive && <View style={styles.activeIndicator} />}
-      </TouchableOpacity>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body1" sx={{ fontWeight: isActive ? '600' : '500' }}>
+            {item.label}
+          </Typography>
+          {isActive && <ArrowRight sx={{ color: '#34d8c8' }} />}
+        </Stack>
+      </Button>
     );
   };
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ScrollView
-        style={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.contentContainer}
-      >
+    <Box
+      sx={{
+        width: 280,
+        bgcolor: '#004d4d',
+        borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+        color: '#f1f5f9',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        overflow: 'hidden',
+      }}
+    >
+      <Stack sx={{ flexGrow: 1, padding: 2 }}>
+        {/* Home Navigation */}
         {renderNavItem({
           href: 'Main',
           label: 'Home',
-          icon: 'home-variant',
+          icon: <Home />,
         })}
 
         {navItems.map((section, index) => (
-          <View key={index} style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Icon name={section.icon} size={18} color="#64748B" />
-              <Text style={styles.sectionTitle}>{section.title}</Text>
-            </View>
+          <Box key={index} sx={{ marginBottom: 3 }}>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ marginBottom: 1 }}>
+              {section.icon}
+              <Typography variant="body2" sx={{ textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                {section.title}
+              </Typography>
+            </Stack>
             {section.items.map((item) => renderNavItem(item, true))}
-          </View>
+          </Box>
         ))}
-      </ScrollView>
+      </Stack>
 
-      <View style={styles.bottomActions}>
-        <TouchableOpacity style={styles.settingsButton}>
-          <Icon name="cog-outline" size={22} color="#94A3B8" />
-          <Text style={styles.settingsText}>Settings</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      {/* Footer Actions */}
+      <Divider />
+      <Box sx={{ padding: 2 }}>
+        <Button
+          startIcon={<Settings />}
+          sx={{
+            justifyContent: 'flex-start',
+            textTransform: 'none',
+            bgcolor: 'rgba(255, 255, 255, 0.1)',
+            color: '#fff',
+            width: '100%',
+            padding: 2,
+            borderRadius: 2,
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+            },
+          }}
+        >
+          Settings
+        </Button>
+      </Box>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#004d4d',
-    borderRightWidth: 1,
-    borderRightColor: 'rgba(255, 255, 255, 0.1)',
-    width: 280,
-    overflow: 'hidden',
-  },
-  scrollContainer: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 12,
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    marginBottom: 8,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#94a3b8',
-    marginLeft: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  navItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 4,
-    position: 'relative',
-  },
-  childNavItem: {
-    marginLeft: 8,
-  },
-  activeNavItem: {
-    backgroundColor: 'rgba(52, 216, 200, 0.2)',
-  },
-  hoveredNavItem: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  iconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  activeIconContainer: {
-    backgroundColor: '#34d8c8',
-  },
-  navItemText: {
-    fontSize: 14,
-    color: '#f1f5f9',
-    fontWeight: '500',
-  },
-  activeNavItemText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-  },
-  activeIndicator: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    transform: [{ translateY: -2 }],
-    width: 4,
-    height: 16,
-    backgroundColor: '#34d8c8',
-    borderRadius: 2,
-  },
-  bottomActions: {
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.15)',
-  },
-  settingsButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  settingsText: {
-    marginLeft: 12,
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: '500',
-  },
-});

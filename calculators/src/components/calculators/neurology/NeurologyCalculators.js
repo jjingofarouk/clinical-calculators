@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { motion } from 'framer-motion';
-import GlasgowComaScale from './GlasgowComaScale';
+import GlasgowComaScale from './GCS';
 import NIHStrokeScale from './NIHStrokeScale';
 import PHQ9 from './PHQ9';
 import GAD7 from './GAD7';

@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Button, Card, TextField, Typography, Box, Divider, Chip, List, ListItem, ListItemText } from '@mui/material';
+import { motion } from 'framer-motion';
+import Select from 'react-select';
+import { AlertTriangle } from 'lucide-react';
 
 // Constants for clinical staging and guidance
 const CKD_STAGES = {
@@ -72,59 +74,18 @@ const CKD_STAGES = {
   }
 };
 
-// Clinical risk factors that affect management
-const RISK_FACTORS = [
-  'Diabetes',
-  'Hypertension',
-  'Cardiovascular disease',
-  'Family history of kidney disease',
-  'Obesity',
-  'Smoking'
-];
-
-
 const CKDEpiCalculator = () => {
   const [inputs, setInputs] = useState({
     creatinine: '',
     age: '',
-    gender: null,
-    weight: '',
-    height: '',
+    gender: null
   });
   const [gfrResult, setGfrResult] = useState(null);
-  const [showDetailedGuidance, setShowDetailedGuidance] = useState(false);
 
-  const renderGenderSelection = () => (
-    <View style={styles.genderContainer}>
-      <Text style={styles.inputLabel}>Sex at Birth*</Text>
-      <View style={styles.genderButtons}>
-        <TouchableOpacity 
-          style={[
-            styles.genderButton,
-            inputs.gender === 'female' && styles.genderButtonSelected
-          ]}
-          onPress={() => setInputs({...inputs, gender: 'female'})}
-        >
-          <Text style={[
-            styles.genderButtonText,
-            inputs.gender === 'female' && styles.genderButtonTextSelected
-          ]}>Female</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={[
-            styles.genderButton,
-            inputs.gender === 'male' && styles.genderButtonSelected
-          ]}
-          onPress={() => setInputs({...inputs, gender: 'male'})}
-        >
-          <Text style={[
-            styles.genderButtonText,
-            inputs.gender === 'male' && styles.genderButtonTextSelected
-          ]}>Male</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+  const genderOptions = [
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' }
+  ];
 
   const calculate2021CKDEpi = () => {
     const scr = parseFloat(inputs.creatinine);
@@ -174,397 +135,174 @@ const CKDEpiCalculator = () => {
     const guidance = CKD_STAGES[stage].guidance;
 
     return (
-      <View style={styles.guidanceContainer}>
-        <Text style={styles.guidanceTitle}>Clinical Management Guidelines</Text>
-        
-        <View style={styles.guidanceSection}>
-          <Text style={styles.guidanceSubtitle}>Monitoring Frequency</Text>
-          <Text style={styles.guidanceText}>{guidance.monitoring}</Text>
-        </View>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+        <Card className="p-6">
+          <Typography variant="h6" className="mb-4 font-bold">
+            Clinical Management Guidelines
+          </Typography>
+          
+          <Box className="mb-4">
+            <Typography variant="subtitle1" className="font-semibold">Monitoring Frequency</Typography>
+            <Typography variant="body2" className="text-gray-600">{guidance.monitoring}</Typography>
+          </Box>
 
-        <View style={styles.guidanceSection}>
-          <Text style={styles.guidanceSubtitle}>Specialty Referral</Text>
-          <Text style={styles.guidanceText}>{guidance.referral}</Text>
-        </View>
+          <Box className="mb-4">
+            <Typography variant="subtitle1" className="font-semibold">Specialty Referral</Typography>
+            <Typography variant="body2" className="text-gray-600">{guidance.referral}</Typography>
+          </Box>
 
-        <View style={styles.guidanceSection}>
-          <Text style={styles.guidanceSubtitle}>Recommended Labs</Text>
-          {guidance.labs.map((lab, index) => (
-            <Text key={index} style={styles.bulletPoint}>• {lab}</Text>
-          ))}
-        </View>
+          <Box className="mb-4">
+            <Typography variant="subtitle1" className="font-semibold">Recommended Labs</Typography>
+            <List>
+              {guidance.labs.map((lab, index) => (
+                <ListItem key={index} className="py-1">
+                  <ListItemText primary={`• ${lab}`} className="text-gray-600" />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
 
-        <View style={styles.guidanceSection}>
-          <Text style={styles.guidanceSubtitle}>Management Focus</Text>
-          <Text style={styles.guidanceText}>{guidance.management}</Text>
-        </View>
+          <Box className="mb-4">
+            <Typography variant="subtitle1" className="font-semibold">Management Focus</Typography>
+            <Typography variant="body2" className="text-gray-600">{guidance.management}</Typography>
+          </Box>
 
-        {stage >= 'G3a' && (
-          <View style={styles.warningBox}>
-            <Text style={styles.warningTitle}>Critical Considerations</Text>
-            <Text style={styles.warningText}>
-              • Dose adjust medications for renal function
-              {'\n'}• Monitor for anemia (CBC q 3-6 months)
-              {'\n'}• Assess mineral bone disease (Ca, Phos, PTH)
-              {'\n'}• Consider dietary protein restriction
-              {'\n'}• Evaluate cardiovascular risk factors
-            </Text>
-          </View>
-        )}
+          {stage >= 'G3a' && (
+            <Box className="bg-red-50 p-4 rounded-lg mb-4">
+              <Box className="flex items-center mb-2">
+                <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
+                <Typography variant="subtitle1" className="font-semibold text-red-600">
+                  Critical Considerations
+                </Typography>
+              </Box>
+              <Typography variant="body2" className="text-red-600 whitespace-pre-line">
+                • Dose adjust medications for renal function
+                {'\n'}• Monitor for anemia (CBC q 3-6 months)
+                {'\n'}• Assess mineral bone disease (Ca, Phos, PTH)
+                {'\n'}• Consider dietary protein restriction
+                {'\n'}• Evaluate cardiovascular risk factors
+              </Typography>
+            </Box>
+          )}
 
-        <TouchableOpacity 
-          style={styles.kdoqiButton}
-          onPress={() => setShowDetailedGuidance(true)}
-        >
-          <Text style={styles.kdoqiButtonText}>View Full KDOQI Guidelines</Text>
-        </TouchableOpacity>
-      </View>
+          <Button
+            variant="outlined"
+            className="w-full"
+            onClick={() => window.open('https://www.kidney.org/professionals/guidelines', '_blank')}
+          >
+            View Full KDOQI Guidelines
+          </Button>
+        </Card>
+      </motion.div>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>CKD-EPI GFR Calculator</Text>
-        <Text style={styles.subtitle}>2021 CKD-EPI Equation (ASN/NKF Standard)</Text>
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-md"
+      >
+        <Card className="p-6">
+          <Typography variant="h4" className="text-center font-bold mb-2">
+            CKD-EPI GFR Calculator
+          </Typography>
+          <Typography variant="subtitle2" className="text-center text-gray-500 mb-6">
+            2021 CKD-EPI Equation (ASN/NKF Standard)
+          </Typography>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Serum Creatinine*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="mg/dL"
-            value={inputs.creatinine}
-            onChangeText={(text) => setInputs({...inputs, creatinine: text})}
-            keyboardType="decimal-pad"
-          />
-          <Text style={styles.inputHint}>Reference Range: Male 0.7-1.3 mg/dL, Female 0.6-1.1 mg/dL</Text>
-        </View>
+          <Box className="space-y-4">
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Serum Creatinine*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="mg/dL"
+                value={inputs.creatinine}
+                onChange={(e) => setInputs({...inputs, creatinine: e.target.value})}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                Reference Range: Male 0.7-1.3 mg/dL, Female 0.6-1.1 mg/dL
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Age*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Years"
-            value={inputs.age}
-            onChangeText={(text) => setInputs({...inputs, age: text})}
-            keyboardType="number-pad"
-          />
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Age*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Years"
+                value={inputs.age}
+                onChange={(e) => setInputs({...inputs, age: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-        {renderGenderSelection()}
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Sex at Birth*</Typography>
+              <Select
+                options={genderOptions}
+                value={genderOptions.find(opt => opt.value === inputs.gender)}
+                onChange={(selected) => setInputs({...inputs, gender: selected.value})}
+                className="text-sm"
+              />
+            </Box>
 
-        <TouchableOpacity 
-          style={styles.calculateButton}
-          onPress={calculate2021CKDEpi}
-        >
-          <Text style={styles.calculateButtonText}>Calculate GFR</Text>
-        </TouchableOpacity>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="mt-6"
+              onClick={calculate2021CKDEpi}
+            >
+              Calculate GFR
+            </Button>
+          </Box>
 
-        {gfrResult && (
-          <View style={[styles.resultCard, { borderColor: gfrResult.stageInfo.color }]}>
-            <View style={styles.resultHeader}>
-              <Text style={styles.resultTitle}>eGFR Result</Text>
-              <View style={[styles.stageIndicator, { backgroundColor: gfrResult.stageInfo.color }]}>
-                <Text style={styles.stageText}>CKD Stage {gfrResult.stage}</Text>
-              </View>
-            </View>
-            
-            <View style={styles.resultDetails}>
-              <Text style={styles.gfrValue}>{gfrResult.value}</Text>
-              <Text style={styles.gfrUnit}>mL/min/1.73m²</Text>
-            </View>
+          {gfrResult && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+              <Card className="p-6 border-2" sx={{ borderColor: gfrResult.stageInfo.color }}>
+                <Box className="flex justify-between items-center mb-4">
+                  <Typography variant="h6" className="font-bold">
+                    eGFR Result
+                  </Typography>
+                  <Chip
+                    label={`CKD Stage ${gfrResult.stage}`}
+                    style={{ backgroundColor: gfrResult.stageInfo.color, color: 'white' }}
+                  />
+                </Box>
 
-            <View style={styles.interpretationBox}>
-              <Text style={styles.interpretationTitle}>Clinical Interpretation</Text>
-              <Text style={styles.interpretationText}>
-                {gfrResult.stageInfo.description}
-                {'\n'}Normal Range: above 90 mL/min/1.73m²
-              </Text>
-            </View>
-          </View>
-        )}
+                <Box className="text-center mb-4">
+                  <Typography variant="h3" className="font-bold">
+                    {gfrResult.value}
+                  </Typography>
+                  <Typography variant="body2" className="text-gray-500">
+                    mL/min/1.73m²
+                  </Typography>
+                </Box>
 
-        {gfrResult && renderDetailedGuidance()}
-      </ScrollView>
-    </SafeAreaView>
+                <Box className="bg-gray-50 p-4 rounded-lg">
+                  <Typography variant="subtitle1" className="font-semibold mb-2">
+                    Clinical Interpretation
+                  </Typography>
+                  <Typography variant="body2" className="text-gray-600">
+                    {gfrResult.stageInfo.description}
+                    {'\n'}Normal Range: above 90 mL/min/1.73m²
+                  </Typography>
+                </Box>
+              </Card>
+            </motion.div>
+          )}
+
+          {renderDetailedGuidance()}
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-
-const styles = StyleSheet.create({
-  // ... (previous styles remain the same)
-  
-  genderContainer: {
-    marginBottom: 20,
-  },
-  genderButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  genderButton: {
-    flex: 1,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F7',
-    borderRadius: 10,
-    marginHorizontal: 4,
-  },
-  genderButtonSelected: {
-    backgroundColor: '#007AFF',
-  },
-  genderButtonText: {
-    fontSize: 17,
-    color: '#000000',
-    fontWeight: '500',
-  },
-  genderButtonTextSelected: {
-    color: '#FFFFFF',
-  },
-  resultCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginVertical: 24,
-    borderWidth: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  resultHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  resultTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000000',
-  },
-  interpretationBox: {
-    backgroundColor: '#F2F2F7',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
-  },
-  interpretationTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 8,
-  },
-  interpretationText: {
-    fontSize: 15,
-    color: '#48484A',
-    lineHeight: 22,
-  },
-  guidanceContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-  },
-  guidanceTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000000',
-    marginBottom: 16,
-  },
-  guidanceSection: {
-    marginBottom: 16,
-  },
-  guidanceSubtitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 8,
-  },
-  guidanceText: {
-    fontSize: 15,
-    color: '#48484A',
-    lineHeight: 22,
-  },
-  bulletPoint: {
-    fontSize: 15,
-    color: '#48484A',
-    lineHeight: 22,
-    marginLeft: 8,
-  },
-  warningBox: {
-    backgroundColor: '#FFE5E5',
-    borderRadius: 8,
-    padding: 12,
-    marginVertical: 16,
-  },
-  warningTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FF3B30',
-    marginBottom: 8,
-  },
-  warningText: {
-    fontSize: 14,
-    color: '#FF3B30',
-    lineHeight: 20,
-  },
-  kdoqiButton: {
-    backgroundColor: '#F2F2F7',
-    borderRadius: 10,
-    padding: 12,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  kdoqiButtonText: {
-    fontSize: 15,
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: '#F2F2F7',
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#000000',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#6E6E73',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 8,
-  },
-  input: {
-    height: 44,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    fontSize: 17,
-    color: '#000000',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  inputHint: {
-    fontSize: 13,
-    color: '#6E6E73',
-    marginTop: 4,
-    marginLeft: 16,
-  },
-  calculateButton: {
-    height: 50,
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  calculateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  resultCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  stageIndicator: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginBottom: 16,
-  },
-  stageText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  gfrValue: {
-    fontSize: 48,
-    fontWeight: '700',
-    color: '#000000',
-  },
-  gfrUnit: {
-    fontSize: 16,
-    color: '#6E6E73',
-    marginTop: 4,
-  },
-  gfrDescription: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000000',
-    marginTop: 12,
-  },
-  clinicalCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  clinicalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#000000',
-    marginBottom: 16,
-  },
-  recommendationItem: {
-    marginBottom: 12,
-  },
-  recommendationLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000000',
-    marginBottom: 4,
-  },
-  recommendationValue: {
-    fontSize: 16,
-    color: '#6E6E73',
-  },
-  warningBox: {
-    backgroundColor: '#FFE5E5',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
-  },
-  warningText: {
-    fontSize: 14,
-    color: '#FF3B30',
-    lineHeight: 20,
-  }
-});
 
 export default CKDEpiCalculator;

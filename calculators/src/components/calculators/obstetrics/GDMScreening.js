@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
-  Modal,
-  Dimensions,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Container,
+  TextField,
+  Button,
   Switch,
-} from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect';
-
-const { width } = Dimensions.get('window');
+  FormControlLabel,
+  Modal,
+  IconButton,
+} from '@mui/material';
+import Select from 'react-select';
+import { motion } from 'framer-motion';
+import { Info, X } from 'lucide-react';
 
 const GDMScreening = () => {
   const [screeningPhase, setScreeningPhase] = useState('initial');
-  const [showInfoModal, setShowInfoModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [activeInfoContent, setActiveInfoContent] = useState('');
   const [patientData, setPatientData] = useState({
     gestationalAge: '',
@@ -28,7 +28,7 @@ const GDMScreening = () => {
     threeHourGlucose: '',
     age: '',
     bmi: '',
-    ethnicity: '',
+    ethnicity: null,
     familyHistory: false,
     previousGDM: false,
     macrosomia: false,
@@ -63,7 +63,7 @@ const GDMScreening = () => {
     {
       id: 'ethnicity',
       label: 'High-risk ethnicity',
-      type: 'picker',
+      type: 'select',
       info: 'Certain ethnic groups have higher GDM risk',
     },
     {
@@ -99,7 +99,7 @@ const GDMScreening = () => {
   ];
 
   const handleInputChange = (field, value) => {
-    setPatientData(prev => ({
+    setPatientData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -116,7 +116,11 @@ const GDMScreening = () => {
     if (patientData.macrosomia) riskScore += 2;
     if (patientData.pcos) riskScore += 1;
     if (patientData.preDiabetes) riskScore += 3;
-    if (['Hispanic', 'African American', 'Native American', 'Asian', 'Pacific Islander'].includes(patientData.ethnicity)) {
+    if (
+      ['Hispanic', 'African American', 'Native American', 'Asian', 'Pacific Islander'].includes(
+        patientData.ethnicity?.value
+      )
+    ) {
       riskScore += 2;
     }
 
@@ -124,7 +128,7 @@ const GDMScreening = () => {
       return {
         risk: riskScore >= 6 ? 'High Risk - Early Screening' : 'Standard Screening',
         score: riskScore,
-        recommendation: riskScore >= 6 
+        recommendation: riskScore >= 6
           ? 'Recommend immediate fasting glucose or HbA1c testing'
           : 'Schedule routine screening at 24-28 weeks gestation',
         color: riskScore >= 6 ? '#FF6B6B' : '#4ECDC4',
@@ -148,65 +152,91 @@ const GDMScreening = () => {
     };
   };
 
-  const showInfo = (info) => {
-    setActiveInfoContent(info);
-    setShowInfoModal(true);
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      borderColor: '#E0E0E0',
+      borderRadius: '8px',
+      backgroundColor: '#FFFFFF',
+      boxShadow: 'none',
+      '&:hover': { borderColor: '#3498DB' },
+    }),
+    menu: (base) => ({
+      ...base,
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    }),
+    option: (base, { isSelected }) => ({
+      ...base,
+      backgroundColor: isSelected ? '#3498DB' : '#FFFFFF',
+      color: isSelected ? '#FFFFFF' : '#2C3E50',
+      '&:hover': {
+        backgroundColor: isSelected ? '#3498DB' : '#F5F7FA',
+      },
+    }),
   };
 
   const renderInputField = (factor) => {
     switch (factor.type) {
       case 'number':
         return (
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              keyboardType="numeric"
+          <Box className="flex flex-row items-center">
+            <TextField
+              fullWidth
+              type="number"
+              variant="outlined"
               value={patientData[factor.id]}
-              onChangeText={(value) => handleInputChange(factor.id, value)}
+              onChange={(e) => handleInputChange(factor.id, e.target.value)}
               placeholder={`Enter ${factor.label}`}
-              placeholderTextColor="#666"
+              InputProps={{
+                sx: { borderRadius: '8px', bgcolor: '#FFFFFF' },
+              }}
             />
-            <TouchableOpacity
-              style={styles.infoButton}
-              onPress={() => showInfo(factor.info)}
-            >
-              <Text style={styles.infoButtonText}>ⓘ</Text>
-            </TouchableOpacity>
-          </View>
+            <IconButton onClick={() => setActiveInfoContent(factor.info) || setShowModal(true)}>
+              <Info size={20} color="#3498DB" />
+            </IconButton>
+          </Box>
         );
-      case 'picker':
+      case 'select':
         return (
-          <View style={styles.pickerContainer}>
-            <CustomSelect
+          <Box className="flex flex-row items-center">
+            <Select
               options={ethnicityOptions}
+              value={patientData.ethnicity}
+              onChange={(option) => handleInputChange(factor.id, option)}
+              styles={selectStyles}
               placeholder="Select Ethnicity"
-              onSelect={(item) => handleInputChange(factor.id, item.value)}
-              label={factor.label}
+              className="flex-1"
             />
-            <TouchableOpacity
-              style={styles.infoButton}
-              onPress={() => showInfo(factor.info)}
-            >
-              <Text style={styles.infoButtonText}>ⓘ</Text>
-            </TouchableOpacity>
-          </View>
+            <IconButton onClick={() => setActiveInfoContent(factor.info) || setShowModal(true)}>
+              <Info size={20} color="#3498DB" />
+            </IconButton>
+          </Box>
         );
       case 'switch':
         return (
-          <View style={styles.switchContainer}>
-            <Switch
-              value={patientData[factor.id]}
-              onValueChange={(value) => handleInputChange(factor.id, value)}
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-              thumbColor={patientData[factor.id] ? '#f5dd4b' : '#f4f3f4'}
+          <Box className="flex flex-row items-center justify-between">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={patientData[factor.id]}
+                  onChange={(e) => handleInputChange(factor.id, e.target.checked)}
+                  sx={{
+                    '& .MuiSwitch-track': {
+                      bgcolor: patientData[factor.id] ? '#81b0ff' : '#767577',
+                    },
+                    '& .MuiSwitch-thumb': {
+                      bgcolor: patientData[factor.id] ? '#f5dd4b' : '#f4f3f4',
+                    },
+                  }}
+                />
+              }
+              label={<Typography className="text-gray-900">{factor.label}</Typography>}
             />
-            <TouchableOpacity
-              style={styles.infoButton}
-              onPress={() => showInfo(factor.info)}
-            >
-              <Text style={styles.infoButtonText}>ⓘ</Text>
-            </TouchableOpacity>
-          </View>
+            <IconButton onClick={() => setActiveInfoContent(factor.info) || setShowModal(true)}>
+              <Info size={20} color="#3498DB" />
+            </IconButton>
+          </Box>
         );
       default:
         return null;
@@ -214,230 +244,105 @@ const GDMScreening = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>GDM Risk Assessment</Text>
-          <Text style={styles.subtitle}>Clinical Screening Tool</Text>
-        </View>
+    <Container maxWidth="md" className="py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Typography variant="h4" className="font-bold text-center text-gray-900 mb-2">
+          GDM Risk Assessment
+        </Typography>
+        <Typography className="text-center text-gray-600 mb-6">
+          Clinical Screening Tool
+        </Typography>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Patient Information</Text>
-          <View style={styles.separator} />
+        <Card className="shadow-sm">
+          <CardContent>
+            <Typography className="font-semibold text-gray-900 mb-4">
+              Patient Information
+            </Typography>
+            <Box className="h-px bg-gray-200 mb-4" />
 
-          {riskFactors.map((factor) => (
-            <View key={factor.id} style={styles.fieldContainer}>
-              {factor.type !== 'picker' && <Text style={styles.label}>{factor.label}</Text>}
-              {renderInputField(factor)}
-            </View>
-          ))}
+            {riskFactors.map((factor) => (
+              <Box key={factor.id} className="mb-4">
+                {factor.type !== 'select' && (
+                  <Typography className="font-medium text-gray-900 mb-2">
+                    {factor.label}
+                  </Typography>
+                )}
+                {renderInputField(factor)}
+              </Box>
+            ))}
 
-          <TouchableOpacity
-            style={styles.assessButton}
-            onPress={() => setResult(calculateRiskLevel())}
-          >
-            <Text style={styles.assessButtonText}>Calculate Risk</Text>
-          </TouchableOpacity>
+            <Button
+              fullWidth
+              variant="contained"
+              className="bg-blue-600 text-white"
+              onClick={() => setResult(calculateRiskLevel())}
+              sx={{ mt: 2, borderRadius: '8px' }}
+            >
+              Calculate Risk
+            </Button>
 
-          {result && (
-            <View style={[styles.resultContainer, { backgroundColor: result.color + '20' }]}>
-              <Text style={[styles.resultTitle, { color: result.color }]}>
-                {result.risk}
-              </Text>
-              <Text style={styles.resultScore}>Risk Score: {result.score}</Text>
-              <Text style={styles.resultRecommendation}>
-                {result.recommendation}
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+            {result && (
+              <Box className="mt-4 p-4 rounded-lg" sx={{ bgcolor: `${result.color}20` }}>
+                <Typography
+                  variant="h6"
+                  className="font-bold mb-2"
+                  sx={{ color: result.color }}
+                >
+                  {result.risk}
+                </Typography>
+                <Typography className="text-gray-900 mb-2">
+                  Risk Score: {result.score}
+                </Typography>
+                <Typography className="text-gray-700">
+                  {result.recommendation}
+                </Typography>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <Modal
-        visible={showInfoModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => setShowInfoModal(false)}
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          activeOpacity={1}
-          onPress={() => setShowInfoModal(false)}
+        <Box
+          className="bg-white rounded-lg p-6 w-4/5 max-w-md"
+          sx={{ outline: 'none' }}
         >
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>{activeInfoContent}</Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => setShowInfoModal(false)}
-            >
-              <Text style={styles.modalButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
+          <Box className="flex justify-between items-center mb-4">
+            <Typography className="font-semibold text-gray-900">
+              Information
+            </Typography>
+            <IconButton onClick={() => setShowModal(false)}>
+              <X size={20} color="#2C3E50" />
+            </IconButton>
+          </Box>
+          <Typography className="text-gray-700 mb-4">
+            {activeInfoContent}
+          </Typography>
+          <Button
+            fullWidth
+            variant="contained"
+            className="bg-blue-600 text-white"
+            onClick={() => setShowModal(false)}
+            sx={{ borderRadius: '8px' }}
+          >
+            Close
+          </Button>
+        </Box>
       </Modal>
-    </SafeAreaView>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F6F8',
-  },
-  scrollContainer: {
-    padding: 16,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#E0E0E0',
-    marginBottom: 16,
-  },
-  fieldContainer: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#34495E',
-    marginBottom: 8,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    height: 44,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    color: '#2C3E50',
-    backgroundColor: '#FFFFFF',
-  },
-  pickerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  switchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  infoButton: {
-    marginLeft: 8,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: '#3498DB',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  infoButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  assessButton: {
-    backgroundColor: '#3498DB',
-    borderRadius: 8,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  assessButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  resultContainer: {
-    marginTop: 20,
-    padding: 16,
-    borderRadius: 8,
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  resultScore: {
-    fontSize: 16,
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  resultRecommendation: {
-    fontSize: 14,
-    color: '#34495E',
-    lineHeight: 20,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.8,
-    maxWidth: 400,
-  },
-  modalText: {
-    fontSize: 16,
-    color: '#2C3E50',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  modalButton: {
-    backgroundColor: '#3498DB',
-    borderRadius: 8,
-    padding: 12,
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
 
 export default GDMScreening;

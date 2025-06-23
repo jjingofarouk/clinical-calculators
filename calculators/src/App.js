@@ -8,7 +8,7 @@ export default function App() {
       <CssBaseline />
       <Box sx={{ 
         flex: 1, 
-        backgroundColor: '#004C54', 
+        backgroundColor: '#ffffff', 
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column'

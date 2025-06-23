@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Platform,
-  SafeAreaView
-} from 'react-native';
+import { Box, Typography, TextField, Card, CardContent, FormControlLabel, Switch, Button } from '@mui/material';
 
 const MELDScore = () => {
   const [dialysis, setDialysis] = useState(false);
@@ -25,15 +16,12 @@ const MELDScore = () => {
     const bilirubinValue = parseFloat(bilirubin);
     const inrValue = parseFloat(inr);
 
-    // Handle dialysis patients
     if (dialysis) {
       creatValue = 4.0;
     }
 
-    // Enforce minimum values per UNOS guidelines
     creatValue = Math.max(1.0, Math.min(creatValue, 4.0));
     
-    // Calculate MELD score
     const rawScore = (
       9.57 * Math.log(inrValue) +
       3.78 * Math.log(bilirubinValue) +
@@ -44,7 +32,6 @@ const MELDScore = () => {
     const finalScore = Math.round(Math.max(6, Math.min(40, rawScore)));
     setScore(finalScore);
 
-    // Calculate 3-month mortality rate
     const mortalityRates = {
       '40+': '71.3%',
       '30-39': '52.6%',
@@ -75,278 +62,106 @@ const MELDScore = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.title}>MELD Score Calculator</Text>
-          <Text style={styles.subtitle}>Model for End-Stage Liver Disease</Text>
-        </View>
+    <Box className="bg-gray-100 min-h-screen">
+      <Box className="p-5 bg-white">
+        <Typography variant="h4" className="font-bold text-gray-800">
+          MELD Score Calculator
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600">
+          Model for End-Stage Liver Disease
+        </Typography>
+      </Box>
 
-        <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Clinical Parameters</Text>
+      <Card className="m-4">
+        <CardContent className="space-y-4">
+          <Typography variant="h6" className="font-semibold">
+            Clinical Parameters
+          </Typography>
 
-          {/* Dialysis Toggle */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Dialysis (twice in past week):</Text>
-            <View style={styles.toggleContainer}>
-              <TouchableOpacity 
-                style={[styles.toggleButton, !dialysis && styles.toggleButtonActive]}
-                onPress={() => setDialysis(false)}
-              >
-                <Text style={[styles.toggleText, !dialysis && styles.toggleTextActive]}>No</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                style={[styles.toggleButton, dialysis && styles.toggleButtonActive]}
-                onPress={() => setDialysis(true)}
-              >
-                <Text style={[styles.toggleText, dialysis && styles.toggleTextActive]}>Yes</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={dialysis}
+                onChange={(e) => setDialysis(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Dialysis (twice in past week)"
+          />
 
-          {/* Input Fields */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Creatinine (mg/dL):</Text>
-            <TextInput
-              style={styles.input}
-              value={creatinine}
-              onChangeText={(value) => handleInputChange(value, setCreatinine)}
-              keyboardType="decimal-pad"
-              placeholder="Enter value"
-              placeholderTextColor="#999"
-            />
-            <Text style={styles.inputHelper}>Normal range: 0.7-1.3 mg/dL</Text>
-          </View>
+          <TextField
+            label="Creatinine (mg/dL)"
+            type="number"
+            value={creatinine}
+            onChange={(e) => handleInputChange(e.target.value, setCreatinine)}
+            className="w-full"
+            placeholder="Enter value"
+            InputLabelProps={{ shrink: true }}
+            helperText="Normal range: 0.7-1.3 mg/dL"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Bilirubin (mg/dL):</Text>
-            <TextInput
-              style={styles.input}
-              value={bilirubin}
-              onChangeText={(value) => handleInputChange(value, setBilirubin)}
-              keyboardType="decimal-pad"
-              placeholder="Enter value"
-              placeholderTextColor="#999"
-            />
-            <Text style={styles.inputHelper}>Normal range: 0.3-1.2 mg/dL</Text>
-          </View>
+          <TextField
+            label="Bilirubin (mg/dL)"
+            type="number"
+            value={bilirubin}
+            onChange={(e) => handleInputChange(e.target.value, setBilirubin)}
+            className="w-full"
+            placeholder="Enter value"
+            InputLabelProps={{ shrink: true }}
+            helperText="Normal range: 0.3-1.2 mg/dL"
+          />
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>INR:</Text>
-            <TextInput
-              style={styles.input}
-              value={inr}
-              onChangeText={(value) => handleInputChange(value, setInr)}
-              keyboardType="decimal-pad"
-              placeholder="Enter value"
-              placeholderTextColor="#999"
-            />
-            <Text style={styles.inputHelper}>Normal range: 0.8-1.1</Text>
-          </View>
-        </View>
+          <TextField
+            label="INR"
+            type="number"
+            value={inr}
+            onChange={(e) => handleInputChange(e.target.value, setInr)}
+            className="w-full"
+            placeholder="Enter value"
+            InputLabelProps={{ shrink: true }}
+            helperText="Normal range: 0.8-1.1"
+          />
+        </CardContent>
+      </Card>
 
-        {/* Results Section */}
-        {score !== null && (
-          <View style={styles.resultCard}>
-            <Text style={styles.resultTitle}>Results</Text>
-            <View style={styles.scoreContainer}>
-              <Text style={styles.scoreLabel}>MELD Score:</Text>
-              <Text style={styles.scoreValue}>{score}</Text>
-            </View>
-            <View style={styles.mortalityContainer}>
-              <Text style={styles.mortalityLabel}>3-Month Mortality Rate:</Text>
-              <Text style={styles.mortalityValue}>{mortality}</Text>
-            </View>
-          </View>
-        )}
+      {score !== null && (
+        <Card className="m-4">
+          <CardContent>
+            <Typography variant="h6" className="font-semibold mb-4">
+              Results
+            </Typography>
+            <Box className="flex justify-between mb-2">
+              <Typography className="text-gray-700">MELD Score:</Typography>
+              <Typography variant="h5" className="font-bold text-gray-800">
+                {score}
+              </Typography>
+            </Box>
+            <Box className="flex justify-between">
+              <Typography className="text-gray-700">3-Month Mortality Rate:</Typography>
+              <Typography variant="h6" className="font-semibold text-red-600">
+                {mortality}
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      )}
 
-        {/* Clinical Guidance */}
-        <View style={styles.guidanceCard}>
-          <Text style={styles.guidanceTitle}>Clinical Interpretation</Text>
-          <Text style={styles.guidanceText}>
-            • MELD Score ≥ 40: Consider immediate transplant evaluation{'\n'}
-            • MELD Score 30-39: High priority for transplantation{'\n'}
-            • MELD Score 20-29: Evaluate for transplant listing{'\n'}
-            • MELD Score 10-19: Monitor closely{'\n'}
+      <Card className="m-4">
+        <CardContent>
+          <Typography variant="h6" className="font-semibold mb-4">
+            Clinical Interpretation
+          </Typography>
+          <Typography className="text-gray-700 whitespace-pre-line">
+            • MELD Score ≥ 40: Consider immediate transplant evaluation
+            • MELD Score 30-39: High priority for transplantation
+            • MELD Score 20-29: Evaluate for transplant listing
+            • MELD Score 10-19: Monitor closely
             • MELD Score below 10: Routine follow-up
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    marginTop: 5,
-  },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 15,
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: '#34495e',
-    marginBottom: 8,
-    fontWeight: '500',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#2c3e50',
-    backgroundColor: '#fff',
-  },
-  inputHelper: {
-    fontSize: 12,
-    color: '#95a5a6',
-    marginTop: 4,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    overflow: 'hidden',
-  },
-  toggleButton: {
-    flex: 1,
-    padding: 12,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  toggleButtonActive: {
-    backgroundColor: '#3498db',
-  },
-  toggleText: {
-    color: '#7f8c8d',
-    fontSize: 16,
-  },
-  toggleTextActive: {
-    color: '#fff',
-  },
-  resultCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 15,
-  },
-  scoreContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  scoreLabel: {
-    fontSize: 16,
-    color: '#34495e',
-  },
-  scoreValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  mortalityContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  mortalityLabel: {
-    fontSize: 16,
-    color: '#34495e',
-  },
-  mortalityValue: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#e74c3c',
-  },
-  guidanceCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    margin: 10,
-    marginBottom: 20,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
-  guidanceTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 10,
-  },
-  guidanceText: {
-    fontSize: 14,
-    color: '#34495e',
-    lineHeight: 22,
-  },
-});
 
 export default MELDScore;

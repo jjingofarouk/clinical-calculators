@@ -1,19 +1,29 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, ScrollView, TouchableOpacity } from "react-native";
-import CustomSelect from "../../../utils/CustomSelect";
+import React, { useState } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  Card,
+  CardContent,
+  Container,
+  IconButton,
+  Collapse,
+} from '@mui/material';
+import { motion } from 'framer-motion';
+import Select from 'react-select';
+import InfoIcon from '@mui/icons-material/Info';
 
 const BishopScore = () => {
-  const [dilation, setDilation] = useState("");
-  const [effacement, setEffacement] = useState("");
-  const [station, setStation] = useState("");
-  const [consistency, setConsistency] = useState("");
-  const [position, setPosition] = useState("");
+  const [dilation, setDilation] = useState('');
+  const [effacement, setEffacement] = useState('');
+  const [station, setStation] = useState('');
+  const [consistency, setConsistency] = useState('');
+  const [position, setPosition] = useState('');
   const [showInfo, setShowInfo] = useState(false);
 
   const calculateScore = () => {
     let score = 0;
 
-    // More precise dilation scoring based on ACOG guidelines
     const dilationScore = {
       0: 0,
       1: 0,
@@ -21,31 +31,29 @@ const BishopScore = () => {
       3: 1,
       4: 2,
       5: 2,
-      6: 3
+      6: 3,
     };
-    score += dilationScore[Math.min(6, Math.floor(dilation))] || 0;
+    score += dilationScore[Math.min(6, Math.floor(parseFloat(dilation) || 0))] || 0;
 
-    // Precise effacement scoring
-    if (effacement <= 30) score += 0;
-    else if (effacement > 30 && effacement <= 50) score += 1;
-    else if (effacement > 50 && effacement <= 70) score += 2;
-    else if (effacement > 70) score += 3;
+    const effacementValue = parseFloat(effacement) || 0;
+    if (effacementValue <= 30) score += 0;
+    else if (effacementValue <= 50) score += 1;
+    else if (effacementValue <= 70) score += 2;
+    else score += 3;
 
-    // Station scoring with precise measurements
     const stationScores = {
-      "-3": 0,
-      "-2": 1,
-      "-1": 2,
-      "0": 2,
-      "+1": 3,
-      "+2": 3
+      '-3': 0,
+      '-2': 1,
+      '-1': 2,
+      '0': 2,
+      '+1': 3,
+      '+2': 3,
     };
     score += stationScores[station] || 0;
 
-    // Consistency and position scoring
-    const consistencyScores = { "Firm": 0, "Medium": 1, "Soft": 2 };
-    const positionScores = { "Posterior": 0, "Mid": 1, "Anterior": 2 };
-    
+    const consistencyScores = { Firm: 0, Medium: 1, Soft: 2 };
+    const positionScores = { Posterior: 0, Mid: 1, Anterior: 2 };
+
     score += consistencyScores[consistency] || 0;
     score += positionScores[position] || 0;
 
@@ -55,21 +63,21 @@ const BishopScore = () => {
   const getInterpretation = (score) => {
     if (score <= 5) {
       return {
-        text: "Unfavorable for induction",
-        detail: "Success rate <50%. Consider cervical ripening.",
-        color: "#FF6B6B"
+        text: 'Unfavorable for induction',
+        detail: 'Success rate <50%. Consider cervical ripening.',
+        color: '#FF6B6B',
       };
-    } else if (score >= 6 && score <= 8) {
+    } else if (score <= 8) {
       return {
-        text: "Moderately favorable",
-        detail: "Success rate 65-85%",
-        color: "#4ECDC4"
+        text: 'Moderately favorable',
+        detail: 'Success rate 65-85%',
+        color: '#4ECDC4',
       };
     } else {
       return {
-        text: "Highly favorable",
-        detail: "Success rate >85%",
-        color: "#2ECC71"
+        text: 'Highly favorable',
+        detail: 'Success rate >85%',
+        color: '#2ECC71',
       };
     }
   };
@@ -77,236 +85,187 @@ const BishopScore = () => {
   const score = calculateScore();
   const interpretation = getInterpretation(score);
 
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      borderColor: '#E2E8F0',
+      borderRadius: '8px',
+      backgroundColor: '#F8F9FA',
+      '&:hover': { borderColor: '#004C54' },
+    }),
+    menu: (base) => ({
+      ...base,
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    }),
+    option: (base, { isSelected }) => ({
+      ...base,
+      backgroundColor: isSelected ? '#004C54' : '#FFFFFF',
+      color: isSelected ? '#FFFFFF' : '#333333',
+      '&:hover': {
+        backgroundColor: isSelected ? '#004C54' : '#F5F7FA',
+      },
+    }),
+  };
+
   const stationOptions = [
-    { label: "-3 (High)", value: "-3" },
-    { label: "-2", value: "-2" },
-    { label: "-1", value: "-1" },
-    { label: "0 (Engaged)", value: "0" },
-    { label: "+1", value: "+1" },
-    { label: "+2 (Low)", value: "+2" },
+    { label: '-3 (High)', value: '-3' },
+    { label: '-2', value: '-2' },
+    { label: '-1', value: '-1' },
+    { label: '0 (Engaged)', value: '0' },
+    { label: '+1', value: '+1' },
+    { label: '+2 (Low)', value: '+2' },
   ];
 
   const consistencyOptions = [
-    { label: "Firm (like cartilage)", value: "Firm" },
-    { label: "Medium", value: "Medium" },
-    { label: "Soft (like vaginal wall)", value: "Soft" },
+    { label: 'Firm (like cartilage)', value: 'Firm' },
+    { label: 'Medium', value: 'Medium' },
+    { label: 'Soft (like vaginal wall)', value: 'Soft' },
   ];
 
   const positionOptions = [
-    { label: "Posterior", value: "Posterior" },
-    { label: "Mid-position", value: "Mid" },
-    { label: "Anterior", value: "Anterior" },
+    { label: 'Posterior', value: 'Posterior' },
+    { label: 'Mid-position', value: 'Mid' },
+    { label: 'Anterior', value: 'Anterior' },
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Bishop Score Assessment</Text>
-        <TouchableOpacity 
-          style={styles.infoButton}
-          onPress={() => setShowInfo(!showInfo)}
-        >
-          <Text style={styles.infoButtonText}>ℹ️</Text>
-        </TouchableOpacity>
-      </View>
+    <Container maxWidth="md" className="py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box className="flex justify-between items-center mb-4">
+          <Typography variant="h4" className="font-bold text-gray-900">
+            Bishop Score Assessment
+          </Typography>
+          <IconButton onClick={() => setShowInfo(!showInfo)}>
+            <InfoIcon sx={{ color: '#339AF0' }} />
+          </IconButton>
+        </Box>
 
-      {showInfo && (
-        <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Clinical Information</Text>
-          <Text style={styles.infoText}>
-            • The Bishop Score (1964) is the most widely used pre-induction cervical scoring system
-            {"\n"}• Scores ≥8 are associated with high probability of vaginal delivery
-            {"\n"}• Modified Bishop Score includes five components, each scored 0-2 or 0-3
-            {"\n"}• Meta-analysis shows 85% success rate for scores above 8
-            {"\n"}• ACOG recommends assessment before labor induction
-          </Text>
-        </View>
-      )}
+        <Collapse in={showInfo}>
+          <Card className="mb-4 shadow-sm" sx={{ bgcolor: '#E7F5FF', borderLeft: '4px solid #339AF0' }}>
+            <CardContent>
+              <Typography className="font-semibold text-blue-700 mb-2">
+                Clinical Information
+              </Typography>
+              <Typography className="text-gray-700">
+                • The Bishop Score (1964) is the most widely used pre-induction cervical scoring system<br />
+                • Scores ≥8 are associated with high probability of vaginal delivery<br />
+                • Modified Bishop Score includes five components, each scored 0-2 or 0-3<br />
+                • Meta-analysis shows 85% success rate for scores above 8<br />
+                • ACOG recommends assessment before labor induction
+              </Typography>
+            </CardContent>
+          </Card>
+        </Collapse>
 
-      <View style={styles.inputSection}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Cervical Dilation</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            placeholder="Enter 0-6 cm"
-            value={dilation}
-            onChangeText={setDilation}
-            maxLength={3}
-          />
-          <Text style={styles.sublabel}>Measured in centimeters</Text>
-        </View>
+        <Card className="mb-4 shadow-sm">
+          <CardContent>
+            <Box className="mb-4">
+              <Typography className="font-semibold text-gray-900 mb-2">
+                Cervical Dilation
+              </Typography>
+              <TextField
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={dilation}
+                onChange={(e) => setDilation(e.target.value)}
+                placeholder="Enter 0-6 cm"
+                InputProps={{
+                  inputProps: { min: 0, max: 6, step: '0.1' },
+                  sx: { borderRadius: '8px', bgcolor: '#F8F9FA' },
+                }}
+              />
+              <Typography className="text-gray-600 text-sm mt-1">
+                Measured in centimeters
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Cervical Effacement</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            placeholder="Enter 0-100%"
-            value={effacement}
-            onChangeText={setEffacement}
-            maxLength={3}
-          />
-          <Text style={styles.sublabel}>Percentage of cervical thinning</Text>
-        </View>
+            <Box className="mb-4">
+              <Typography className="font-semibold text-gray-900 mb-2">
+                Cervical Effacement
+              </Typography>
+              <TextField
+                fullWidth
+                type="number"
+                variant="outlined"
+                value={effacement}
+                onChange={(e) => setEffacement(e.target.value)}
+                placeholder="Enter 0-100%"
+                InputProps={{
+                  inputProps: { min: 0, max: 100 },
+                  sx: { borderRadius: '8px', bgcolor: '#F8F9FA' },
+                }}
+              />
+              <Typography className="text-gray-600 text-sm mt-1">
+                Percentage of cervical thinning
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Fetal Station</Text>
-          <CustomSelect
-            options={stationOptions}
-            placeholder="Select station"
-            onSelect={(item) => setStation(item.value)}
-            label="Fetal Station"
-            containerStyle={styles.select}
-          />
-          <Text style={styles.sublabel}>Relation to ischial spines</Text>
-        </View>
+            <Box className="mb-4">
+              <Typography className="font-semibold text-gray-900 mb-2">
+                Fetal Station
+              </Typography>
+              <Select
+                options={stationOptions}
+                value={stationOptions.find((option) => option.value === station)}
+                onChange={(option) => setStation(option.value)}
+                styles={selectStyles}
+                placeholder="Select station"
+              />
+              <Typography className="text-gray-600 text-sm mt-1">
+                Relation to ischial spines
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Cervical Consistency</Text>
-          <CustomSelect
-            options={consistencyOptions}
-            placeholder="Select consistency"
-            onSelect={(item) => setConsistency(item.value)}
-            label="Cervical Consistency"
-            containerStyle={styles.select}
-          />
-        </View>
+            <Box className="mb-4">
+              <Typography className="font-semibold text-gray-900 mb-2">
+                Cervical Consistency
+              </Typography>
+              <Select
+                options={consistencyOptions}
+                value={consistencyOptions.find((option) => option.value === consistency)}
+                onChange={(option) => setConsistency(option.value)}
+                styles={selectStyles}
+                placeholder="Select consistency"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Cervical Position</Text>
-          <CustomSelect
-            options={positionOptions}
-            placeholder="Select position"
-            onSelect={(item) => setPosition(item.value)}
-            label="Cervical Position"
-            containerStyle={styles.select}
-          />
-        </View>
-      </View>
+            <Box>
+              <Typography className="font-semibold text-gray-900 mb-2">
+                Cervical Position
+              </Typography>
+              <Select
+                options={positionOptions}
+                value={positionOptions.find((option) => option.value === position)}
+                onChange={(option) => setPosition(option.value)}
+                styles={selectStyles}
+                placeholder="Select position"
+              />
+            </Box>
+          </CardContent>
+        </Card>
 
-      <View style={[styles.resultCard, { borderLeftColor: interpretation.color }]}>
-        <Text style={styles.scoreText}>Bishop Score: {score}/13</Text>
-        <Text style={[styles.interpretationText, { color: interpretation.color }]}>
-          {interpretation.text}
-        </Text>
-        <Text style={styles.detailText}>{interpretation.detail}</Text>
-      </View>
-    </ScrollView>
+        <Card className="shadow-sm" sx={{ borderLeft: `6px solid ${interpretation.color}` }}>
+          <CardContent>
+            <Typography variant="h5" className="font-bold text-gray-900 mb-2">
+              Bishop Score: {score}/13
+            </Typography>
+            <Typography className="font-semibold mb-1" sx={{ color: interpretation.color }}>
+              {interpretation.text}
+            </Typography>
+            <Typography className="text-gray-700">
+              {interpretation.detail}
+            </Typography>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </Container>
   );
-};
-
-const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F9FA",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#FFFFFF",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E9ECEF",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    color: "#212529",
-  },
-  infoButton: {
-    padding: 8,
-  },
-  infoButtonText: {
-    fontSize: 20,
-  },
-  infoCard: {
-    margin: 15,
-    padding: 15,
-    backgroundColor: "#E7F5FF",
-    borderRadius: 10,
-    borderLeftWidth: 4,
-    borderLeftColor: "#339AF0",
-  },
-  infoTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#1971C2",
-    marginBottom: 10,
-  },
-  infoText: {
-    fontSize: 14,
-    color: "#495057",
-    lineHeight: 20,
-  },
-  inputSection: {
-    padding: 15,
-  },
-  inputGroup: {
-    marginBottom: 20,
-    backgroundColor: "#FFFFFF",
-    padding: 15,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#495057",
-    marginBottom: 8,
-  },
-  sublabel: {
-    fontSize: 12,
-    color: "#868E96",
-    marginTop: 4,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#DEE2E6",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: "#212529",
-    backgroundColor: "#F8F9FA",
-  },
-  select: {
-    borderWidth: 1,
-    borderColor: "#DEE2E6",
-    borderRadius: 8,
-    backgroundColor: "#F8F9FA",
-  },
-  resultCard: {
-    margin: 15,
-    padding: 20,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    borderLeftWidth: 6,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#212529",
-    marginBottom: 8,
-  },
-  interpretationText: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  detailText: {
-    fontSize: 16,
-    color: "#495057",
-  },
 };
 
 export default BishopScore;

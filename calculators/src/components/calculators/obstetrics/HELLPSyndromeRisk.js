@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { TextField, Button, Typography, Box, Alert } from "@mui/material";
+import { Calculator } from "lucide-react";
 
 const HELLPSyndromeRisk = () => {
   const [plateletCount, setPlateletCount] = useState("");
@@ -21,7 +22,9 @@ const HELLPSyndromeRisk = () => {
       isNaN(parsedAltLevel) ||
       isNaN(parsedLdhLevel)
     ) {
-      Alert.alert("Invalid Input", "Please enter valid numeric values for all parameters.");
+      setRisk(
+        <Alert severity="error">Please enter valid numeric values for all parameters.</Alert>
+      );
       return;
     }
 
@@ -39,117 +42,103 @@ const HELLPSyndromeRisk = () => {
 
     // Determine risk level
     if (riskScore >= 5) {
-      setRisk("High Risk for HELLP Syndrome");
+      setRisk(
+        <Alert severity="warning">High Risk for HELLP Syndrome</Alert>
+      );
     } else if (riskScore >= 3) {
-      setRisk("Moderate Risk for HELLP Syndrome");
+      setRisk(
+        <Alert severity="info">Moderate Risk for HELLP Syndrome</Alert>
+      );
     } else {
-      setRisk("Low Risk for HELLP Syndrome");
+      setRisk(
+        <Alert severity="success">Low Risk for HELLP Syndrome</Alert>
+      );
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>HELLP Syndrome Risk Calculator</Text>
+    <Box
+      className="p-8 bg-white shadow-lg rounded-lg"
+      sx={{ maxWidth: 600, mx: "auto" }}
+    >
+      <Box className="text-center mb-6">
+        <Calculator className="mx-auto mb-2 text-blue-500" size={48} />
+        <Typography variant="h4" className="font-bold">
+          HELLP Syndrome Risk Calculator
+        </Typography>
+      </Box>
 
       {/* Input for Platelet Count */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Platelet Count (per mm³):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          fullWidth
+          label="Platelet Count (per mm³)"
+          variant="outlined"
+          type="number"
           value={plateletCount}
-          onChangeText={(value) => setPlateletCount(value)}
+          onChange={(e) => setPlateletCount(e.target.value)}
           placeholder="Enter platelet count"
         />
-      </View>
+      </Box>
 
       {/* Input for AST */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>AST Level (IU/L):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          fullWidth
+          label="AST Level (IU/L)"
+          variant="outlined"
+          type="number"
           value={astLevel}
-          onChangeText={(value) => setAstLevel(value)}
+          onChange={(e) => setAstLevel(e.target.value)}
           placeholder="Enter AST level"
         />
-      </View>
+      </Box>
 
       {/* Input for ALT */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>ALT Level (IU/L):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          fullWidth
+          label="ALT Level (IU/L)"
+          variant="outlined"
+          type="number"
           value={altLevel}
-          onChangeText={(value) => setAltLevel(value)}
+          onChange={(e) => setAltLevel(e.target.value)}
           placeholder="Enter ALT level"
         />
-      </View>
+      </Box>
 
       {/* Input for LDH */}
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>LDH Level (IU/L):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          fullWidth
+          label="LDH Level (IU/L)"
+          variant="outlined"
+          type="number"
           value={ldhLevel}
-          onChangeText={(value) => setLdhLevel(value)}
+          onChange={(e) => setLdhLevel(e.target.value)}
           placeholder="Enter LDH level"
         />
-      </View>
+      </Box>
 
       {/* Calculate Button */}
-      <Button title="Calculate Risk" onPress={calculateRisk} />
+      <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={calculateRisk}
+        className="my-4"
+      >
+        Calculate Risk
+      </Button>
 
       {/* Display the result */}
       {risk && (
-        <View style={styles.result}>
-          <Text style={styles.resultText}>Result: {risk}</Text>
-        </View>
+        <Box className="mt-6">
+          {risk}
+        </Box>
       )}
-    </View>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
-  },
-  result: {
-    marginTop: 20,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 5,
-    borderColor: "#ccc",
-    borderWidth: 1,
-  },
-  resultText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});
 
 export default HELLPSyndromeRisk;

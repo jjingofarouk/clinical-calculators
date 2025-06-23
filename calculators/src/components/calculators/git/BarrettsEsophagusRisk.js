@@ -1,41 +1,34 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const BarrettsEsophagusRisk = () => {
-  // State variables for input parameters
   const [age, setAge] = useState('');
-  const [gender, setGender] = useState('Male'); // 'Male' or 'Female'
-  const [refluxSymptoms, setRefluxSymptoms] = useState('No'); // 'Yes' or 'No'
-  const [familyHistory, setFamilyHistory] = useState('No'); // 'Yes' or 'No'
+  const [gender, setGender] = useState('Male');
+  const [refluxSymptoms, setRefluxSymptoms] = useState('No');
+  const [familyHistory, setFamilyHistory] = useState('No');
 
-  // Calculate the risk based on the inputs
   const calculateRisk = () => {
     const patientAge = parseInt(age, 10);
     let riskScore = 0;
 
-    // Validate inputs
     if (isNaN(patientAge) || patientAge <= 0) {
       return 'Please enter a valid age.';
     }
 
-    // Age factor
     if (patientAge > 50) {
       riskScore += 2;
     } else if (patientAge >= 40) {
       riskScore += 1;
     }
 
-    // Gender factor (Men are at higher risk)
     if (gender === 'Male') {
       riskScore += 2;
     }
 
-    // Reflux Symptoms (more reflux symptoms increase risk)
     if (refluxSymptoms === 'Yes') {
       riskScore += 2;
     }
 
-    // Family History of Barrett's Esophagus (family history increases risk)
     if (familyHistory === 'Yes') {
       riskScore += 2;
     }
@@ -44,97 +37,82 @@ const BarrettsEsophagusRisk = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Barrett's Esophagus Risk Calculator</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        Barrett's Esophagus Risk Calculator
+      </Typography>
 
-      {/* Age Input */}
-      <View style={styles.inputContainer}>
-        <Text>Age:</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          label="Age"
+          type="number"
           value={age}
-          onChangeText={(value) => setAge(value)}
+          onChange={(e) => setAge(e.target.value)}
+          className="w-52"
+          InputLabelProps={{ shrink: true }}
         />
-      </View>
+      </Box>
 
-      {/* Gender Input */}
-      <View style={styles.inputContainer}>
-        <Text>Gender:</Text>
-        <TextInput
-          style={styles.input}
-          value={gender}
-          onChangeText={(value) => setGender(value)}
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Gender</InputLabel>
+          <Select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            label="Gender"
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Reflux Symptoms Input */}
-      <View style={styles.inputContainer}>
-        <Text>Reflux Symptoms (Yes/No):</Text>
-        <TextInput
-          style={styles.input}
-          value={refluxSymptoms}
-          onChangeText={(value) => setRefluxSymptoms(value)}
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Reflux Symptoms</InputLabel>
+          <Select
+            value={refluxSymptoms}
+            onChange={(e) => setRefluxSymptoms(e.target.value)}
+            label="Reflux Symptoms"
+          >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Family History Input */}
-      <View style={styles.inputContainer}>
-        <Text>Family History of Barrett's Esophagus (Yes/No):</Text>
-        <TextInput
-          style={styles.input}
-          value={familyHistory}
-          onChangeText={(value) => setFamilyHistory(value)}
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Family History</InputLabel>
+          <Select
+            value={familyHistory}
+            onChange={(e) => setFamilyHistory(e.target.value)}
+            label="Family History"
+          >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Calculate and display the risk */}
-      <Text style={styles.result}>{calculateRisk()}</Text>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
+        {calculateRisk()}
+      </Typography>
 
-      {/* Reset button */}
       <Button
-        title="Reset"
-        onPress={() => {
+        variant="outlined"
+        className="mt-4"
+        onClick={() => {
           setAge('');
           setGender('Male');
           setRefluxSymptoms('No');
           setFamilyHistory('No');
         }}
-      />
-    </View>
+      >
+        Reset
+      </Button>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    fontSize: 16,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default BarrettsEsophagusRisk;

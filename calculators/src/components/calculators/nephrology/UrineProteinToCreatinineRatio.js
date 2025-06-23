@@ -88,7 +88,7 @@ const UrineProteinToCreatinineRatio = () => {
 								type="number"
 								size="small"
 							/>
-							<Typography variant="caption" className="text-gray-500 mt-1">Reference: < 150 mg/dL</Typography>
+							<Typography variant="caption" className="text-gray-500 mt-1">Reference: Less than 150 mg/dL</Typography>
 						</Box>
 
 						<Box>

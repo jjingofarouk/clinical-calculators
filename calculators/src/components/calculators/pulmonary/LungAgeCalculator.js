@@ -1,81 +1,103 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, TextField, Button, Typography } from '@mui/material';
 
 const LungAgeCalculator = () => {
-  const [age, setAge] = useState("");
-  const [fev1, setFEV1] = useState("");
-  const [lungAge, setLungAge] = useState("");
+  const [age, setAge] = useState('');
+  const [fev1, setFEV1] = useState('');
+  const [lungAge, setLungAge] = useState('');
 
   const calculateLungAge = () => {
-    const result = Math.round(60 - (fev1 / 2)); // Simplified calculation
+    const ageValue = parseFloat(age);
+    const fev1Value = parseFloat(fev1);
+
+    if (isNaN(ageValue) || isNaN(fev1Value)) {
+      alert('Please enter valid numeric values for Age and FEV1.');
+      return;
+    }
+
+    if (ageValue <= 0 || fev1Value <= 0) {
+      alert('Age and FEV1 must be greater than 0.');
+      return;
+    }
+
+    const result = Math.round(60 - (fev1Value / 2));
     setLungAge(result);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lung Age Calculator</Text>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-6">
+          Lung Age Calculator
+        </Typography>
 
-      <TextInput
-        style={styles.input}
-        value={age}
-        onChangeText={(text) => setAge(text)}
-        placeholder="Age (years)"
-        keyboardType="numeric"
-      />
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="space-y-6">
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Age (years)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="Enter age"
+                  variant="outlined"
+                  inputProps={{ min: 0 }}
+                />
+              </Box>
 
-      <TextInput
-        style={styles.input}
-        value={fev1}
-        onChangeText={(text) => setFEV1(text)}
-        placeholder="FEV1 (L)"
-        keyboardType="numeric"
-      />
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  FEV1 (L)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={fev1}
+                  onChange={(e) => setFEV1(e.target.value)}
+                  placeholder="Enter FEV1"
+                  variant="outlined"
+                  inputProps={{ min: 0, step: '0.1' }}
+                />
+              </Box>
 
-      <Button title="Calculate Lung Age" onPress={calculateLungAge} />
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-4"
+                onClick={calculateLungAge}
+              >
+                Calculate Lung Age
+              </Button>
 
-      {lungAge && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Lung Age: {lungAge} years</Text>
-        </View>
-      )}
-    </View>
+              {lungAge && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 p-4 rounded-lg bg-cyan-50 border border-cyan-200"
+                >
+                  <Typography variant="h6" className="font-bold text-blue-600 text-center">
+                    Lung Age: {lungAge} years
+                  </Typography>
+                </motion.div>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 15,
-    paddingLeft: 10,
-    backgroundColor: "#fff",
-  },
-  resultContainer: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#e0f7fa",
-    borderRadius: 5,
-  },
-  resultText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#007BFF",
-    textAlign: "center",
-  },
-});
 
 export default LungAgeCalculator;

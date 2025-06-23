@@ -328,7 +328,7 @@ const PERCCalculator = () => {
             <br />
             • Heart rate ≥100
             <br />
-            • Oxygen saturation on room air <95%
+• Oxygen saturation on room air &lt;95%
             <br />
             • Unilateral leg swelling
             <br />

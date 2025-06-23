@@ -8,7 +8,7 @@ import NeurologyCalculators from './components/calculators/neurology/NeurologyCa
 import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
 import GastroenterologyCalculators from './components/calculators/git/GastroenterologyCalculators';
 import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
-import OrthopedicsCalculators from './components/calculators/orthopedics/OrthopedicsCalculators';
+import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
 import SearchCalculators from './components/calculators/SearchCalculators';

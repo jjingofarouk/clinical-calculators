@@ -1,6 +1,6 @@
 import React from 'react';
 import { CssBaseline, Box } from '@mui/material';
-import ClinicalCalculators from './src/components/calculators/ClinicalCalculators';
+import ClinicalCalculators from './components/calculators/ClinicalCalculators';
 
 export default function App() {
   return (

@@ -29,7 +29,7 @@ const GAD7 = () => {
     if (totalScore >= 10) return { text: 'Moderate anxiety', color: 'warning.main' };
     if (totalScore >= 5) return { text: 'Mild anxiety', color: 'info.main' };
     return { text: 'Minimal anxiety', color: 'success.main' };
-  });
+  };
 
   const questions = [
     {

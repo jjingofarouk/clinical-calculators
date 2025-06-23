@@ -1,93 +1,105 @@
 import React, { useState } from 'react';
-import { View, Text,  TextInput, StyleSheet } from 'react-native';
-import CheckBox from './CheckBox';
+import { Card, Typography, Box, FormControlLabel, Checkbox } from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const AHASAScore = () => {
-  const [age, setAge] = useState(false);
-  const [hypertension, setHypertension] = useState(false);
-  const [diabetes, setDiabetes] = useState(false);
-  const [smoking, setSmoking] = useState(false);
-  const [previousStroke, setPreviousStroke] = useState(false);
+const AHASAScore = () => {
+	const [age, setAge] = useState(false);
+	const [hypertension, setHypertension] = useState(false);
+	const [diabetes, setDiabetes] = useState(false);
+	const [smoking, setSmoking] = useState(false);
+	const [previousStroke, setPreviousStroke] = useState(false);
 
-  const score = (age ? 1 : 0) + 
-               (hypertension ? 1 : 0) + 
-               (diabetes ? 1 : 0) + 
-               (smoking ? 1 : 0) + 
-               (previousStroke ? 2 : 0);
+	const score = (age ? 1 : 0) + 
+		(hypertension ? 1 : 0) + 
+		(diabetes ? 1 : 0) + 
+		(smoking ? 1 : 0) + 
+		(previousStroke ? 2 : 0);
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>AHA/ASA Stroke Risk Assessment</Text>
+	return (
+		<div className="min-h-screen bg-gray-100 p-6">
+			<motion.div 
+				initial={{ y: 20, opacity: 0 }}
+				animate={{ y: 0, opacity: 1 }}
+				className="max-w-md mx-auto"
+			>
+				<Card className="p-6" sx={{ borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+					<Typography variant="h5" className="text-center font-bold mb-4" sx={{ color: '#004C54' }}>
+						AHA/ASA Stroke Risk Assessment
+					</Typography>
 
-      {/* Age */}
-      <View style={styles.checkboxContainer}>
-        <Text style={styles.label}>Age greater or equal to  65</Text>
-        <CheckBox value={age} onValueChange={setAge} />
-      </View>
+					<Box className="space-y-4">
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={age}
+									onChange={(e) => setAge(e.target.checked)}
+									color="primary"
+								/>
+							}
+							label="Age greater or equal to 65"
+							sx={{ '.MuiTypography-root': { fontSize: '1rem', fontWeight: 500, color: '#333' } }}
+						/>
 
-      {/* Hypertension */}
-      <View style={styles.checkboxContainer}>
-        <Text style={styles.label}>Hypertension</Text>
-        <CheckBox value={hypertension} onValueChange={setHypertension} />
-      </View>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={hypertension}
+									onChange={(e) => setHypertension(e.target.checked)}
+									color="primary"
+								/>
+							}
+							label="Hypertension"
+							sx={{ '.MuiTypography-root': { fontSize: '1rem', fontWeight: 500, color: '#333' } }}
+						/>
 
-      {/* Diabetes */}
-      <View style={styles.checkboxContainer}>
-        <Text style={styles.label}>Diabetes</Text>
-        <CheckBox value={diabetes} onValueChange={setDiabetes} />
-      </View>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={diabetes}
+									onChange={(e) => setDiabetes(e.target.checked)}
+									color="primary"
+								/>
+							}
+							label="Diabetes"
+							sx={{ '.MuiTypography-root': { fontSize: '1rem', fontWeight: 500, color: '#333' } }}
+						/>
 
-      {/* Smoking */}
-      <View style={styles.checkboxContainer}>
-        <Text style={styles.label}>Smoking</Text>
-        <CheckBox value={smoking} onValueChange={setSmoking} />
-      </View>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={smoking}
+									onChange={(e) => setSmoking(e.target.checked)}
+									color="primary"
+								/>
+							}
+							label="Smoking"
+							sx={{ '.MuiTypography-root': { fontSize: '1rem', fontWeight: 500, color: '#333' } }}
+						/>
 
-      {/* Previous Stroke */}
-      <View style={styles.checkboxContainer}>
-        <Text style={styles.label}>Previous Stroke/TIA</Text>
-        <CheckBox value={previousStroke} onValueChange={setPreviousStroke} />
-      </View>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={previousStroke}
+									onChange={(e) => setPreviousStroke(e.target.checked)}
+									color="primary"
+								/>
+							}
+							label="Previous Stroke/TIA"
+							sx={{ '.MuiTypography-root': { fontSize: '1rem', fontWeight: 500, color: '#333' } }}
+						/>
 
-      <Text style={styles.result}>Total Score: {score}</Text>
-    </View>
-  );
+						<Typography 
+							variant="h6" 
+							className="text-center font-semibold mt-4" 
+							sx={{ color: '#004C54' }}
+						>
+							Total Score: {score}
+						</Typography>
+					</Box>
+				</Card>
+			</motion.div>
+		</div>
+	);
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: '#F5F7FA',
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#004C54',
-    textAlign: 'center',
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
-    marginRight: 8,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#004C54',
-    textAlign: 'center',
-    marginTop: 16,
-  },
-});
+export default AHASAScore;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { Box, Typography, TextField, Button } from "@mui/material";
 
 const WaistCircumferenceCalculator = () => {
   const [waistCircumference, setWaistCircumference] = useState('');
@@ -16,48 +16,37 @@ const WaistCircumferenceCalculator = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Waist Circumference Calculator</Text>
+    <Box className="min-h-screen flex flex-col items-center justify-center p-5">
+      <Typography variant="h4" className="font-bold mb-5">
+        Waist Circumference Calculator
+      </Typography>
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Waist Circumference (cm)"
         value={waistCircumference}
-        onChangeText={(text) => setWaistCircumference(text)}
-        keyboardType="numeric"
+        onChange={(e) => setWaistCircumference(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <Button title="Calculate Risk" onPress={calculateRisk} />
+      <Button
+        variant="contained"
+        onClick={calculateRisk}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+      >
+        Calculate Risk
+      </Button>
 
-      {risk && <Text style={styles.result}>{risk}</Text>}
-    </View>
+      {risk && (
+        <Typography variant="h6" className="mt-5">
+          {risk}
+        </Typography>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    width: '100%',
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-  },
-});
 
 export default WaistCircumferenceCalculator;

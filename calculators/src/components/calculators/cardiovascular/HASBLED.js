@@ -1,85 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Switch, Button, ScrollView, Alert } from 'react-native';
-
-const styles = {
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f4f4f9',
-  },
-  header: {
-    fontSize: 26,
-    fontWeight: '600',
-    marginBottom: 30,
-    color: '#002432',
-  },
-  calculatorBox: {
-    marginBottom: 20,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#002432',
-  },
-  inputField: {
-    height: 45,
-    borderColor: '#d0d0d0',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingLeft: 10,
-    fontSize: 16,
-    marginBottom: 16,
-    backgroundColor: '#fff',
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  switchLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginRight: 10,
-    color: '#002432',
-  },
-  button: {
-    backgroundColor: '#27c7b8',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#fff',
-    fontWeight: '600',
-  },
-  resultContainer: {
-    marginTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#d0d0d0',
-    paddingTop: 15,
-  },
-  resultTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#27c7b8',
-  },
-  resultText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#002432',
-  },
-};
+import { Box, Typography, TextField, Switch, Button } from '@mui/material';
 
 const HASBLED = () => {
   const [hypertension, setHypertension] = useState(false);
@@ -92,15 +12,14 @@ const HASBLED = () => {
   const [result, setResult] = useState(null);
 
   const handleCalculate = () => {
-    // Input validation
     const creatinineValue = parseFloat(creatinine);
     const ageValue = parseInt(age);
     if (isNaN(creatinineValue) || creatinineValue <= 0) {
-      Alert.alert("Invalid Input", "Please enter a valid creatinine value.");
+      alert("Please enter a valid creatinine value.");
       return;
     }
     if (isNaN(ageValue) || ageValue <= 0) {
-      Alert.alert("Invalid Input", "Please enter a valid age.");
+      alert("Please enter a valid age.");
       return;
     }
 
@@ -113,7 +32,6 @@ const HASBLED = () => {
     score += drugs ? 1 : 0;
     score += alcohol ? 1 : 0;
 
-    // Determine risk level
     let riskLevel = '';
     if (score === 0) riskLevel = 'Low risk for major bleeding';
     else if (score === 1) riskLevel = 'Moderate risk for major bleeding';
@@ -125,57 +43,91 @@ const HASBLED = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>HAS-BLED Risk Calculator</Text>
+    <Box className="min-h-screen bg-gray-100 p-5">
+      <Typography variant="h4" className="font-semibold text-gray-900 mb-8">
+        HAS-BLED Risk Calculator
+      </Typography>
 
-      <View style={styles.calculatorBox}>
-        <Text style={styles.inputLabel}>Hypertension</Text>
-        <Switch value={hypertension} onValueChange={setHypertension} />
+      <Box className="w-full bg-white rounded-xl p-5 shadow-md">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Hypertension
+        </Typography>
+        <Switch checked={hypertension} onChange={(e) => setHypertension(e.target.checked)} className="mb-4" />
 
-        <Text style={styles.inputLabel}>Creatinine Level (mg/dl)</Text>
-        <TextInput
-          style={styles.inputField}
-          keyboardType="numeric"
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Creatinine Level (mg/dl)
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
           value={creatinine}
-          onChangeText={setCreatinine}
+          onChange={(e) => setCreatinine(e.target.value)}
           placeholder="Enter Creatinine Level"
+          variant="outlined"
+          className="mb-4"
+          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Text style={styles.inputLabel}>Stroke History</Text>
-        <Switch value={stroke} onValueChange={setStroke} />
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Stroke History
+        </Typography>
+        <Switch checked={stroke} onChange={(e) => setStroke(e.target.checked)} className="mb-4" />
 
-        <Text style={styles.inputLabel}>Bleeding History</Text>
-        <Switch value={bleedingHistory} onValueChange={setBleedingHistory} />
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Bleeding History
+        </Typography>
+        <Switch checked={bleedingHistory} onChange={(e) => setBleedingHistory(e.target.checked)} className="mb-4" />
 
-        <Text style={styles.inputLabel}>Age</Text>
-        <TextInput
-          style={styles.inputField}
-          keyboardType="numeric"
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Age
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
           value={age}
-          onChangeText={setAge}
+          onChange={(e) => setAge(e.target.value)}
           placeholder="Enter Age"
+          variant="outlined"
+          className="mb-4"
+          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Text style={styles.inputLabel}>Medications (Aspirin, NSAIDs)</Text>
-        <Switch value={drugs} onValueChange={setDrugs} />
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Medications (Aspirin, NSAIDs)
+        </Typography>
+        <Switch checked={drugs} onChange={(e) => setDrugs(e.target.checked)} className="mb-4" />
 
-        <Text style={styles.inputLabel}>Alcohol Consumption (≥8 units/week)</Text>
-        <Switch value={alcohol} onValueChange={setAlcohol} />
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+          Alcohol Consumption (≥8 units/week)
+        </Typography>
+        <Switch checked={alcohol} onChange={(e) => setAlcohol(e.target.checked)} className="mb-4" />
 
-        <View style={styles.button}>
-          <Button title="Calculate HAS-BLED" onPress={handleCalculate} color="#fff" />
-        </View>
+        <Button
+          variant="contained"
+          onClick={handleCalculate}
+          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg"
+        >
+          Calculate HAS-BLED
+        </Button>
 
         {result && (
-          <View style={styles.resultContainer}>
-            <Text style={styles.resultTitle}>HAS-BLED Score</Text>
-            <Text style={styles.resultText}>{result.score}</Text>
-            <Text style={styles.resultTitle}>Risk Level</Text>
-            <Text style={styles.resultText}>{result.riskLevel}</Text>
-          </View>
+          <Box className="mt-5 pt-4 border-t border-gray-300">
+            <Typography variant="h6" className="font-semibold text-teal-500">
+              HAS-BLED Score
+            </Typography>
+            <Typography variant="body1" className="font-medium text-gray-900">
+              {result.score}
+            </Typography>
+            <Typography variant="h6" className="font-semibold text-teal-500 mt-2">
+              Risk Level
+            </Typography>
+            <Typography variant="body1" className="font-medium text-gray-900">
+              {result.riskLevel}
+            </Typography>
+          </Box>
         )}
-      </View>
-    </ScrollView>
+      </Box>
+    </Box>
   );
 };
 

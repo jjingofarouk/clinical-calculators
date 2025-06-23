@@ -64,8 +64,8 @@ const GlasgowBlatchfordScore = () => {
         'Start fluid resuscitation',
         'Consider blood type and cross-match',
         'Urgent endoscopy within 24 hours',
-        'Monitor vitals every'  ],
-      [
+        'Monitor vitals every 15-30 minutes'
+      ] : [
         'Regular vital sign monitoring',
         'Consider oral intake if appropriate',
         'Schedule routine endoscopy if indicated',
@@ -82,7 +82,7 @@ const GlasgowBlatchfordScore = () => {
   const sexOptions = [
     { label: 'Male', value: 'male' },
     { label: 'Female', value: 'female' }
-];
+  ];
 
   const handleInputChange = (field, selectedOption) => {
     setFormData(prev => ({

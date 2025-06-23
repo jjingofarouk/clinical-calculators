@@ -1,39 +1,120 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { Card, Typography, TextField, Button, Box } from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const DenverII = () => {
-  const [grossMotor, setGrossMotor] = useState(0); // scale for gross motor skills (0-2)
-  const [fineMotor, setFineMotor] = useState(0); // scale for fine motor skills (0-2)
-  const [language, setLanguage] = useState(0); // scale for language skills (0-2)
-  const [personalSocial, setPersonalSocial] = useState(0); // scale for personal/social skills (0-2)
-  const [score, setScore] = useState(0);
+const DenverII = () => {
+  const [grossMotor, setGrossMotor] = useState('');
+  const [fineMotor, setFineMotor] = useState('');
+  const [language, setLanguage] = useState('');
+  const [personalSocial, setPersonalSocial] = useState('');
+  const [score, setScore] = useState(null);
 
   const calculateDenverII = () => {
-    // Calculate total score
-    let totalScore = grossMotor + fineMotor + language + personalSocial;
+    const gross = parseInt(grossMotor) || 0;
+    const fine = parseInt(fineMotor) || 0;
+    const lang = parseInt(language) || 0;
+    const personal = parseInt(personalSocial) || 0;
+
+    if ([gross, fine, lang, personal].some(val => val < 0 || val > 2)) {
+      alert('Please enter values between 0 and 2 for all fields');
+      return;
+    }
+
+    const totalScore = gross + fine + lang + personal;
     setScore(totalScore);
   };
 
   return (
-    <View>
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Denver II Developmental Screening Test</Text>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="max-w-md mx-auto"
+      >
+        <Card className="p-6" sx={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <Typography variant="h5" className="text-center font-bold mb-4" sx={{ color: '#004C54' }}>
+            Denver II Developmental Screening Test
+          </Typography>
 
-      {/* Input fields for Denver II scoring */}
-      <Text>Gross Motor Skills (0-2):</Text>
-      <TextInput value={grossMotor.toString()} onChangeText={(text) => setGrossMotor(parseInt(text))} keyboardType="numeric" />
+          <Box className="space-y-4">
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Gross Motor Skills (0-2)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={grossMotor}
+                onChange={(e) => setGrossMotor(e.target.value)}
+                type="number"
+                inputProps={{ min: 0, max: 2 }}
+                size="small"
+              />
+            </Box>
 
-      <Text>Fine Motor Skills (0-2):</Text>
-      <TextInput value={fineMotor.toString()} onChangeText={(text) => setFineMotor(parseInt(text))} keyboardType="numeric" />
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Fine Motor Skills (0-2)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={fineMotor}
+                onChange={(e) => setFineMotor(e.target.value)}
+                type="number"
+                inputProps={{ min: 0, max: 2 }}
+                size="small"
+              />
+            </Box>
 
-      <Text>Language Skills (0-2):</Text>
-      <TextInput value={language.toString()} onChangeText={(text) => setLanguage(parseInt(text))} keyboardType="numeric" />
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Language Skills (0-2)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                type="number"
+                inputProps={{ min: 0, max: 2 }}
+                size="small"
+              />
+            </Box>
 
-      <Text>Personal/Social Skills (0-2):</Text>
-      <TextInput value={personalSocial.toString()} onChangeText={(text) => setPersonalSocial(parseInt(text))} keyboardType="numeric" />
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Personal/Social Skills (0-2)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                value={personalSocial}
+                onChange={(e) => setPersonalSocial(e.target.value)}
+                type="number"
+                inputProps={{ min: 0, max: 2 }}
+                size="small"
+              />
+            </Box>
 
-      <Button title="Calculate" onPress={calculateDenverII} />
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={calculateDenverII}
+              sx={{ borderRadius: '8px', py: 1.5, backgroundColor: '#004C54' }}
+            >
+              Calculate
+            </Button>
 
-      <Text>Total Score: {score}</Text>
-    </View>
+            {score !== null && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Typography 
+                  variant="h6" 
+                  className="text-center font-semibold mt-4" 
+                  sx={{ color: '#004C54' }}
+                >
+                  Total Score: {score}
+                </Typography>
+              </motion.div>
+            )}
+          </Box>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
+
+export default DenverII;

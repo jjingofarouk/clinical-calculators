@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Box, TextField, Tabs, Tab, Typography } from '@mui/material';
-import CURB65Calculator from './CURB65Calculator';
-import WellsScoreCalculator from './WellsScoreCalculator';
+import CURB65Calculator from './CURB65';
+import WellsScoreCalculator from './Wells';
 import PSICalculator from './PSICalculator';
 import PERCCalculator from './PERCCalculator';
 import BODECalculator from './BODECalculator';

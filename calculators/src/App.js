@@ -1,6 +1,6 @@
 import React from 'react';
 import { CssBaseline, Box } from '@mui/material';
-import ASCVD from './components/calculators/cardiovascular/ASCVD';
+import ASCVDCalculator from './components/calculators/cardiovascular/ASCVD';
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <ASCVD />
+        <ASCVDCalculator />
       </Box>
     </>
   );

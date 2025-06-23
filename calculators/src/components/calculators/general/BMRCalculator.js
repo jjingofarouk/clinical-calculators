@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { Picker } from '@react-native-picker/picker';
+import { Box, Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 const BMRCalculator = () => {
   const [weight, setWeight] = useState('');
@@ -20,78 +19,71 @@ const BMRCalculator = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>BMR Calculator</Text>
+    <Box className="min-h-screen flex flex-col items-center justify-center p-5">
+      <Typography variant="h4" className="font-bold mb-5">
+        BMR Calculator
+      </Typography>
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Weight (kg)"
         value={weight}
-        onChangeText={(text) => setWeight(text)}
-        keyboardType="numeric"
+        onChange={(e) => setWeight(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Height (cm)"
         value={height}
-        onChangeText={(text) => setHeight(text)}
-        keyboardType="numeric"
+        onChange={(e) => setHeight(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Age (years)"
         value={age}
-        onChangeText={(text) => setAge(text)}
-        keyboardType="numeric"
+        onChange={(e) => setAge(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <Picker
-        selectedValue={gender}
-        style={styles.picker}
-        onValueChange={(itemValue) => setGender(itemValue)}
+      <FormControl fullWidth className="mb-5" sx={{ maxWidth: '400px' }}>
+        <InputLabel>Gender</InputLabel>
+        <Select
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          label="Gender"
+        >
+          <MenuItem value="male">Male</MenuItem>
+          <MenuItem value="female">Female</MenuItem>
+        </Select>
+      </FormControl>
+
+      <Button
+        variant="contained"
+        onClick={calculateBMR}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
       >
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-      </Picker>
+        Calculate BMR
+      </Button>
 
-      <Button title="Calculate BMR" onPress={calculateBMR} />
-
-      {bmr && <Text style={styles.result}>Your BMR is: {bmr} calories/day</Text>}
-    </View>
+      {bmr && (
+        <Typography variant="h6" className="mt-5">
+          Your BMR is: {bmr} calories/day
+        </Typography>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    width: '100%',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-    marginBottom: 20,
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-  },
-});
 
 export default BMRCalculator;

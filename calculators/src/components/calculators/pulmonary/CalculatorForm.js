@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Box, TextField, Button, Typography, FormControlLabel, Checkbox } from '@mui/material';
 
-// Generic form for calculators
 const CalculatorForm = ({ onSubmit, initialValues, fields, score, result }) => {
   const [values, setValues] = useState(initialValues);
 
-  const handleChange = (name, value) => {
+  const handleChange = (name, value, isCheckbox = false) => {
     setValues((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: isCheckbox ? value : value,
     }));
   };
 
@@ -17,68 +17,65 @@ const CalculatorForm = ({ onSubmit, initialValues, fields, score, result }) => {
   };
 
   return (
-    <View style={styles.formContainer}>
-      {fields.map((field) => (
-        <View key={field.name} style={styles.inputContainer}>
-          <Text style={styles.label}>{field.label}:</Text>
-          {field.type === "checkbox" ? (
-            <TextInput
-              style={styles.input}
-              value={values[field.name]}
-              onChangeText={(text) => handleChange(field.name, text)}
-              placeholder={field.label}
-            />
-          ) : (
-            <TextInput
-              style={styles.input}
-              value={values[field.name]}
-              onChangeText={(text) => handleChange(field.name, text)}
-              keyboardType={field.type === "number" ? "numeric" : "default"}
-              placeholder={field.label}
-            />
-          )}
-        </View>
-      ))}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="p-4"
+    >
+      <Box className="bg-white shadow-lg rounded-lg p-6">
+        {fields.map((field) => (
+          <Box key={field.name} className="mb-4">
+            <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+              {field.label}
+            </Typography>
+            {field.type === 'checkbox' ? (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={values[field.name] || false}
+                    onChange={(e) => handleChange(field.name, e.target.checked, true)}
+                  />
+                }
+                label={field.label}
+              />
+            ) : (
+              <TextField
+                fullWidth
+                type={field.type === 'number' ? 'number' : 'text'}
+                value={values[field.name] || ''}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                placeholder={field.label}
+                variant="outlined"
+                inputProps={field.type === 'number' ? { min: 0 } : {}}
+              />
+            )}
+          </Box>
+        ))}
 
-      <Button title="Calculate" onPress={handleSubmit} />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          className="mt-4"
+          onClick={handleSubmit}
+        >
+          Calculate
+        </Button>
 
-      {score !== null && (
-        <Text style={styles.result}>Score: {score}</Text>
-      )}
-      {result && <Text style={styles.result}>Result: {result}</Text>}
-    </View>
+        {score !== null && (
+          <Typography variant="h6" className="mt-4 font-bold text-blue-600">
+            Score: {score}
+          </Typography>
+        )}
+        {result && (
+          <Typography variant="h6" className="mt-2 font-bold text-blue-600">
+            Result: {result}
+          </Typography>
+        )}
+      </Box>
+    </motion.div>
   );
 };
-
-const styles = StyleSheet.create({
-  formContainer: {
-    marginTop: 10,
-    padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    elevation: 5,
-  },
-  inputContainer: {
-    marginBottom: 12,
-  },
-  label: {
-    fontSize: 16,
-    color: "#333",
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-    backgroundColor: "#f9f9f9",
-  },
-  result: {
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#007BFF",
-  },
-});
 
 export default CalculatorForm;

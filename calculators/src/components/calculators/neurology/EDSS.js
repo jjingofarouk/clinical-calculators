@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { Card, Typography, Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const EDSS = () => {
+const EDSS = () => {
   const [scores, setScores] = useState({
     pyramidal: 0,
     cerebellar: 0,
@@ -15,7 +16,6 @@ export const EDSS = () => {
   });
 
   const [showGuidelines, setShowGuidelines] = useState(false);
-  const [selectedSystem, setSelectedSystem] = useState(null);
 
   const functionalSystems = {
     pyramidal: {
@@ -142,7 +142,6 @@ export const EDSS = () => {
     const maxFS = Math.max(...Object.values(fsScores));
     const numFS2Plus = Object.values(fsScores).filter(score => score >= 2).length;
 
-    // EDSS calculation logic based on functional systems and ambulation
     if (scores.ambulation >= 7) {
       return scores.ambulation;
     }
@@ -163,212 +162,129 @@ export const EDSS = () => {
       }
     }
 
-    // Complex walking assessment integration
     if (scores.ambulation >= 4) {
       return Math.max(scores.ambulation, maxFS);
     }
 
-    // Default calculation based on functional system scores
     return Math.min(4, maxFS + 1);
   };
 
-  const GuidelinesModal = () => (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={showGuidelines}
-      onRequestClose={() => setShowGuidelines(false)}
-    >
-      <View style={styles.modalView}>
-        <ScrollView>
-          <Text style={styles.modalTitle}>Clinical Guidelines</Text>
-          <Text style={styles.guidelineText}>
-            The Expanded Disability Status Scale (EDSS) is used to quantify disability in multiple sclerosis:
-            {'\n\n'}
-            • Scores 1.0 to 4.5: Fully ambulatory patients
-            {'\n'}
-            • Scores 5.0 to 9.5: Impairment to ambulation
-            {'\n\n'}
-            Assessment Guidelines:
-            {'\n\n'}
-            1. Evaluate each functional system independently
-            {'\n'}
-            2. Consider impact on daily activities
-            {'\n'}
-            3. Document objective findings
-            {'\n'}
-            4. Regular reassessment recommended
-            {'\n\n'}
-            Note: The final EDSS score is heavily weighted toward ambulatory ability in the middle and high range of the scale.
-          </Text>
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setShowGuidelines(false)}
-          >
-            <Text style={styles.buttonText}>Close Guidelines</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    </Modal>
-  );
-
   const ScoreSection = ({ system, scores, setScores }) => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{functionalSystems[system].title}</Text>
+    <Card className="p-4 mb-4" sx={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>
+      <Typography variant="h6" className="font-bold mb-2" sx={{ color: '#2c3e50' }}>
+        {functionalSystems[system].title}
+      </Typography>
       {functionalSystems[system].options.map((option, index) => (
-        <TouchableOpacity
+        <Button
           key={index}
-          style={[
-            styles.scoreOption,
-            scores[system] === option.score && styles.selectedOption
-          ]}
-          onPress={() => setScores({...scores, [system]: option.score})}
+          variant={scores[system] === option.score ? "contained" : "outlined"}
+          fullWidth
+          onClick={() => setScores({...scores, [system]: option.score})}
+          sx={{
+            mb: 1,
+            textAlign: 'left',
+            justifyContent: 'flex-start',
+            textTransform: 'none',
+            borderRadius: '5px',
+            backgroundColor: scores[system] === option.score ? '#e3f2fd' : '#f8f9fa',
+            borderColor: scores[system] === option.score ? '#2196f3' : '#e0e0e0',
+            color: '#333',
+          }}
         >
-          <Text style={styles.scoreText}>Score {option.score}: {option.description}</Text>
-        </TouchableOpacity>
+          <Typography variant="body2">
+            Score {option.score}: {option.description}
+          </Typography>
+        </Button>
       ))}
-    </View>
+    </Card>
   );
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>EDSS Assessment Tool</Text>
-        
-        <TouchableOpacity
-          style={styles.guidelinesButton}
-          onPress={() => setShowGuidelines(true)}
-        >
-          <Text style={styles.buttonText}>View Clinical Guidelines</Text>
-        </TouchableOpacity>
+    <div className="min-h-screen bg-gray-100 p-6">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Card className="p-6" sx={{ borderRadius: '10px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <Typography variant="h5" className="text-center font-bold mb-4" sx={{ color: '#2c3e50' }}>
+            EDSS Assessment Tool
+          </Typography>
 
-        {Object.keys(functionalSystems).map((system) => (
-          <ScoreSection
-            key={system}
-            system={system}
-            scores={scores}
-            setScores={setScores}
-          />
-        ))}
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={() => setShowGuidelines(true)}
+            sx={{ mb: 4, borderRadius: '10px', backgroundColor: '#2196f3' }}
+          >
+            View Clinical Guidelines
+          </Button>
 
-        <View style={styles.resultsSection}>
-          <Text style={styles.resultTitle}>EDSS Score: {calculateEDSS().toFixed(1)}</Text>
-          <Text style={styles.resultDescription}>
-            Based on:
-            {'\n'}- Functional Systems Scores
-            {'\n'}- Ambulation Assessment
-          </Text>
-        </View>
+          {Object.keys(functionalSystems).map((system) => (
+            <ScoreSection
+              key={system}
+              system={system}
+              scores={scores}
+              setScores={setScores}
+            />
+          ))}
 
-        <GuidelinesModal />
-      </ScrollView>
-    </View>
+          <Card className="p-4 mt-4" sx={{ backgroundColor: '#fff', borderRadius: '10px' }}>
+            <Typography variant="h6" className="text-center font-bold mb-2">
+              EDSS Score: {calculateEDSS().toFixed(1)}
+            </Typography>
+            <Typography variant="body2" className="text-center text-gray-600">
+              Based on:
+              <br />- Functional Systems Scores
+              <br />- Ambulation Assessment
+            </Typography>
+          </Card>
+
+          <Dialog
+            open={showGuidelines}
+            onClose={() => setShowGuidelines(false)}
+            maxWidth="md"
+            fullWidth
+          >
+            <DialogTitle sx={{ fontWeight: 'bold', color: '#333' }}>
+              Clinical Guidelines
+            </DialogTitle>
+            <DialogContent>
+              <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.5 }}>
+                The Expanded Disability Status Scale (EDSS) is used to quantify disability in multiple sclerosis:
+                <br /><br />
+                • Scores 1.0 to 4.5: Fully ambulatory patients
+                <br />
+                • Scores 5.0 to 9.5: Impairment to ambulation
+                <br /><br />
+                Assessment Guidelines:
+                <br /><br />
+                1. Evaluate each functional system independently
+                <br />
+                2. Consider impact on daily activities
+                <br />
+                3. Document objective findings
+                <br />
+                4. Regular reassessment recommended
+                <br /><br />
+                Note: The final EDSS score is heavily weighted toward ambulatory ability in the middle and high range of the scale.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => setShowGuidelines(false)}
+                color="error"
+                sx={{ borderRadius: '10px' }}
+              >
+                Close Guidelines
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  section: {
-    marginBottom: 20,
-    backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  scoreOption: {
-    padding: 10,
-    borderRadius: 5,
-    marginVertical: 5,
-    backgroundColor: '#f8f9fa',
-  },
-  selectedOption: {
-    backgroundColor: '#e3f2fd',
-    borderColor: '#2196f3',
-    borderWidth: 1,
-  },
-  scoreText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  guidelinesButton: {
-    backgroundColor: '#2196f3',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  modalView: {
-    flex: 1,
-    backgroundColor: 'white',
-    marginTop: 50,
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333',
-  },
-  guidelineText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 20,
-    lineHeight: 24,
-  },
-  closeButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  resultTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-  resultDescription: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#555',
-    marginTop: 10,
-  },
-});
+export default EDSS;

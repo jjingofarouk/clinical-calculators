@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput,  StyleSheet, Button } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const HepaticEncephalopathy = () => {
-  // State for grading scale parameters
-  const [grade, setGrade] = useState('0'); // '0', '1', '2', '3', '4'
+  const [grade, setGrade] = useState('0');
 
-  // Calculate Hepatic Encephalopathy Score
   const calculateScore = () => {
-    // Hepatic Encephalopathy Grading Scale (0 - 4)
     switch (grade) {
       case '0':
         return "Grade 0: No encephalopathy";
@@ -26,57 +22,33 @@ const HepaticEncephalopathy = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Hepatic Encephalopathy Grading Scale</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        Hepatic Encephalopathy Grading Scale
+      </Typography>
 
-      <View style={styles.inputContainer}>
-        <Text>Select Grade of Encephalopathy:</Text>
-        <Picker
-          selectedValue={grade}
-          style={styles.picker}
-          onValueChange={(itemValue) => setGrade(itemValue)}>
-          <Picker.Item label="Grade 0" value="0" />
-          <Picker.Item label="Grade 1" value="1" />
-          <Picker.Item label="Grade 2" value="2" />
-          <Picker.Item label="Grade 3" value="3" />
-          <Picker.Item label="Grade 4" value="4" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Grade of Encephalopathy</InputLabel>
+          <Select
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+            label="Grade of Encephalopathy"
+          >
+            <MenuItem value="0">Grade 0</MenuItem>
+            <MenuItem value="1">Grade 1</MenuItem>
+            <MenuItem value="2">Grade 2</MenuItem>
+            <MenuItem value="3">Grade 3</MenuItem>
+            <MenuItem value="4">Grade 4</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Display calculated result */}
-      <View>
-        <Text style={styles.result}>{calculateScore()}</Text>
-      </View>
-    </View>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
+        {calculateScore()}
+      </Typography>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-    width: 200,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default HepaticEncephalopathy;

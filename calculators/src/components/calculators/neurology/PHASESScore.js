@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Container,
+  Grid,
   Alert,
-} from 'react-native';
+  Divider,
+} from '@mui/material';
+import { motion } from 'framer-motion';
 
-export const PHASESScore = () => {
+const PHASESScore = () => {
   const [scores, setScores] = useState({
     population: 0,
     hypertension: 0,
     age: 0,
     size: 0,
     earlierSAH: 0,
-    site: 0
+    site: 0,
   });
+  const [showAlert, setShowAlert] = useState(false);
 
   const calculateRuptureProbability = (score) => {
     const riskTable = {
@@ -31,7 +35,7 @@ export const PHASESScore = () => {
       9: 4.3,
       10: 5.3,
       11: 7.2,
-      12: 17.8
+      12: 17.8,
     };
     return score >= 12 ? 17.8 : riskTable[score];
   };
@@ -43,24 +47,24 @@ export const PHASESScore = () => {
       options: [
         { label: 'North American/European (non-Finnish)', value: 0, detail: 'Standard population risk' },
         { label: 'Japanese', value: 3, detail: 'Higher baseline risk' },
-        { label: 'Finnish', value: 5, detail: 'Highest population risk' }
-      ]
+        { label: 'Finnish', value: 5, detail: 'Highest population risk' },
+      ],
     },
     {
       title: 'Hypertension',
       key: 'hypertension',
       options: [
         { label: 'No', value: 0, detail: 'Normal blood pressure' },
-        { label: 'Yes', value: 1, detail: 'Diagnosed hypertension' }
-      ]
+        { label: 'Yes', value: 1, detail: 'Diagnosed hypertension' },
+      ],
     },
     {
       title: 'Age',
       key: 'age',
       options: [
         { label: '< 70 years', value: 0, detail: 'Lower age-related risk' },
-        { label: '≥ 70 years', value: 1, detail: 'Higher age-related risk' }
-      ]
+        { label: '≥ 70 years', value: 1, detail: 'Higher age-related risk' },
+      ],
     },
     {
       title: 'Size of Aneurysm',
@@ -69,16 +73,16 @@ export const PHASESScore = () => {
         { label: '< 7.0 mm', value: 0, detail: 'Small aneurysm' },
         { label: '7.0-9.9 mm', value: 3, detail: 'Medium aneurysm' },
         { label: '10.0-19.9 mm', value: 6, detail: 'Large aneurysm' },
-        { label: '≥ 20.0 mm', value: 10, detail: 'Giant aneurysm' }
-      ]
+        { label: '≥ 20.0 mm', value: 10, detail: 'Giant aneurysm' },
+      ],
     },
     {
       title: 'Earlier SAH',
       key: 'earlierSAH',
       options: [
         { label: 'No', value: 0, detail: 'No previous subarachnoid hemorrhage' },
-        { label: 'Yes', value: 1, detail: 'History of SAH from another aneurysm' }
-      ]
+        { label: 'Yes', value: 1, detail: 'History of SAH from another aneurysm' },
+      ],
     },
     {
       title: 'Site of Aneurysm',
@@ -86,22 +90,17 @@ export const PHASESScore = () => {
       options: [
         { label: 'Internal carotid artery (ICA)', value: 0, detail: 'Lowest site-related risk' },
         { label: 'Middle cerebral artery (MCA)', value: 2, detail: 'Moderate site-related risk' },
-        { label: 'ACA/PComm/Posterior circulation', value: 4, detail: 'Highest site-related risk' }
-      ]
-    }
+        { label: 'ACA/PComm/Posterior circulation', value: 4, detail: 'Highest site-related risk' },
+      ],
+    },
   ];
 
   const handleSelection = (sectionKey, value) => {
     const newScores = { ...scores, [sectionKey]: value };
     setScores(newScores);
     
-    // Alert for high-risk features
-    if (value === 10) { // Giant aneurysm
-      Alert.alert(
-        "⚠️ High Risk Feature Detected",
-        "Giant aneurysm (≥20mm) detected. Consider urgent neurosurgical consultation.",
-        [{ text: "Acknowledge", style: "cancel" }]
-      );
+    if (value === 10) {
+      setShowAlert(true);
     }
   };
 
@@ -109,223 +108,119 @@ export const PHASESScore = () => {
   const ruptureProbability = calculateRuptureProbability(totalScore);
 
   const getRiskLevel = (probability) => {
-    if (probability >= 7) return { text: "High Risk", color: '#DC2626' };
-    if (probability >= 3) return { text: "Moderate Risk", color: '#EA580C' };
-    return { text: "Low Risk", color: '#047857' };
+    if (probability >= 7) return { text: 'High Risk', color: 'error.main' };
+    if (probability >= 3) return { text: 'Moderate Risk', color: 'warning.main' };
+    return { text: 'Low Risk', color: 'success.main' };
   };
 
   const riskLevel = getRiskLevel(ruptureProbability);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>PHASES Score Calculator</Text>
-          <Text style={styles.subtitle}>
+    <Container maxWidth="md" className="py-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Box className="text-center mb-6">
+          <Typography variant="h4" className="font-bold text-gray-900">
+            PHASES Score Calculator
+          </Typography>
+          <Typography className="text-gray-600">
             5-Year Aneurysm Rupture Risk Assessment
-          </Text>
-        </View>
+          </Typography>
+        </Box>
+
+        {showAlert && (
+          <Alert
+            severity="warning"
+            onClose={() => setShowAlert(false)}
+            className="mb-4"
+          >
+            <Typography>
+              Giant aneurysm (≥20mm) detected. Consider urgent neurosurgical consultation.
+            </Typography>
+          </Alert>
+        )}
 
         {sections.map((section) => (
-          <View key={section.key} style={styles.section}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <View style={styles.optionsContainer}>
-              {section.options.map((option) => (
-                <TouchableOpacity
-                  key={option.value}
-                  style={[
-                    styles.optionButton,
-                    scores[section.key] === option.value && {
-                      backgroundColor: '#1E293B',
-                      borderColor: '#1E293B',
-                    },
-                  ]}
-                  onPress={() => handleSelection(section.key, option.value)}
-                >
-                  <View style={styles.optionContent}>
-                    <Text style={[
-                      styles.optionText,
-                      scores[section.key] === option.value && styles.selectedOptionText
-                    ]}>
-                      {option.label}
-                    </Text>
-                    <Text style={[
-                      styles.optionDetail,
-                      scores[section.key] === option.value && styles.selectedOptionText
-                    ]}>
-                      {option.detail}
-                    </Text>
-                  </View>
-                  <Text style={[
-                    styles.pointsText,
-                    scores[section.key] === option.value && styles.selectedOptionText
-                  ]}>
-                    {option.value > 0 ? `+${option.value}` : '0'}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+          <Card key={section.key} className="mb-4 shadow-sm">
+            <CardContent>
+              <Typography className="font-semibold text-gray-900 mb-4">
+                {section.title}
+              </Typography>
+              <Grid container spacing={2}>
+                {section.options.map((option) => (
+                  <Grid item xs={12} key={option.value}>
+                    <Button
+                      fullWidth
+                      variant={scores[section.key] === option.value ? 'contained' : 'outlined'}
+                      className={scores[section.key] === option.value ? 'bg-slate-800' : 'border-gray-300'}
+                      onClick={() => handleSelection(section.key, option.value)}
+                      sx={{ justifyContent: 'space-between', textTransform: 'none', p: 2 }}
+                    >
+                      <Box className="flex flex-col items-start">
+                        <Typography className={scores[section.key] === option.value ? 'text-white' : 'text-gray-900'}>
+                          {option.label}
+                        </Typography>
+                        <Typography
+                          className={scores[section.key] === option.value ? 'text-white' : 'text-gray-600'}
+                          variant="caption"
+                        >
+                          {option.detail}
+                        </Typography>
+                      </Box>
+                      <Typography className={scores[section.key] === option.value ? 'text-white' : 'text-gray-900'}>
+                        {option.value > 0 ? `+${option.value}` : '0'}
+                      </Typography>
+                    </Button>
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
         ))}
 
-        <View style={[styles.resultContainer, { backgroundColor: riskLevel.color + '20' }]}>
-          <Text style={styles.scoreText}>Total Score: {totalScore}</Text>
-          <Text style={styles.probabilityText}>
-            5-Year Rupture Risk: {ruptureProbability}%
-          </Text>
-          <Text style={[styles.riskLevel, { color: riskLevel.color }]}>
-            {riskLevel.text}
-          </Text>
-        </View>
+        <Card className="mb-4 shadow-sm" sx={{ bgcolor: `${riskLevel.color}15` }}>
+          <CardContent className="text-center">
+            <Typography variant="h5" className="font-bold text-gray-900 mb-2">
+              Total Score: {totalScore}
+            </Typography>
+            <Typography className="text-gray-900 mb-2">
+              5-Year Rupture Risk: {ruptureProbability}%
+            </Typography>
+            <Typography className="font-semibold" sx={{ color: riskLevel.color }}>
+              {riskLevel.text}
+            </Typography>
+          </CardContent>
+        </Card>
 
-        <View style={styles.recommendationContainer}>
-          <Text style={styles.recommendationTitle}>Clinical Recommendations:</Text>
-          <Text style={styles.recommendationText}>
-            • Score ≤2: Consider conservative management with regular monitoring
-          </Text>
-          <Text style={styles.recommendationText}>
-            • Score 3-6: Individual risk assessment needed; consider patient factors
-          </Text>
-          <Text style={styles.recommendationText}>
-            • Score 7-11: Consider intervention based on patient factors
-          </Text>
-          <Text style={styles.recommendationText}>
-            • Score ≥12: Strong consideration for intervention
-          </Text>
-        </View>
+        <Card className="mb-4 shadow-sm">
+          <CardContent>
+            <Typography className="font-semibold text-gray-900 mb-4">
+              Clinical Recommendations
+            </Typography>
+            <Typography className="text-gray-600 mb-2">
+              • Score ≤2: Consider conservative management with regular monitoring
+            </Typography>
+            <Typography className="text-gray-600 mb-2">
+              • Score 3-6: Individual risk assessment needed; consider patient factors
+            </Typography>
+            <Typography className="text-gray-600 mb-2">
+              • Score 7-11: Consider intervention based on patient factors
+            </Typography>
+            <Typography className="text-gray-600">
+              • Score ≥12: Strong consideration for intervention
+            </Typography>
+          </CardContent>
+        </Card>
 
-        <Text style={styles.disclaimer}>
-          Validated only in North American, European, Japanese, and Finnish populations.
-          Use clinical judgment in conjunction with score results.
-        </Text>
-      </ScrollView>
-    </SafeAreaView>
+        <Typography className="text-gray-600 italic text-center">
+          Validated only in North American, European, Japanese, and Finnish populations. Use clinical judgment in conjunction with score results.
+        </Typography>
+      </motion.div>
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-  },
-  container: {
-    flex: 1,
-  },
-  header: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1E293B',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#64748B',
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  section: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1E293B',
-    marginBottom: 12,
-  },
-  optionsContainer: {
-    gap: 8,
-  },
-  optionButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
-  },
-  optionContent: {
-    flex: 1,
-  },
-  optionText: {
-    fontSize: 16,
-    color: '#1E293B',
-    fontWeight: '500',
-  },
-  optionDetail: {
-    fontSize: 14,
-    color: '#64748B',
-    marginTop: 2,
-  },
-  selectedOptionText: {
-    color: '#FFFFFF',
-  },
-  pointsText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1E293B',
-    marginLeft: 8,
-  },
-  resultContainer: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1E293B',
-    marginBottom: 8,
-  },
-  probabilityText: {
-    fontSize: 18,
-    color: '#1E293B',
-    marginBottom: 8,
-  },
-  riskLevel: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  recommendationContainer: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  recommendationTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1E293B',
-    marginBottom: 12,
-  },
-  recommendationText: {
-    fontSize: 15,
-    color: '#64748B',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  disclaimer: {
-    fontSize: 14,
-    color: '#64748B',
-    fontStyle: 'italic',
-    textAlign: 'center',
-    margin: 16,
-    marginTop: 0,
-  },
-});
+export default PHASESScore;

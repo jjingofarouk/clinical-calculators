@@ -15,7 +15,7 @@ import GastroenterologyCalculators from './components/calculators/git/Gastroente
 import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
 import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
-import OrthopedicsCalculators from './components/calculators/orthopedics/OrthopedicsCalculators';
+import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
 // 404 Not Found Page

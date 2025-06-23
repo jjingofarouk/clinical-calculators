@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Button, Card, TextField, Typography, Box } from '@mui/material';
+import { motion } from 'framer-motion';
 
 const KidneyStoneRiskAssessment = () => {
   const [calcium, setCalcium] = useState('');
@@ -7,59 +8,71 @@ const KidneyStoneRiskAssessment = () => {
   const [risk, setRisk] = useState(null);
 
   const calculateRisk = () => {
-    const riskValue = calcium * 0.1 + oxalate * 0.2; // Simplified logic
+    if (!calcium || !oxalate) return;
+    const riskValue = parseFloat(calcium) * 0.1 + parseFloat(oxalate) * 0.2;
     setRisk(riskValue.toFixed(2));
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Kidney Stone Risk Assessment</Text>
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-md"
+      >
+        <Card className="p-6">
+          <Typography variant="h4" className="text-center font-bold mb-6">
+            Kidney Stone Risk Assessment
+          </Typography>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Calcium (mg/dL) - Reference: 8.5-10.5"
-        value={calcium}
-        onChangeText={(text) => setCalcium(text)}
-        keyboardType="numeric"
-      />
+          <Box className="space-y-4">
+            <Box>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Calcium (mg/dL)"
+                placeholder="Reference: 8.5-10.5"
+                value={calcium}
+                onChange={(e) => setCalcium(e.target.value)}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Oxalate (mg/dL) - Reference: < 40"
-        value={oxalate}
-        onChangeText={(text) => setOxalate(text)}
-        keyboardType="numeric"
-      />
+            <Box>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Oxalate (mg/dL)"
+                placeholder="Reference: < 40"
+                value={oxalate}
+                onChange={(e) => setOxalate(e.target.value)}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-      <Button title="Calculate Risk" onPress={calculateRisk} />
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={calculateRisk}
+            >
+              Calculate Risk
+            </Button>
 
-      {risk && <Text style={styles.result}>Kidney Stone Risk: {risk}</Text>}
-    </View>
+            {risk && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <Typography variant="h6" className="text-center mt-6">
+                  Kidney Stone Risk: {risk}
+                </Typography>
+              </motion.div>
+            )}
+          </Box>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    width: '100%',
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-  },
-});
 
 export default KidneyStoneRiskAssessment;

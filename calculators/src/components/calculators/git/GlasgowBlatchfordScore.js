@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect'; // Using the provided custom select
+import { Box, Typography, TextField, Card, CardContent, List, ListItem, ListItemText } from '@mui/material';
+import Select from 'react-select';
 
 const GlasgowBlatchfordScore = () => {
-  // Enhanced state management
   const [formData, setFormData] = useState({
     hemoglobin: '',
     bloodUrea: '',
@@ -16,7 +15,6 @@ const GlasgowBlatchfordScore = () => {
     cardiacFailure: '',
   });
 
-  // Risk level thresholds based on clinical guidelines
   const getRiskLevel = (score) => {
     if (score === 0) return { level: 'Very Low Risk', recommendation: 'Consider outpatient management' };
     if (score <= 3) return { level: 'Low Risk', recommendation: 'Consider early discharge with follow-up' };
@@ -24,34 +22,30 @@ const GlasgowBlatchfordScore = () => {
     return { level: 'High Risk', recommendation: 'Urgent intervention required. Consider ICU admission.' };
   };
 
-  // Enhanced score calculation with more precise clinical criteria
   const calculateScore = useCallback(() => {
     let score = 0;
     const { hemoglobin, bloodUrea, systolicBP, sex, heartRate, melena, syncope, liverDisease, cardiacFailure } = formData;
 
-    // Blood Urea Nitrogen (converting mmol/L to clinical scoring)
     const bun = parseFloat(bloodUrea);
     if (bun >= 25.0) score += 6;
     else if (bun >= 10.0) score += 3;
     else if (bun >= 6.5) score += 2;
     else if (bun >= 3.5) score += 1;
 
-    // Hemoglobin criteria with sex-specific thresholds
     const hb = parseFloat(hemoglobin);
     if (sex === 'male') {
       if (hb < 100) score += 6;
-      else if (hb < 120) score += 3;
+      else if (hb < 120) score += 1;
     } else if (sex === 'female') {
       if (hb < 100) score += 6;
-      else if (hb < 110) score += 3;
+      else if (hb < 110) score += 1;
     }
 
-    // Systolic Blood Pressure
     const sbp = parseFloat(systolicBP);
     if (sbp < 90) score += 3;
     else if (sbp < 100) score += 2;
+    else if (sbp < 110) score += 1;
 
-    // Other clinical parameters
     if (heartRate === 'yes') score += 1;
     if (melena === 'yes') score += 1;
     if (syncope === 'yes') score += 2;
@@ -70,8 +64,8 @@ const GlasgowBlatchfordScore = () => {
         'Start fluid resuscitation',
         'Consider blood type and cross-match',
         'Urgent endoscopy within 24 hours',
-        'Monitor vitals every 15 minutes'
-      ] : [
+        'Monitor vitals every  ],
+      [
         'Regular vital sign monitoring',
         'Consider oral intake if appropriate',
         'Schedule routine endoscopy if indicated',
@@ -80,7 +74,6 @@ const GlasgowBlatchfordScore = () => {
     };
   };
 
-  // Input options for CustomSelect
   const yesNoOptions = [
     { label: 'No', value: 'no' },
     { label: 'Yes', value: 'yes' }
@@ -89,258 +82,186 @@ const GlasgowBlatchfordScore = () => {
   const sexOptions = [
     { label: 'Male', value: 'male' },
     { label: 'Female', value: 'female' }
-  ];
+];
 
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (field, selectedOption) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: selectedOption ? selectedOption.value : ''
     }));
   };
 
   const score = calculateScore();
   const management = getManagementGuidelines(score);
 
+  const selectStyles = {
+    control: (provided) => ({
+      ...provided,
+      width: '208px',
+      borderRadius: '8px',
+      borderColor: '#dcdde1',
+      backgroundColor: '#fff',
+    }),
+    menu: (provided) => ({
+      ...provided,
+      width: '208px',
+    }),
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Glasgow-Blatchford Score (GBS)</Text>
-        <Text style={styles.subheaderText}>Upper GI Bleeding Risk Assessment</Text>
-      </View>
+    <Box className="p-5 bg-gray-100 min-h-screen">
+      <Box className="mb-5">
+        <Typography variant="h4" className="font-bold text-gray-800">
+          Glasgow-Blatchford Score (GBS)
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600">
+          Upper GI Bleeding Risk Assessment
+        </Typography>
+      </Box>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>Clinical Parameters</Text>
-        
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Sex</Text>
-          <CustomSelect
-            options={sexOptions}
-            placeholder="Select sex"
-            onSelect={(item) => handleInputChange('sex', item.value)}
-          />
-        </View>
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h6" className="font-semibold mb-4">
+            Clinical Parameters
+          </Typography>
+          <Box className="space-y-4">
+            <Box>
+              <Typography className="mb-1">Sex</Typography>
+              <Select
+                options={sexOptions}
+                value={sexOptions.find(option => option.value === formData.sex)}
+                onChange={(option) => handleInputChange('sex', option)}
+                placeholder="Select sex"
+                styles={selectStyles}
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Hemoglobin (g/L)</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            value={formData.hemoglobin}
-            onChangeText={(value) => handleInputChange('hemoglobin', value)}
-            placeholder="Enter hemoglobin level"
-          />
-          <Text style={styles.helperText}>Normal range: Males 130-170, Females 120-150 g/L</Text>
-        </View>
+            <Box>
+              <TextField
+                label="Hemoglobin (g/L)"
+                type="number"
+                value={formData.hemoglobin}
+                onChange={(e) => handleInputChange('hemoglobin', { value: e.target.value })}
+                className="w-52"
+                placeholder="Enter hemoglobin level"
+                InputLabelProps={{ shrink: true }}
+                helperText="Normal range: Males 130-170, Females 120-150 g/L"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Blood Urea (mmol/L)</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            value={formData.bloodUrea}
-            onChangeText={(value) => handleInputChange('bloodUrea', value)}
-            placeholder="Enter blood urea level"
-          />
-          <Text style={styles.helperText}>Normal range: 3.6-7.1 mmol/L</Text>
-        </View>
+            <Box>
+              <TextField
+                label="Blood Urea (mmol/L)"
+                type="number"
+                value={formData.bloodUrea}
+                onChange={(e) => handleInputChange('bloodUrea', { value: e.target.value })}
+                className="w-52"
+                placeholder="Enter blood urea level"
+                InputLabelProps={{ shrink: true }}
+                helperText="Normal range: 3.6-7.1 mmol/L"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Systolic BP (mmHg)</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            value={formData.systolicBP}
-            onChangeText={(value) => handleInputChange('systolicBP', value)}
-            placeholder="Enter systolic blood pressure"
-          />
-          <Text style={styles.helperText}>Normal range: 90-140 mmHg</Text>
-        </View>
+            <Box>
+              <TextField
+                label="Systolic BP (mmHg)"
+                type="number"
+                value={formData.systolicBP}
+                onChange={(e) => handleInputChange('systolicBP', { value: e.target.value })}
+                className="w-52"
+                placeholder="Enter systolic blood pressure"
+                InputLabelProps={{ shrink: true }}
+                helperText="Normal range: 90-140 mmHg"
+              />
+            </Box>
 
-        {/* Clinical Signs and Symptoms */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Heart Rate ≥100 bpm</Text>
-          <CustomSelect
-            options={yesNoOptions}
-            placeholder="Select heart rate status"
-            onSelect={(item) => handleInputChange('heartRate', item.value)}
-          />
-        </View>
+            <Box>
+              <Typography className="mb-1">Heart Rate ≥100 bpm</Typography>
+              <Select
+                options={yesNoOptions}
+                value={yesNoOptions.find(option => option.value === formData.heartRate)}
+                onChange={(option) => handleInputChange('heartRate', option)}
+                placeholder="Select heart rate status"
+                styles={selectStyles}
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Melena Present</Text>
-          <CustomSelect
-            options={yesNoOptions}
-            placeholder="Select melena status"
-            onSelect={(item) => handleInputChange('melena', item.value)}
-          />
-        </View>
+            <Box>
+              <Typography className="mb-1">Melena Present</Typography>
+              <Select
+                options={yesNoOptions}
+                value={yesNoOptions.find(option => option.value === formData.melena)}
+                onChange={(option) => handleInputChange('melena', option)}
+                placeholder="Select melena status"
+                styles={selectStyles}
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Recent Syncope</Text>
-          <CustomSelect
-            options={yesNoOptions}
-            placeholder="Select syncope status"
-            onSelect={(item) => handleInputChange('syncope', item.value)}
-          />
-        </View>
+            <Box>
+              <Typography className="mb-1">Recent Syncope</Typography>
+              <Select
+                options={yesNoOptions}
+                value={yesNoOptions.find(option => option.value === formData.syncope)}
+                onChange={(option) => handleInputChange('syncope', option)}
+                placeholder="Select syncope status"
+                styles={selectStyles}
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Liver Disease History</Text>
-          <CustomSelect
-            options={yesNoOptions}
-            placeholder="Select liver disease status"
-            onSelect={(item) => handleInputChange('liverDisease', item.value)}
-          />
-        </View>
+            <Box>
+              <Typography className="mb-1">Liver Disease History</Typography>
+              <Select
+                options={yesNoOptions}
+                value={yesNoOptions.find(option => option.value === formData.liverDisease)}
+                onChange={(option) => handleInputChange('liverDisease', option)}
+                placeholder="Select liver disease status"
+                styles={selectStyles}
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Cardiac Failure</Text>
-          <CustomSelect
-            options={yesNoOptions}
-            placeholder="Select cardiac failure status"
-            onSelect={(item) => handleInputChange('cardiacFailure', item.value)}
-          />
-        </View>
-      </View>
+            <Box>
+              <Typography className="mb-1">Cardiac Failure</Typography>
+              <Select
+                options={yesNoOptions}
+                value={yesNoOptions.find(option => option.value === formData.cardiacFailure)}
+                onChange={(option) => handleInputChange('cardiacFailure', option)}
+                placeholder="Select cardiac failure status"
+                styles={selectStyles}
+              />
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
 
-      {/* Results Section */}
-      <View style={styles.resultSection}>
-        <Text style={styles.scoreText}>Total Score: {score}</Text>
-        <Text style={styles.riskLevel}>Risk Level: {management.level}</Text>
-        <Text style={styles.recommendation}>Recommendation: {management.recommendation}</Text>
-        
-        <View style={styles.actionList}>
-          <Text style={styles.actionHeader}>Immediate Actions:</Text>
-          {management.immediateActions.map((action, index) => (
-            <Text key={index} style={styles.actionItem}>• {action}</Text>
-          ))}
-        </View>
-      </View>
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h6" className="font-semibold mb-4">Results</Typography>
+          <Typography variant="h4" className="font-bold text-gray-800 mb-2">Total Score: {score}</Typography>
+          <Typography variant="h6" className="text-red-600 mb-2">Risk Level: {management.level}</Typography>
+          <Typography className="text-gray-700 mb-4">Recommendation: {management.recommendation}</Typography>
+          <Typography className="font-semibold mb-2">Immediate Actions:</Typography>
+          <List>
+            {management.immediateActions.map((action, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemText primary={`• ${action}`} />
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
+      </Card>
 
-      {/* Clinical Notes */}
-      <View style={styles.clinicalNotes}>
-        <Text style={styles.notesHeader}>Clinical Notes</Text>
-        <Text style={styles.noteText}>• Score of 0 has NPV above 99% for requiring intervention</Text>
-        <Text style={styles.noteText}>• Scores ≥7 associated with above 50% risk of requiring intervention</Text>
-        <Text style={styles.noteText}>• Consider early endoscopy for scores above 3</Text>
-      </View>
-    </ScrollView>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" className="font-semibold mb-4">Clinical Notes</Typography>
+          <List>
+            <ListItem disablePadding><ListItemText primary="• Score of 0 has NPV above 99% for requiring intervention" /></ListItem>
+            <ListItem disablePadding><ListItemText primary="• Scores ≥7 associated with above 50% risk of requiring intervention" /></ListItem>
+            <ListItem disablePadding><ListItemText primary="• Consider early endoscopy for scores above 3" /></ListItem>
+          </List>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f7',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  subheaderText: {
-    fontSize: 16,
-    color: '#7f8c8d',
-    marginTop: 5,
-  },
-  section: {
-    padding: 15,
-    backgroundColor: '#fff',
-    marginBottom: 10,
-  },
-  sectionHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
-    color: '#34495e',
-  },
-  inputGroup: {
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#2c3e50',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#dcdde1',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#fff',
-  },
-  helperText: {
-    fontSize: 12,
-    color: '#7f8c8d',
-    marginTop: 5,
-  },
-  resultSection: {
-    padding: 20,
-    backgroundColor: '#fff',
-    margin: 15,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  scoreText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 10,
-  },
-  riskLevel: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#e74c3c',
-    marginBottom: 5,
-  },
-  recommendation: {
-    fontSize: 16,
-    color: '#34495e',
-    marginBottom: 15,
-  },
-  actionList: {
-    marginTop: 10,
-  },
-  actionHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  actionItem: {
-    fontSize: 16,
-    color: '#34495e',
-    marginBottom: 5,
-    paddingLeft: 10,
-  },
-  clinicalNotes: {
-    padding: 15,
-    backgroundColor: '#fff',
-    margin: 15,
-    borderRadius: 10,
-  },
-  notesHeader: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: '#2c3e50',
-  },
-  noteText: {
-    fontSize: 14,
-    color: '#34495e',
-    marginBottom: 5,
-  },
-});
 
 export default GlasgowBlatchfordScore;

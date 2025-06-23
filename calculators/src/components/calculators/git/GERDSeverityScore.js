@@ -1,145 +1,116 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const GERDSeverityScore = () => {
-  // State variables to store user inputs
-  const [frequency, setFrequency] = useState('None'); // Frequency of symptoms
-  const [duration, setDuration] = useState('None'); // Duration of symptoms
-  const [impact, setImpact] = useState('None'); // Impact of symptoms on daily life
-  const [heartburn, setHeartburn] = useState('No'); // Heartburn symptoms
-  const [regurgitation, setRegurgitation] = useState('No'); // Regurgitation symptoms
+  const [frequency, setFrequency] = useState('None');
+  const [duration, setDuration] = useState('None');
+  const [impact, setImpact] = useState('None');
+  const [heartburn, setHeartburn] = useState('No');
+  const [regurgitation, setRegurgitation] = useState('No');
 
-  // Function to calculate GERD severity score
   const calculateGERDScore = () => {
     let score = 0;
-
-    // Frequency of symptoms (higher frequency = higher score)
     if (frequency === 'Occasional') score += 1;
     if (frequency === 'Frequent') score += 2;
     if (frequency === 'Constant') score += 3;
-
-    // Duration of symptoms (longer duration = higher score)
     if (duration === 'Days') score += 1;
     if (duration === 'Weeks') score += 2;
     if (duration === 'Months') score += 3;
-
-    // Impact on daily life (higher impact = higher score)
     if (impact === 'Mild') score += 1;
     if (impact === 'Moderate') score += 2;
     if (impact === 'Severe') score += 3;
-
-    // Heartburn and regurgitation symptoms (more symptoms = higher score)
     if (heartburn === 'Yes') score += 2;
     if (regurgitation === 'Yes') score += 2;
-
     return score;
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>GERD Severity Score</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        GERD Severity Score
+      </Typography>
 
-      {/* Frequency of symptoms */}
-      <View style={styles.inputContainer}>
-        <Text>Frequency of Symptoms:</Text>
-        <Picker
-          selectedValue={frequency}
-          style={styles.picker}
-          onValueChange={(itemValue) => setFrequency(itemValue)}>
-          <Picker.Item label="None" value="None" />
-          <Picker.Item label="Occasional" value="Occasional" />
-          <Picker.Item label="Frequent" value="Frequent" />
-          <Picker.Item label="Constant" value="Constant" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Frequency of Symptoms</InputLabel>
+          <Select
+            value={frequency}
+            onChange={(e) => setFrequency(e.target.value)}
+            label="Frequency of Symptoms"
+          >
+            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="Occasional">Occasional</MenuItem>
+            <MenuItem value="Frequent">Frequent</MenuItem>
+            <MenuItem value="Constant">Constant</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Duration of symptoms */}
-      <View style={styles.inputContainer}>
-        <Text>Duration of Symptoms:</Text>
-        <Picker
-          selectedValue={duration}
-          style={styles.picker}
-          onValueChange={(itemValue) => setDuration(itemValue)}>
-          <Picker.Item label="None" value="None" />
-          <Picker.Item label="Days" value="Days" />
-          <Picker.Item label="Weeks" value="Weeks" />
-          <Picker.Item label="Months" value="Months" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Duration of Symptoms</InputLabel>
+          <Select
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            label="Duration of Symptoms"
+          >
+            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="Days">Days</MenuItem>
+            <MenuItem value="Weeks">Weeks</MenuItem>
+            <MenuItem value="Months">Months</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Impact of symptoms on daily life */}
-      <View style={styles.inputContainer}>
-        <Text>Impact on Daily Life:</Text>
-        <Picker
-          selectedValue={impact}
-          style={styles.picker}
-          onValueChange={(itemValue) => setImpact(itemValue)}>
-          <Picker.Item label="None" value="None" />
-          <Picker.Item label="Mild" value="Mild" />
-          <Picker.Item label="Moderate" value="Moderate" />
-          <Picker.Item label="Severe" value="Severe" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Impact on Daily Life</InputLabel>
+          <Select
+            value={impact}
+            onChange={(e) => setImpact(e.target.value)}
+            label="Impact on Daily Life"
+          >
+            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="Mild">Mild</MenuItem>
+            <MenuItem value="Moderate">Moderate</MenuItem>
+            <MenuItem value="Severe">Severe</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Heartburn symptom */}
-      <View style={styles.inputContainer}>
-        <Text>Heartburn:</Text>
-        <Picker
-          selectedValue={heartburn}
-          style={styles.picker}
-          onValueChange={(itemValue) => setHeartburn(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Heartburn</InputLabel>
+          <Select
+            value={heartburn}
+            onChange={(e) => setHeartburn(e.target.value)}
+            label="Heartburn"
+          >
+            <MenuItem value="No">No</MenuItem>
+            <MenuItem value="Yes">Yes</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Regurgitation symptom */}
-      <View style={styles.inputContainer}>
-        <Text>Regurgitation:</Text>
-        <Picker
-          selectedValue={regurgitation}
-          style={styles.picker}
-          onValueChange={(itemValue) => setRegurgitation(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Regurgitation</InputLabel>
+          <Select
+            value={regurgitation}
+            onChange={(e) => setRegurgitation(e.target.value)}
+            label="Regurgitation"
+          >
+            <MenuItem value="No">No</MenuItem>
+            <MenuItem value="Yes">Yes</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Display calculated GERD severity score */}
-      <Text style={styles.result}>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
         GERD Severity Score: {calculateGERDScore()} (Higher score indicates more severe symptoms)
-      </Text>
-    </View>
+      </Typography>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-    width: 200,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default GERDSeverityScore;

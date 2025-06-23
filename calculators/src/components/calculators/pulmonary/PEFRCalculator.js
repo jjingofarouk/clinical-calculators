@@ -1,17 +1,6 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  Dimensions,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-
-const { width } = Dimensions.get('window');
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, Typography, TextField, Button, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 const PEFRCalculator = () => {
   const [formData, setFormData] = useState({
@@ -19,8 +8,7 @@ const PEFRCalculator = () => {
     height: '',
     race: '',
     actualPEFR: '',
-    previousBest: '', // Added for personal best PEFR
-    symptoms: '', // Added for symptom severity
+    previousBest: '',
   });
   const [result, setResult] = useState(null);
 
@@ -36,7 +24,6 @@ const PEFRCalculator = () => {
     }
 
     let expectedPEFR;
-    // CDC NHANES III formulas
     switch (formData.race) {
       case 'caucasian':
         expectedPEFR = (-0.0517 * age + 0.0332 * height + 2.3) * 60;
@@ -59,16 +46,16 @@ const PEFRCalculator = () => {
       expectedPEFR: expectedPEFR.toFixed(1),
       percentage: actualPEFR ? ((actualPEFR / expectedPEFR) * 100).toFixed(1) : null,
       personalBestRatio: previousBest ? ((actualPEFR / previousBest) * 100).toFixed(1) : null,
-      severity: getExacerbationSeverity(actualPEFR, previousBest, formData.symptoms),
+      severity: getExacerbationSeverity(actualPEFR, previousBest),
     };
 
     setResult(pefrResult);
   };
 
-  const getExacerbationSeverity = (actual, personalBest, symptoms) => {
+  const getExacerbationSeverity = (actual, personalBest) => {
     if (!actual || !personalBest) return null;
     const percentage = (actual / personalBest) * 100;
-    
+
     if (percentage >= 80) return {
       level: 'Green Zone - Well Controlled',
       description: 'Good asthma control',
@@ -95,7 +82,7 @@ const PEFRCalculator = () => {
       ],
       color: '#4CAF50'
     };
-    
+
     if (percentage >= 50) return {
       level: 'Yellow Zone - Partial Control',
       description: 'Moderate exacerbation',
@@ -123,7 +110,7 @@ const PEFRCalculator = () => {
       ],
       color: '#FFC107'
     };
-    
+
     return {
       level: 'Red Zone - Severe Exacerbation',
       description: 'Severe exacerbation - Medical Alert',
@@ -161,489 +148,239 @@ const PEFRCalculator = () => {
     };
   };
 
-  // Rest of the component UI code remains similar, but we'll add clinical sections
-
-  const renderRaceButton = (value, label) => (
-    <TouchableOpacity
-      style={[
-        styles.raceButton,
-        formData.race === value && styles.raceButtonSelected
-      ]}
-      onPress={() => setFormData({ ...formData, race: value })}
-    >
-      <Text style={[
-        styles.raceButtonText,
-        formData.race === value && styles.raceButtonTextSelected
-      ]}>
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={styles.title}>PEFR Clinical Assessment Tool</Text>
-          <Text style={styles.subtitle}>Based on GINA Guidelines & NHANES III Standards</Text>
-        </View>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-2">
+          PEFR Clinical Assessment Tool
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600 text-center mb-8">
+          Based on GINA Guidelines & NHANES III Standards
+        </Typography>
 
-        <View style={styles.card}>
-          {/* Previous inputs remain the same */}
-          <Text style={styles.label}>Age (years)</Text>
-          <TextInput
-            style={styles.input}
-            value={formData.age}
-            onChangeText={(value) => setFormData({ ...formData, age: value })}
-            keyboardType="numeric"
-            placeholder="Enter age"
-          />
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="space-y-6">
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Age (years)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={formData.age}
+                  onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                  placeholder="Enter age"
+                  variant="outlined"
+                  inputProps={{ min: 0 }}
+                />
+              </Box>
 
-          <Text style={styles.label}>Height (cm)</Text>
-          <TextInput
-            style={styles.input}
-            value={formData.height}
-            onChangeText={(value) => setFormData({ ...formData, height: value })}
-            keyboardType="numeric"
-            placeholder="Enter height"
-          />
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Height (cm)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={formData.height}
+                  onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+                  placeholder="Enter height"
+                  variant="outlined"
+                  inputProps={{ min: 0 }}
+                />
+              </Box>
 
-          <Text style={styles.label}>Race/Ethnicity</Text>
-          <View style={styles.raceContainer}>
-            {renderRaceButton('caucasian', 'Caucasian')}
-            {renderRaceButton('african-american', 'African-American')}
-            {renderRaceButton('mexican-american', 'Mexican-American')}
-            {renderRaceButton('other', 'Other')}
-          </View>
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Race/Ethnicity
+                </Typography>
+                <ToggleButtonGroup
+                  value={formData.race}
+                  exclusive
+                  onChange={(e, value) => setFormData({ ...formData, race: value })}
+                  sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}
+                >
+                  <ToggleButton value="caucasian">Caucasian</ToggleButton>
+                  <ToggleButton value="african-american">African-American</ToggleButton>
+                  <ToggleButton value="mexican-american">Mexican-American</ToggleButton>
+                  <ToggleButton value="other">Other</ToggleButton>
+                </ToggleButtonGroup>
+              </Box>
 
-          <Text style={styles.label}>Current PEFR (L/min)</Text>
-          <TextInput
-            style={styles.input}
-            value={formData.actualPEFR}
-            onChangeText={(value) => setFormData({ ...formData, actualPEFR: value })}
-            keyboardType="numeric"
-            placeholder="Enter measured PEFR"
-          />
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Current PEFR (L/min)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={formData.actualPEFR}
+                  onChange={(e) => setFormData({ ...formData, actualPEFR: e.target.value })}
+                  placeholder="Enter measured PEFR"
+                  variant="outlined"
+                  inputProps={{ min: 0 }}
+                />
+              </Box>
 
-          <Text style={styles.label}>Personal Best PEFR (L/min)</Text>
-          <TextInput
-            style={styles.input}
-            value={formData.previousBest}
-            onChangeText={(value) => setFormData({ ...formData, previousBest: value })}
-            keyboardType="numeric"
-            placeholder="Enter patient's personal best PEFR"
-          />
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Personal Best PEFR (L/min)
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={formData.previousBest}
+                  onChange={(e) => setFormData({ ...formData, previousBest: e.target.value })}
+                  placeholder="Enter patient's personal best PEFR"
+                  variant="outlined"
+                  inputProps={{ min: 0 }}
+                />
+              </Box>
 
-          <TouchableOpacity
-            style={styles.calculateButton}
-            onPress={calculateExpectedPEFR}
-          >
-            <LinearGradient
-              colors={['#007AFF', '#0055FF']}
-              style={styles.gradient}
-            >
-              <Text style={styles.calculateButtonText}>Generate Clinical Assessment</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
+              <Button
+                variant="contained"
+                fullWidth
+                className="mt-4"
+                onClick={calculateExpectedPEFR}
+                sx={{ background: 'linear-gradient(to right, #007AFF, #0055FF)', padding: 2 }}
+              >
+                Generate Clinical Assessment
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
 
         {result && (
-          <View style={styles.resultCard}>
-            <Text style={styles.resultTitle}>Clinical Assessment</Text>
-            
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>Expected PEFR:</Text>
-              <Text style={styles.resultValue}>{result.expectedPEFR} L/min</Text>
-            </View>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="mt-6"
+          >
+            <Card className="shadow-lg">
+              <CardContent className="p-6">
+                <Typography variant="h6" className="font-bold text-gray-800 mb-4">
+                  Clinical Assessment
+                </Typography>
 
-            {result.percentage && (
-              <>
-                <View style={styles.resultRow}>
-                  <Text style={styles.resultLabel}>% of Predicted:</Text>
-                  <Text style={styles.resultValue}>{result.percentage}%</Text>
-                </View>
+                <Box display="flex" justifyContent="space-between" mb={2}>
+                  <Typography variant="body1" className="text-gray-600">
+                    Expected PEFR:
+                  </Typography>
+                  <Typography variant="body1" className="font-semibold text-gray-800">
+                    {result.expectedPEFR} L/min
+                  </Typography>
+                </Box>
 
-                <View style={styles.resultRow}>
-                  <Text style={styles.resultLabel}>% of Personal Best:</Text>
-                  <Text style={styles.resultValue}>{result.personalBestRatio}%</Text>
-                </View>
+                {result.percentage && (
+                  <>
+                    <Box display="flex" justifyContent="space-between" mb={2}>
+                      <Typography variant="body1" className="text-gray-600">
+                        % of Predicted:
+                      </Typography>
+                      <Typography variant="body1" className="font-semibold text-gray-800">
+                        {result.percentage}%
+                      </Typography>
+                    </Box>
 
-                <View style={[styles.severityCard, { borderLeftColor: result.severity.color }]}>
-                  <Text style={[styles.severityTitle, { color: result.severity.color }]}>
-                    {result.severity.level}
-                  </Text>
-                  <Text style={styles.severityDescription}>{result.severity.description}</Text>
-                  
-                  <Text style={styles.sectionTitle}>Clinical Features</Text>
-                  {result.severity.clinicalFeatures.map((feature, index) => (
-                    <Text key={index} style={styles.bulletPoint}>• {feature}</Text>
-                  ))}
+                    <Box display="flex" justifyContent="space-between" mb={2}>
+                      <Typography variant="body1" className="text-gray-600">
+                        % of Personal Best:
+                      </Typography>
+                      <Typography variant="body1" className="font-semibold text-gray-800">
+                        {result.personalBestRatio}%
+                      </Typography>
+                    </Box>
 
-                  <Text style={styles.sectionTitle}>Recommended Actions</Text>
-                  {result.severity.recommendations.map((rec, index) => (
-                    <Text key={index} style={styles.bulletPoint}>• {rec}</Text>
-                  ))}
+                    <Card sx={{ borderLeft: `4px solid ${result.severity.color}`, mt: 2 }}>
+                      <CardContent>
+                        <Typography variant="h6" sx={{ color: result.severity.color, fontWeight: 'bold', mb: 2 }}>
+                          {result.severity.level}
+                        </Typography>
+                        <Typography variant="body1" className="text-gray-600 mb-2">
+                          {result.severity.description}
+                        </Typography>
 
-                  <Text style={styles.sectionTitle}>Medication Adjustments</Text>
-                  {result.severity.medications.map((med, index) => (
-                    <Text key={index} style={styles.bulletPoint}>• {med}</Text>
-                  ))}
+                        <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                          Clinical Features
+                        </Typography>
+                        {result.severity.clinicalFeatures.map((feature, index) => (
+                          <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                            • {feature}
+                          </Typography>
+                        ))}
 
-                  <Text style={styles.sectionTitle}>Monitoring Plan</Text>
-                  {result.severity.monitoring.map((item, index) => (
-                    <Text key={index} style={styles.bulletPoint}>• {item}</Text>
-                  ))}
+                        <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                          Recommended Actions
+                        </Typography>
+                        {result.severity.recommendations.map((rec, index) => (
+                          <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                            • {rec}
+                          </Typography>
+                        ))}
 
-                  {result.severity.referral && (
-                    <>
-                      <Text style={styles.sectionTitle}>Referral Considerations</Text>
-                      {result.severity.referral.map((item, index) => (
-                        <Text key={index} style={styles.bulletPoint}>• {item}</Text>
-                      ))}
-                    </>
-                  )}
-                </View>
+                        <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                          Medication Adjustments
+                        </Typography>
+                        {result.severity.medications.map((med, index) => (
+                          <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                            • {med}
+                          </Typography>
+                        ))}
 
-                <View style={styles.clinicalGuidance}>
-                  <Text style={styles.guidanceTitle}>Additional Clinical Considerations</Text>
-                  <Text style={styles.guidanceText}>
-                    • Consider comorbidities (rhinitis, GERD, obesity){'\n'}
-                    • Assess medication adherence and inhaler technique{'\n'}
-                    • Evaluate trigger factors and environmental exposures{'\n'}
-                    • Review vaccination status (flu, pneumococcal){'\n'}
-                    • Consider biological therapy for severe asthma
-                  </Text>
-                </View>
-              </>
-            )}
-          </View>
+                        <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                          Monitoring Plan
+                        </Typography>
+                        {result.severity.monitoring.map((item, index) => (
+                          <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                            • {item}
+                          </Typography>
+                        ))}
+
+                        {result.severity.referral && (
+                          <>
+                            <Typography variant="subtitle2" className="font-medium text-gray-800 mt-4 mb-2">
+                              Referral Considerations
+                            </Typography>
+                            {result.severity.referral.map((item, index) => (
+                              <Typography key={index} variant="body2" className="text-gray-600 mb-1">
+                                • {item}
+                              </Typography>
+                            ))}
+                          </>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    <Card sx={{ mt: 2, bgcolor: '#F8F9FA' }}>
+                      <CardContent>
+                        <Typography variant="subtitle1" className="font-bold text-gray-800 mb-2">
+                          Additional Clinical Considerations
+                        </Typography>
+                        <Typography variant="body2" className="text-gray-600">
+                          • Consider comorbidities (rhinitis, GERD, obesity)<br />
+                          • Assess medication adherence and inhaler technique<br />
+                          • Evaluate trigger factors and environmental exposures<br />
+                          • Review vaccination status (flu, pneumococcal)<br />
+                          • Consider biological therapy for severe asthma
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F6F7',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666666',
-    lineHeight: 22,
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    margin: 10,
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#1A1A1A',
-    marginBottom: 8,
-    marginTop: 16,
-  },
-  input: {
-    height: 48,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    backgroundColor: '#FFFFFF',
-    color: '#1A1A1A',
-  },
-  raceContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 8,
-    gap: 8,
-  },
-  raceButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#007AFF',
-    backgroundColor: '#FFFFFF',
-    marginBottom: 8,
-  },
-  raceButtonSelected: {
-    backgroundColor: '#007AFF',
-  },
-  raceButtonText: {
-    color: '#007AFF',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  raceButtonTextSelected: {
-    color: '#FFFFFF',
-  },
-  calculateButton: {
-    marginTop: 24,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  gradient: {
-    padding: 16,
-    alignItems: 'center',
-  },
-  calculateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  resultCard: {
-    backgroundColor: '#FFFFFF',
-    margin: 10,
-    padding: 20,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  resultTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 16,
-  },
-  resultRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    paddingVertical: 4,
-  },
-  resultLabel: {
-    fontSize: 16,
-    color: '#666666',
-  },
-  resultValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-  severityCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 8,
-    borderLeftWidth: 4,
-    marginTop: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  severityTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  severityDescription: {
-    fontSize: 16,
-    color: '#666666',
-    marginBottom: 8,
-    lineHeight: 22,
-  },
-  sectionTitle: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  bulletPoint: {
-    fontSize: 15,
-    color: '#4A4A4A',
-    marginBottom: 6,
-    paddingLeft: 8,
-    lineHeight: 20,
-  },
-  clinicalGuidance: {
-    marginTop: 24,
-    padding: 16,
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-  },
-  guidanceTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1A1A1A',
-    marginBottom: 12,
-  },
-  guidanceText: {
-    fontSize: 15,
-    color: '#4A4A4A',
-    lineHeight: 24,
-  },
-  clinicalCard: {
-    backgroundColor: '#F8F9FA',
-    padding: 16,
-    borderRadius: 8,
-    marginTop: 16,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
-  },
-  warningText: {
-    color: '#D32F2F',
-    fontSize: 14,
-    marginTop: 8,
-    fontStyle: 'italic',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#E5E5E5',
-    marginVertical: 16,
-  },
-  footerText: {
-    fontSize: 12,
-    color: '#666666',
-    textAlign: 'center',
-    marginTop: 16,
-    fontStyle: 'italic',
-  },
-  errorText: {
-    color: '#D32F2F',
-    fontSize: 14,
-    marginTop: 4,
-    marginLeft: 4,
-  },
-  requiredField: {
-    color: '#D32F2F',
-    marginLeft: 4,
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  infoIcon: {
-    marginLeft: 8,
-    color: '#007AFF',
-  },
-  tooltip: {
-    backgroundColor: '#333333',
-    padding: 8,
-    borderRadius: 4,
-    maxWidth: 200,
-  },
-  tooltipText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 12,
-    width: '90%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#1A1A1A',
-  },
-  modalCloseButton: {
-    position: 'absolute',
-    right: 16,
-    top: 16,
-  },
-  modalScrollView: {
-    maxHeight: '90%',
-  },
-  graphContainer: {
-    marginTop: 16,
-    height: 200,
-    padding: 16,
-  },
-  legend: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    marginTop: 8,
-    gap: 16,
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  legendColor: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 4,
-  },
-  legendText: {
-    fontSize: 12,
-    color: '#666666',
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  activeTab: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#007AFF',
-  },
-  tabText: {
-    fontSize: 14,
-    color: '#666666',
-    fontWeight: '500',
-  },
-  activeTabText: {
-    color: '#007AFF',
-  },
-  printButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#F5F6F7',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  printButtonText: {
-    color: '#007AFF',
-    fontSize: 16,
-    fontWeight: '500',
-    marginLeft: 8,
-  },
-});
 
 export default PEFRCalculator;

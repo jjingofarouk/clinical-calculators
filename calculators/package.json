@@ -22,7 +22,7 @@
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
     "recharts": "^2.12.7",
-    "react-router-dom": "^6.14.0" // Added dependency
+    "react-router-dom": "^6.14.0" 
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

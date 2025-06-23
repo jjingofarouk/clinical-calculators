@@ -1,14 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Button, Card, TextField, Typography, Box, Chip, Switch, FormControlLabel } from '@mui/material';
+import { motion } from 'framer-motion';
+import Select from 'react-select';
 
 const CKD_STAGES = {
   1: { range: '≥90', description: 'Normal or High', color: '#4CAF50' },
@@ -30,18 +23,19 @@ const GFRCalculator = () => {
   const [results, setResults] = useState(null);
   const [showRecommendations, setShowRecommendations] = useState(false);
 
+  const genderOptions = [
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' }
+  ];
+
   const calculateMDRD = () => {
     const { creatinine, age, gender, isBlack } = inputs;
     if (!creatinine || !age) return null;
 
-    // MDRD Formula
     let gfr = 175 * Math.pow(parseFloat(creatinine), -1.154) 
               * Math.pow(parseFloat(age), -0.203);
     
-    // Gender modifier
     if (gender === 'female') gfr *= 0.742;
-    
-    // Race modifier (optional)
     if (isBlack) gfr *= 1.212;
 
     return gfr.toFixed(2);
@@ -84,295 +78,148 @@ const GFRCalculator = () => {
     }
   };
 
-  const renderRecommendations = () => {
-    if (!results) return null;
-    const { stage } = results;
-
-    return (
-      <View style={styles.recommendationsContainer}>
-        <Text style={styles.recommendationsTitle}>Clinical Recommendations</Text>
-        <Text style={styles.recommendationText}>
-          • Monitoring Frequency: {stage <= 2 ? 'Annually' : stage === 3 ? 'Every 3-6 months' : 'Monthly'}
-        </Text>
-        <Text style={styles.recommendationText}>
-          • Referral to Nephrology: {stage >= 4 ? 'Strongly Recommended' : stage === 3 ? 'Consider based on progression' : 'Not typically needed'}
-        </Text>
-        <Text style={styles.recommendationText}>
-          • Key Interventions:
-          {'\n'}- BP Target: beliw 130/80 mmHg
-          {'\n'}- Diabetes Control: HbA1c below 7%
-          {'\n'}- Avoid nephrotoxic medications
-          {stage >= 3 ? '\n- Consider dose adjustments for medications' : ''}
-        </Text>
-        {stage >= 3 && (
-          <Text style={styles.warningText}>
-            ⚠️ Consider dose adjustments for medications cleared by kidneys
-          </Text>
-        )}
-      </View>
-    );
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>GFR Calculator</Text>
-        
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={styles.input}
-            placeholder="Creatinine (mg/dL)"
-            placeholderTextColor="#808080" // Using hex code for gray
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-md"
+      >
+        <Card className="p-6">
+          <Typography variant="h4" className="text-center font-bold mb-6">
+            GFR Calculator
+          </Typography>
 
-            value={inputs.creatinine}
-            onChangeText={(text) => setInputs({...inputs, creatinine: text})}
-            keyboardType="decimal-pad"
-          />
-          <Text style={styles.inputHint}>Reference Range: 0.6 - 1.2 mg/dL</Text>
-        </View>
+          <Box className="space-y-4">
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Serum Creatinine</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Creatinine (mg/dL)"
+                value={inputs.creatinine}
+                onChange={(e) => setInputs({...inputs, creatinine: e.target.value})}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                Reference Range: 0.6 - 1.2 mg/dL
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={styles.input}
-            placeholder="Age (years)"
-            placeholderTextColor="#808080" // Using hex code for gray
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Age</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Age (years)"
+                value={inputs.age}
+                onChange={(e) => setInputs({...inputs, age: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-            value={inputs.age}
-            onChangeText={(text) => setInputs({...inputs, age: text})}
-            keyboardType="number-pad"
-          />
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Weight</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Weight (kg)"
+                value={inputs.weight}
+                onChange={(e) => setInputs({...inputs, weight: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <TextInput
-            style={styles.input}
-            placeholder="Weight (kg)"
-            placeholderTextColor="#808080" // Using hex code for gray
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Sex at Birth</Typography>
+              <Select
+                options={genderOptions}
+                value={genderOptions.find(opt => opt.value === inputs.gender)}
+                onChange={(selected) => setInputs({...inputs, gender: selected.value})}
+                className="text-sm"
+              />
+            </Box>
 
-            value={inputs.weight}
-            onChangeText={(text) => setInputs({...inputs, weight: text})}
-            keyboardType="decimal-pad"
-          />
-        </View>
+            <Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={inputs.isBlack}
+                    onChange={() => setInputs({...inputs, isBlack: !inputs.isBlack})}
+                    color="primary"
+                  />
+                }
+                label="Black Race (Optional)"
+              />
+            </Box>
 
-        <View style={styles.toggleContainer}>
-          <TouchableOpacity
-            style={[styles.toggleButton, inputs.gender === 'male' && styles.toggleButtonActive]}
-            onPress={() => setInputs({...inputs, gender: 'male'})}>
-            <Text style={[styles.toggleText, inputs.gender === 'male' && styles.toggleTextActive]}>Male</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.toggleButton, inputs.gender === 'female' && styles.toggleButtonActive]}
-            onPress={() => setInputs({...inputs, gender: 'female'})}>
-            <Text style={[styles.toggleText, inputs.gender === 'female' && styles.toggleTextActive]}>Female</Text>
-          </TouchableOpacity>
-        </View>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="mt-6"
+              onClick={handleCalculate}
+            >
+              Calculate GFR
+            </Button>
 
-        <View style={styles.toggleContainer}>
-          <TouchableOpacity
-            style={[styles.toggleButton, inputs.isBlack && styles.toggleButtonActive]}
-            onPress={() => setInputs({...inputs, isBlack: !inputs.isBlack})}>
-            <Text style={[styles.toggleText, inputs.isBlack && styles.toggleTextActive]}>
-              Black Race (Optional)
-            </Text>
-          </TouchableOpacity>
-        </View>
+            {results && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+                <Card className="p-4 mb-4" sx={{ borderLeft: `4px solid ${results.stageInfo.color}` }}>
+                  <Chip
+                    label={`CKD Stage ${results.stage} - ${results.stageInfo.description}`}
+                    style={{ backgroundColor: results.stageInfo.color, color: 'white' }}
+                    className="mb-4"
+                  />
+                  <Box className="flex justify-between">
+                    <Box className="text-center">
+                      <Typography variant="caption" className="text-gray-600">MDRD GFR</Typography>
+                      <Typography variant="h5" className="font-bold">{results.mdrd}</Typography>
+                      <Typography variant="caption" className="text-gray-500">mL/min/1.73m²</Typography>
+                    </Box>
+                    <Box className="text-center">
+                      <Typography variant="caption" className="text-gray-600">Cockcroft-Gault</Typography>
+                      <Typography variant="h5" className="font-bold">{results.cg}</Typography>
+                      <Typography variant="caption" className="text-gray-500">mL/min</Typography>
+                    </Box>
+                  </Box>
+                </Card>
 
-        <TouchableOpacity style={styles.calculateButton} onPress={handleCalculate}>
-          <Text style={styles.calculateButtonText}>Calculate GFR</Text>
-        </TouchableOpacity>
-
-        {results && (
-          <View style={styles.resultsContainer}>
-            <View style={[styles.stageIndicator, { backgroundColor: results.stageInfo.color }]}>
-              <Text style={styles.stageText}>CKD Stage {results.stage}</Text>
-              <Text style={styles.stageDescription}>{results.stageInfo.description}</Text>
-            </View>
-            
-            <View style={styles.gfrResults}>
-              <View style={styles.gfrResult}>
-                <Text style={styles.gfrLabel}>MDRD GFR</Text>
-                <Text style={styles.gfrValue}>{results.mdrd}</Text>
-                <Text style={styles.gfrUnit}>mL/min/1.73m²</Text>
-              </View>
-              
-              <View style={styles.gfrResult}>
-                <Text style={styles.gfrLabel}>Cockcroft-Gault</Text>
-                <Text style={styles.gfrValue}>{results.cg}</Text>
-                <Text style={styles.gfrUnit}>mL/min</Text>
-              </View>
-            </View>
-          </View>
-        )}
-
-        {showRecommendations && renderRecommendations()}
-      </ScrollView>
-    </SafeAreaView>
+                {showRecommendations && (
+                  <Card className="p-4">
+                    <Typography variant="h6" className="font-bold mb-4">Clinical Recommendations</Typography>
+                    <Box className="space-y-2">
+                      <Typography variant="body2">
+                        • Monitoring Frequency: {results.stage <= 2 ? 'Annually' : results.stage === 3 ? 'Every 3-6 months' : 'Monthly'}
+                      </Typography>
+                      <Typography variant="body2">
+                        • Referral to Nephrology: {results.stage >= 4 ? 'Strongly Recommended' : results.stage === 3 ? 'Consider based on progression' : 'Not typically needed'}
+                      </Typography>
+                      <Typography variant="body2">
+                        • Key Interventions:<br />
+                        - BP Target: below 130/80 mmHg<br />
+                        - Diabetes Control: HbA1c below 7%<br />
+                        - Avoid nephrotoxic medications
+                        {results.stage >= 3 ? '<br />- Consider dose adjustments for medications' : ''}
+                      </Typography>
+                      {results.stage >= 3 && (
+                        <Typography variant="body2" className="text-red-600 font-medium mt-2">
+                          ⚠️ Consider dose adjustments for medications cleared by kidneys
+                        </Typography>
+                      )}
+                    </Box>
+                  </Card>
+                )}
+              </motion.div>
+            )}
+          </Box>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#2D3748',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  input: {
-    height: 50,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#2D3748',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  inputHint: {
-    fontSize: 12,
-    color: '#718096',
-    marginTop: 4,
-    marginLeft: 16,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    justifyContent: 'center',
-  },
-  toggleButton: {
-    flex: 1,
-    height: 44,
-    backgroundColor: '#EDF2F7',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 4,
-    borderRadius: 8,
-  },
-  toggleButtonActive: {
-    backgroundColor: '#4299E1',
-  },
-  toggleText: {
-    color: '#4A5568',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  toggleTextActive: {
-    color: '#FFFFFF',
-  },
-  calculateButton: {
-    height: 56,
-    backgroundColor: '#4299E1',
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 24,
-  },
-  calculateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  resultsContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  stageIndicator: {
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-    alignItems: 'center',
-  },
-  stageText: {
-    color: '#FFFFFF',
-    fontSize: 20,
-    fontWeight: '700',
-  },
-  stageDescription: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '500',
-    marginTop: 4,
-  },
-  gfrResults: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  gfrResult: {
-    alignItems: 'center',
-  },
-  gfrLabel: {
-    fontSize: 14,
-    color: '#718096',
-    marginBottom: 4,
-  },
-  gfrValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#2D3748',
-  },
-  gfrUnit: {
-    fontSize: 12,
-    color: '#718096',
-    marginTop: 2,
-  },
-  recommendationsContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  recommendationsTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#2D3748',
-    marginBottom: 12,
-  },
-  recommendationText: {
-    fontSize: 14,
-    color: '#4A5568',
-    marginBottom: 8,
-    lineHeight: 20,
-  },
-  warningText: {
-    fontSize: 14,
-    color: '#E53E3E',
-    marginTop: 8,
-    fontWeight: '500',
-  },
-});
 
 export default GFRCalculator;

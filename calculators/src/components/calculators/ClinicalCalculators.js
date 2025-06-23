@@ -1,18 +1,114 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LucideIcon, Search, Star } from "lucide-react";
-import { TextField, IconButton, Box, Typography, Card, CardContent, Grid } from "@mui/material";
+import {
+  Search,
+  Star,
+  Calculator,
+  Heart,
+  Brain,
+  Wind,
+  Stethoscope,
+  Baby,
+  Bone,
+  Droplet,
+  Activity,
+} from "lucide-react";
+import {
+  TextField,
+  IconButton,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+} from "@mui/material";
+
+// Icon map for dynamic rendering
+const iconMap = {
+  Calculator,
+  Heart,
+  Brain,
+  Wind,
+  Stethoscope,
+  Baby,
+  Bone,
+  Droplet,
+  Activity,
+};
 
 const calculatorCategories = [
-  { id: "general", label: "General", icon: "Calculator", color: "#2ECC71", description: "BMI, BMR, caloric needs", screen: "General" },
-  { id: "cardiovascular", label: "Cardiovascular", icon: "Heart", color: "#FF4757", description: "ASCVD, CHADSVASC, HASBLED", screen: "Cardiovascular" },
-  { id: "neurology", label: "Neurology", icon: "Brain", color: "#5352ED", description: "GCS, NIHSS, mRS", screen: "Neurology" },
-  { id: "pulmonary", label: "Pulmonary", icon: "Wind", color: "#1E90FF", description: "BODE, CURB-65, asthma", screen: "Pulmonary" },
-  { id: "gastroenterology", label: "Gastroenterology", icon: "Stethoscope", color: "#FF6B6B", description: "Alvarado, Child-Pugh, FIB-4", screen: "Gastroenterology" },
-  { id: "obstetrics", label: "Obstetrics", icon: "Baby", color: "#FF9FF3", description: "Due date, Bishop, Apgar", screen: "Obstetrics" },
-  { id: "orthopedics", label: "Orthopedics", icon: "Bone", color: "#FFA502", description: "Fracture risk, Ottawa rules", screen: "Orthopedics" },
-  { id: "nephrology", label: "Nephrology", icon: "Droplet", color: "#747D8C", description: "eGFR, creatinine, KDIGO", screen: "Nephrology" },
-  { id: "icu", label: "ICU", icon: "Activity", color: "#E84393", description: "APACHE, SOFA, qSOFA", screen: "ICU" },
+  {
+    id: "general",
+    label: "General",
+    icon: "Calculator",
+    color: "#2ECC71",
+    description: "BMI, BMR, caloric needs",
+    screen: "General",
+  },
+  {
+    id: "cardiovascular",
+    label: "Cardiovascular",
+    icon: "Heart",
+    color: "#FF4757",
+    description: "ASCVD, CHADSVASC, HASBLED",
+    screen: "Cardiovascular",
+  },
+  {
+    id: "neurology",
+    label: "Neurology",
+    icon: "Brain",
+    color: "#5352ED",
+    description: "GCS, NIHSS, mRS",
+    screen: "Neurology",
+  },
+  {
+    id: "pulmonary",
+    label: "Pulmonary",
+    icon: "Wind",
+    color: "#1E90FF",
+    description: "BODE, CURB-65, asthma",
+    screen: "Pulmonary",
+  },
+  {
+    id: "gastroenterology",
+    label: "Gastroenterology",
+    icon: "Stethoscope",
+    color: "#FF6B6B",
+    description: "Alvarado, Child-Pugh, FIB-4",
+    screen: "Gastroenterology",
+  },
+  {
+    id: "obstetrics",
+    label: "Obstetrics",
+    icon: "Baby",
+    color: "#FF9FF3",
+    description: "Due date, Bishop, Apgar",
+    screen: "Obstetrics",
+  },
+  {
+    id: "orthopedics",
+    label: "Orthopedics",
+    icon: "Bone",
+    color: "#FFA502",
+    description: "Fracture risk, Ottawa rules",
+    screen: "Orthopedics",
+  },
+  {
+    id: "nephrology",
+    label: "Nephrology",
+    icon: "Droplet",
+    color: "#747D8C",
+    description: "eGFR, creatinine, KDIGO",
+    screen: "Nephrology",
+  },
+  {
+    id: "icu",
+    label: "ICU",
+    icon: "Activity",
+    color: "#E84393",
+    description: "APACHE, SOFA, qSOFA",
+    screen: "ICU",
+  },
 ];
 
 const CustomHeader = () => {
@@ -110,8 +206,11 @@ const ClinicalCalculators = () => {
     const isCategory = !item.category;
     const category = isCategory
       ? calculatorCategories.find((cat) => cat.id === item.id)
-      : calculatorCategories.find((cat) => cat.label.toLowerCase() === item.category.toLowerCase());
-    const IconComponent = LucideIcon[category.icon] || LucideIcon.Calculator;
+      : calculatorCategories.find(
+          (cat) => cat.label.toLowerCase() === item.category.toLowerCase()
+        );
+
+    const IconComponent = iconMap[category?.icon] || Calculator;
 
     return (
       <Card
@@ -132,10 +231,19 @@ const ClinicalCalculators = () => {
             </Box>
           </Box>
           {!isCategory && (
-            <IconButton onClick={(e) => { e.stopPropagation(); toggleFavorite(item); }}>
+            <IconButton
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite(item);
+              }}
+            >
               <Star
                 size={24}
-                className={favorites.includes(item.screen) ? "text-yellow-400" : "text-gray-400"}
+                className={
+                  favorites.includes(item.screen)
+                    ? "text-yellow-400"
+                    : "text-gray-400"
+                }
                 fill={favorites.includes(item.screen) ? "#FFD700" : "none"}
               />
             </IconButton>

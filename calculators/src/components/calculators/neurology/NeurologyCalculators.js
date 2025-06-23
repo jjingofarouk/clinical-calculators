@@ -15,7 +15,7 @@ import NIHStrokeScale from './NIHStrokeScale';
 import PHQ9 from './PHQ9';
 import GAD7 from './GAD7';
 import MMSE from './MMSE';
-import MoCA from './MoCA';
+import MoCA from './MoCa';
 import TBISeverityScore from './TBISeverityScore';
 import ABCD2Score from './ABCD2Score';
 import PHASESScore from './PHASESScore';

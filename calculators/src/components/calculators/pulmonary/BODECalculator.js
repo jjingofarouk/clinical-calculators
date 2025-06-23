@@ -194,9 +194,9 @@ const BODECalculator = () => {
                 <Typography variant="subtitle2" className="font-medium text-gray-800 mb-2">
                   6-Minute Walk Distance (meters)
                 </Typography>
-                <Typography variant="body2" className="text-gray-600 mb-2">
-                  ≥350m: 0pts | 250-349m: 1pt | 150-249m: 2pts | <150m: 3pts
-                </Typography>
+<Typography variant="body2" className="text-gray-600 mb-2">
+  &ge;350m: 0pts | 250–349m: 1pt | 150–249m: 2pts | &lt;150m: 3pts
+</Typography>
                 <TextField
                   fullWidth
                   type="number"

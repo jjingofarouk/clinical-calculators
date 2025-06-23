@@ -64,7 +64,7 @@ const GlasgowBlatchfordScore = () => {
         'Start fluid resuscitation',
         'Consider blood type and cross-match',
         'Urgent endoscopy within 24 hours',
-        'Monitor vitals every  ],
+        'Monitor vitals every'  ],
       [
         'Regular vital sign monitoring',
         'Consider oral intake if appropriate',

@@ -1,26 +1,19 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from "react-native";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button, Card, CardContent, TextField, Typography, Box } from '@mui/material';
 
 const JointReplacementRiskCalculator = () => {
-  const [age, setAge] = useState("");
-  const [comorbidities, setComorbidities] = useState("");
-  const [previousSurgeries, setPreviousSurgeries] = useState("");
+  const [age, setAge] = useState('');
+  const [comorbidities, setComorbidities] = useState('');
+  const [previousSurgeries, setPreviousSurgeries] = useState('');
   const [risk, setRisk] = useState(null);
 
   const validateInput = (value) => {
-    if (value === "" || Number(value) >= 0) {
+    if (value === '' || Number(value) >= 0) {
       return value;
     } else {
-      Alert.alert("Invalid Input", "Value must be a positive number.");
-      return "";
+      alert('Value must be a positive number.');
+      return '';
     }
   };
 
@@ -34,133 +27,101 @@ const JointReplacementRiskCalculator = () => {
     const previousSurgeriesValue = Number(previousSurgeries) || 0;
 
     if (ageValue < 0 || comorbiditiesValue < 0 || previousSurgeriesValue < 0) {
-      setRisk("Invalid input. Please enter positive numbers.");
+      setRisk('Invalid input. Please enter positive numbers.');
       return;
     }
 
     const calculatedRisk = (ageValue + comorbiditiesValue + previousSurgeriesValue) / 10;
-    setRisk((calculatedRisk * 100).toFixed(2)); // Risk as a percentage
+    setRisk((calculatedRisk * 100).toFixed(2));
   };
 
   const resetInputs = () => {
-    setAge("");
-    setComorbidities("");
-    setPreviousSurgeries("");
+    setAge('');
+    setComorbidities('');
+    setPreviousSurgeries('');
     setRisk(null);
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Joint Replacement Risk Calculator</Text>
-      <Text style={styles.description}>
-        Enter the following values to calculate the risk of joint replacement surgery.
-      </Text>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-4">
+          Joint Replacement Risk Calculator
+        </Typography>
+        <Typography variant="subtitle1" className="text-gray-600 text-center mb-8">
+          Enter the following values to calculate the risk of joint replacement surgery.
+        </Typography>
 
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Age"
-        value={age.toString()}
-        onChangeText={handleAgeChange}
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Comorbidities (count)"
-        value={comorbidities.toString()}
-        onChangeText={handleComorbiditiesChange}
-      />
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        placeholder="Previous Surgeries (count)"
-        value={previousSurgeries.toString()}
-        onChangeText={handlePreviousSurgeriesChange}
-      />
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="space-y-4">
+              <TextField
+                fullWidth
+                type="number"
+                label="Age"
+                value={age}
+                onChange={(e) => handleAgeChange(e.target.value)}
+                variant="outlined"
+              />
+              <TextField
+                fullWidth
+                type="number"
+                label="Comorbidities (count)"
+                value={comorbidities}
+                onChange={(e) => handleComorbiditiesChange(e.target.value)}
+                variant="outlined"
+              />
+              <TextField
+                fullWidth
+                type="number"
+                label="Previous Surgeries (count)"
+                value={previousSurgeries}
+                onChange={(e) => handlePreviousSurgeriesChange(e.target.value)}
+                variant="outlined"
+              />
 
-      <TouchableOpacity style={styles.button} onPress={calculateJointReplacementRisk}>
-        <Text style={styles.buttonText}>Calculate Risk</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.resetButton]} onPress={resetInputs}>
-        <Text style={[styles.buttonText, styles.resetButtonText]}>Reset</Text>
-      </TouchableOpacity>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-4"
+                onClick={calculateJointReplacementRisk}
+              >
+                Calculate Risk
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                fullWidth
+                className="mt-2"
+                onClick={resetInputs}
+              >
+                Reset
+              </Button>
 
-      {risk !== null && (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Joint Replacement Risk: {risk}%</Text>
-        </View>
-      )}
-    </ScrollView>
+              {risk !== null && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 p-4 rounded-lg bg-white border border-gray-200 shadow-sm"
+                >
+                  <Typography variant="h6" className="font-bold text-gray-800 text-center">
+                    Joint Replacement Risk: {risk}%
+                  </Typography>
+                </motion.div>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    backgroundColor: "#F4F6F9",
-    flexGrow: 1,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#002432",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 16,
-    color: "#6B7280",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  input: {
-    backgroundColor: "#FFFFFF",
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    marginBottom: 12,
-    fontSize: 16,
-    color: "#1F2937",
-  },
-  button: {
-    backgroundColor: "#27C7B8",
-    padding: 14,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 16,
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  resetButton: {
-    backgroundColor: "#F78837",
-    marginTop: 8,
-  },
-  resetButtonText: {
-    color: "#FFFFFF",
-  },
-  resultContainer: {
-    marginTop: 24,
-    padding: 16,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  resultText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1E3052",
-    textAlign: "center",
-  },
-});
 
 export default JointReplacementRiskCalculator;

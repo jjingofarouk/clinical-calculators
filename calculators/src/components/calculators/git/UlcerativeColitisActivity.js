@@ -1,122 +1,94 @@
 import React, { useState } from 'react';
-import { View, Text,  StyleSheet, TextInput, Button } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { TextField, Button, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 const UlcerativeColitisActivity = () => {
-  // State variables to store user inputs
-  const [stoolFrequency, setStoolFrequency] = useState(0); // Stool frequency (per day)
-  const [bloodInStool, setBloodInStool] = useState('None'); // Blood in stool (None, Occasional, Severe)
-  const [generalCondition, setGeneralCondition] = useState('Good'); // General condition (Good, Fair, Poor)
+  const [stoolFrequency, setStoolFrequency] = useState(0);
+  const [bloodInStool, setBloodInStool] = useState('None');
+  const [generalCondition, setGeneralCondition] = useState('Good');
 
-  // Calculate UCAI Score
   const calculateUCAI = () => {
     let score = 0;
 
-    // Stool frequency scoring (per day)
     if (stoolFrequency >= 1 && stoolFrequency <= 3) score += 1;
     if (stoolFrequency >= 4 && stoolFrequency <= 6) score += 2;
     if (stoolFrequency >= 7 && stoolFrequency <= 9) score += 3;
     if (stoolFrequency >= 10) score += 4;
 
-    // Blood in stool scoring
     if (bloodInStool === 'Occasional') score += 2;
     if (bloodInStool === 'Severe') score += 4;
 
-    // General condition scoring
     if (generalCondition === 'Fair') score += 2;
     if (generalCondition === 'Poor') score += 4;
 
     return score;
   };
 
+  const resetValues = () => {
+    setStoolFrequency(0);
+    setBloodInStool('None');
+    setGeneralCondition('Good');
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Ulcerative Colitis Activity Index</Text>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <Typography variant="h4" className="text-center text-blue-600 mb-4">
+        Ulcerative Colitis Activity Index
+      </Typography>
 
       {/* Stool Frequency */}
-      <View style={styles.inputContainer}>
-        <Text>Stool Frequency (per day):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
-          value={String(stoolFrequency)}
-          onChangeText={(value) => setStoolFrequency(Number(value))}
+      <div className="mb-4">
+        <TextField
+          label="Stool Frequency (per day)"
+          variant="outlined"
+          type="number"
+          value={stoolFrequency}
+          onChange={(e) => setStoolFrequency(Number(e.target.value))}
+          className="w-full"
         />
-      </View>
+      </div>
 
       {/* Blood in Stool */}
-      <View style={styles.inputContainer}>
-        <Text>Blood in Stool:</Text>
-        <Picker
-          selectedValue={bloodInStool}
-          style={styles.picker}
-          onValueChange={(itemValue) => setBloodInStool(itemValue)}>
-          <Picker.Item label="None" value="None" />
-          <Picker.Item label="Occasional" value="Occasional" />
-          <Picker.Item label="Severe" value="Severe" />
-        </Picker>
-      </View>
+      <FormControl fullWidth className="mb-4">
+        <InputLabel>Blood in Stool</InputLabel>
+        <Select
+          value={bloodInStool}
+          onChange={(e) => setBloodInStool(e.target.value)}
+        >
+          <MenuItem value="None">None</MenuItem>
+          <MenuItem value="Occasional">Occasional</MenuItem>
+          <MenuItem value="Severe">Severe</MenuItem>
+        </Select>
+      </FormControl>
 
       {/* General Condition */}
-      <View style={styles.inputContainer}>
-        <Text>General Condition:</Text>
-        <Picker
-          selectedValue={generalCondition}
-          style={styles.picker}
-          onValueChange={(itemValue) => setGeneralCondition(itemValue)}>
-          <Picker.Item label="Good" value="Good" />
-          <Picker.Item label="Fair" value="Fair" />
-          <Picker.Item label="Poor" value="Poor" />
-        </Picker>
-      </View>
+      <FormControl fullWidth className="mb-4">
+        <InputLabel>General Condition</InputLabel>
+        <Select
+          value={generalCondition}
+          onChange={(e) => setGeneralCondition(e.target.value)}
+        >
+          <MenuItem value="Good">Good</MenuItem>
+          <MenuItem value="Fair">Fair</MenuItem>
+          <MenuItem value="Poor">Poor</MenuItem>
+        </Select>
+      </FormControl>
 
       {/* Display calculated UCAI score */}
-      <Text style={styles.result}>UCAI Score: {calculateUCAI()}</Text>
+      <Typography variant="h6" className="text-center text-green-600 mb-4">
+        UCAI Score: {calculateUCAI()}
+      </Typography>
 
-      {/* Optional button to reset values */}
-      <Button title="Reset" onPress={() => {
-        setStoolFrequency(0);
-        setBloodInStool('None');
-        setGeneralCondition('Good');
-      }} />
-    </View>
+      {/* Reset Button */}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={resetValues}
+        className="w-full"
+      >
+        Reset
+      </Button>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    fontSize: 16,
-  },
-  picker: {
-    height: 50,
-    width: 200,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default UlcerativeColitisActivity;

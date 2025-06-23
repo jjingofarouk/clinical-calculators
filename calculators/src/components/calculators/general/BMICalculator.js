@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { Box, Typography, TextField, Button } from "@mui/material";
 
 const BMICalculator = () => {
   const [weight, setWeight] = useState('');
@@ -7,62 +7,54 @@ const BMICalculator = () => {
   const [bmi, setBmi] = useState(null);
 
   const calculateBMI = () => {
-    const heightInMeters = height / 100; // Convert cm to meters
+    const heightInMeters = height / 100;
     const bmiValue = weight / (heightInMeters * heightInMeters);
     setBmi(bmiValue.toFixed(2));
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>BMI Calculator</Text>
+    <Box className="min-h-screen flex flex-col items-center justify-center p-5">
+      <Typography variant="h4" className="font-bold mb-5">
+        BMI Calculator
+      </Typography>
       
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Weight (kg)"
         value={weight}
-        onChangeText={(text) => setWeight(text)}
-        keyboardType="numeric"
+        onChange={(e) => setWeight(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <TextInput
-        style={styles.input}
+      <TextField
+        fullWidth
+        type="number"
         placeholder="Height (cm)"
         value={height}
-        onChangeText={(text) => setHeight(text)}
-        keyboardType="numeric"
+        onChange={(e) => setHeight(e.target.value)}
+        variant="outlined"
+        className="mb-5"
+        sx={{ maxWidth: '400px', backgroundColor: '#fff', borderRadius: 1 }}
       />
 
-      <Button title="Calculate BMI" onPress={calculateBMI} />
+      <Button
+        variant="contained"
+        onClick={calculateBMI}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+      >
+        Calculate BMI
+      </Button>
 
-      {bmi && <Text style={styles.result}>Your BMI is: {bmi}</Text>}
-    </View>
+      {bmi && (
+        <Typography variant="h6" className="mt-5">
+          Your BMI is: {bmi}
+        </Typography>
+      )}
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    width: '100%',
-  },
-  result: {
-    marginTop: 20,
-    fontSize: 18,
-  },
-});
 
 export default BMICalculator;

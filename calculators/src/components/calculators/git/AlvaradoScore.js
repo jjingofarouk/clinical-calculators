@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import Select from 'react-select';
+import { TextField, Typography, Box, FormControl, InputLabel } from '@mui/material';
 
 const AlvaradoScore = () => {
   const [painLocation, setPainLocation] = useState('');
@@ -10,148 +10,110 @@ const AlvaradoScore = () => {
   const [temperature, setTemperature] = useState('');
   const [leucocytosis, setLeucocytosis] = useState('No');
 
-  // Function to calculate Alvarado score
   const calculateAlvaradoScore = () => {
     let score = 0;
-
-    // Pain location (Right lower quadrant pain = 2 points)
     if (painLocation === 'Right lower quadrant') score += 2;
-
-    // Anorexia (Yes = 1 point)
     if (anorexia === 'Yes') score += 1;
-
-    // Nausea (Yes = 1 point)
     if (nausea === 'Yes') score += 1;
-
-    // Rebound tenderness (Yes = 1 point)
     if (reboundTenderness === 'Yes') score += 1;
-
-    // Temperature (Above 37.3°C = 1 point)
     if (parseFloat(temperature) > 37.3) score += 1;
-
-    // Leucocytosis (Yes = 2 points)
     if (leucocytosis === 'Yes') score += 2;
-
     return score;
   };
 
+  const painOptions = [
+    { value: '', label: 'Select Location' },
+    { value: 'Right lower quadrant', label: 'Right lower quadrant' },
+    { value: 'Other', label: 'Other' },
+  ];
+
+  const yesNoOptions = [
+    { value: 'No', label: 'No' },
+    { value: 'Yes', label: 'Yes' },
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Alvarado Score for Appendicitis</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        Alvarado Score for Appendicitis
+      </Typography>
 
-      {/* Pain location */}
-      <View style={styles.inputContainer}>
-        <Text>Pain Location:</Text>
-        <Picker
-          selectedValue={painLocation}
-          style={styles.picker}
-          onValueChange={(itemValue) => setPainLocation(itemValue)}>
-          <Picker.Item label="Select Location" value="" />
-          <Picker.Item label="Right lower quadrant" value="Right lower quadrant" />
-          <Picker.Item label="Other" value="Other" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl fullWidth>
+          <InputLabel shrink>Pain Location</InputLabel>
+          <Select
+            value={painOptions.find(option => option.value === painLocation)}
+            onChange={option => setPainLocation(option.value)}
+            options={painOptions}
+            className="w-52 mt-2"
+          />
+        </FormControl>
+      </Box>
 
-      {/* Anorexia */}
-      <View style={styles.inputContainer}>
-        <Text>Anorexia:</Text>
-        <Picker
-          selectedValue={anorexia}
-          style={styles.picker}
-          onValueChange={(itemValue) => setAnorexia(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl fullWidth>
+          <InputLabel shrink>Anorexia</InputLabel>
+          <Select
+            value={yesNoOptions.find(option => option.value === anorexia)}
+            onChange={option => setAnorexia(option.value)}
+            options={yesNoOptions}
+            className="w-52 mt-2"
+          />
+        </FormControl>
+      </Box>
 
-      {/* Nausea */}
-      <View style={styles.inputContainer}>
-        <Text>Nausea:</Text>
-        <Picker
-          selectedValue={nausea}
-          style={styles.picker}
-          onValueChange={(itemValue) => setNausea(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl fullWidth>
+          <InputLabel shrink>Nausea</InputLabel>
+          <Select
+            value={yesNoOptions.find(option => option.value === nausea)}
+            onChange={option => setNausea(option.value)}
+            options={yesNoOptions}
+            className="w-52 mt-2"
+          />
+        </FormControl>
+      </Box>
 
-      {/* Rebound Tenderness */}
-      <View style={styles.inputContainer}>
-        <Text>Rebound Tenderness:</Text>
-        <Picker
-          selectedValue={reboundTenderness}
-          style={styles.picker}
-          onValueChange={(itemValue) => setReboundTenderness(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl fullWidth>
+          <InputLabel shrink>Rebound Tenderness</InputLabel>
+          <Select
+            value={yesNoOptions.find(option => option.value === reboundTenderness)}
+            onChange={option => setReboundTenderness(option.value)}
+            options={yesNoOptions}
+            className="w-52 mt-2"
+          />
+        </FormControl>
+      </Box>
 
-      {/* Temperature */}
-      <View style={styles.inputContainer}>
-        <Text>Temperature (°C):</Text>
-        <TextInput
-          style={styles.input}
-          keyboardType="numeric"
+      <Box className="mb-4">
+        <TextField
+          label="Temperature (°C)"
+          type="number"
           value={temperature}
-          onChangeText={(text) => setTemperature(text)}
+          onChange={e => setTemperature(e.target.value)}
+          className="w-52"
+          InputLabelProps={{ shrink: true }}
         />
-      </View>
+      </Box>
 
-      {/* Leucocytosis */}
-      <View style={styles.inputContainer}>
-        <Text>Leucocytosis:</Text>
-        <Picker
-          selectedValue={leucocytosis}
-          style={styles.picker}
-          onValueChange={(itemValue) => setLeucocytosis(itemValue)}>
-          <Picker.Item label="No" value="No" />
-          <Picker.Item label="Yes" value="Yes" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl fullWidth>
+          <InputLabel shrink>Leucocytosis</InputLabel>
+          <Select
+            value={yesNoOptions.find(option => option.value === leucocytosis)}
+            onChange={option => setLeucocytosis(option.value)}
+            options={yesNoOptions}
+            className="w-52 mt-2"
+          />
+        </FormControl>
+      </Box>
 
-      {/* Display calculated score */}
-      <Text style={styles.result}>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
         Alvarado Score: {calculateAlvaradoScore()} (Lower score suggests less likelihood of appendicitis)
-      </Text>
-    </View>
+      </Typography>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-    width: 200,
-  },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingLeft: 8,
-    marginTop: 5,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default AlvaradoScore;

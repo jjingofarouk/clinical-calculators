@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CssBaseline, Box, Typography } from '@mui/material';
-import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
+import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
 export default function App() {
   return (
@@ -17,7 +17,7 @@ export default function App() {
         }}
       >
         <Routes>
-          <Route path="/" element={<NephrologyCalculators />} />
+          <Route path="/" element={<ICUCalculators />} />
           <Route path="*" element={<Typography variant="h5">404 - Page Not Found</Typography>} />
         </Routes>
       </Box>

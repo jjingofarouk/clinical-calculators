@@ -1,124 +1,102 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { Box, Card, CardContent, TextField, Button, Typography } from '@mui/material';
 
 const FEV1FVCCalculator = () => {
-  const [fev1, setFEV1] = useState("");
-  const [fvc, setFVC] = useState("");
-  const [ratio, setRatio] = useState("");
+  const [fev1, setFEV1] = useState('');
+  const [fvc, setFVC] = useState('');
+  const [ratio, setRatio] = useState('');
 
   const calculateRatio = () => {
     const fev1Value = parseFloat(fev1);
     const fvcValue = parseFloat(fvc);
 
     if (isNaN(fev1Value) || isNaN(fvcValue)) {
-      Alert.alert("Invalid Input", "Please enter valid numeric values for FEV1 and FVC.");
+      alert('Please enter valid numeric values for FEV1 and FVC.');
       return;
     }
 
     if (fvcValue > 0) {
       const result = (fev1Value / fvcValue) * 100;
-      setRatio(result.toFixed(2) + "%");
+      setRatio(result.toFixed(2) + '%');
     } else {
-      Alert.alert("Error", "FVC must be greater than 0.");
+      alert('FVC must be greater than 0.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>FEV1/FVC Ratio Calculator</Text>
+    <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-2xl mx-auto"
+      >
+        <Typography variant="h4" className="font-bold text-gray-800 text-center mb-6">
+          FEV1/FVC Ratio Calculator
+        </Typography>
 
-      {/* FEV1 Input */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Enter FEV1 (L):</Text>
-        <TextInput
-          style={styles.input}
-          value={fev1}
-          onChangeText={(value) => setFEV1(value)}
-          placeholder="e.g., 2.5"
-          keyboardType="numeric"
-        />
-      </View>
+        <Card className="shadow-lg">
+          <CardContent className="p-6">
+            <Box className="space-y-6">
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Enter FEV1 (L):
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={fev1}
+                  onChange={(e) => setFEV1(e.target.value)}
+                  placeholder="e.g., 2.5"
+                  variant="outlined"
+                  inputProps={{ step: '0.1' }}
+                />
+              </Box>
 
-      {/* FVC Input */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Enter FVC (L):</Text>
-        <TextInput
-          style={styles.input}
-          value={fvc}
-          onChangeText={(value) => setFVC(value)}
-          placeholder="e.g., 3.0"
-          keyboardType="numeric"
-        />
-      </View>
+              <Box>
+                <Typography variant="subtitle1" className="font-medium text-gray-800 mb-2">
+                  Enter FVC (L):
+                </Typography>
+                <TextField
+                  fullWidth
+                  type="number"
+                  value={fvc}
+                  onChange={(e) => setFVC(e.target.value)}
+                  placeholder="e.g., 3.0"
+                  variant="outlined"
+                  inputProps={{ step: '0.1' }}
+                />
+              </Box>
 
-      {/* Calculate Button */}
-      <TouchableOpacity style={styles.button} onPress={calculateRatio}>
-        <Text style={styles.buttonText}>Calculate</Text>
-      </TouchableOpacity>
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="mt-4"
+                onClick={calculateRatio}
+              >
+                Calculate
+              </Button>
 
-      {/* Display Result */}
-      {ratio ? (
-        <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>FEV1/FVC Ratio: {ratio}</Text>
-        </View>
-      ) : null}
-    </View>
+              {ratio && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 p-4 rounded-lg bg-cyan-50 border border-cyan-200"
+                >
+                  <Typography variant="h6" className="font-bold text-blue-600 text-center">
+                    FEV1/FVC Ratio: {ratio}
+                  </Typography>
+                </motion.div>
+              )}
+            </Box>
+          </CardContent>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#333",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: "#555",
-    marginBottom: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    fontSize: 16,
-    backgroundColor: "#fff",
-  },
-  button: {
-    backgroundColor: "#007BFF",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  resultContainer: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: "#e0f7fa",
-    borderRadius: 5,
-  },
-  resultText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#007BFF",
-    textAlign: "center",
-  },
-});
 
 export default FEV1FVCCalculator;

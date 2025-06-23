@@ -1,27 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
 const HepaticEncephalopathySeverity = () => {
-  // State variables for the different factors
   const [mentalState, setMentalState] = useState('');
   const [asterixis, setAsterixis] = useState('');
   const [levelOfConsciousness, setLevelOfConsciousness] = useState('');
 
-  // Calculate the Hepatic Encephalopathy Severity Score
   const calculateScore = () => {
     let score = 0;
 
-    // Mental State scoring (West Haven Criteria)
     if (mentalState === 'Coma') score += 4;
     else if (mentalState === 'Confused') score += 3;
     else if (mentalState === 'Drowsy') score += 2;
     else if (mentalState === 'Normal') score += 0;
 
-    // Asterixis (Presence of asterixis increases severity)
     if (asterixis === 'Present') score += 2;
     else if (asterixis === 'Absent') score += 0;
 
-    // Level of Consciousness (changes based on alertness)
     if (levelOfConsciousness === 'Comatose') score += 4;
     else if (levelOfConsciousness === 'Somnolent') score += 2;
     else if (levelOfConsciousness === 'Alert') score += 0;
@@ -30,88 +25,76 @@ const HepaticEncephalopathySeverity = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Hepatic Encephalopathy Severity Score</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        Hepatic Encephalopathy Severity Score
+      </Typography>
 
-      {/* Mental State Input */}
-      <View style={styles.inputContainer}>
-        <Text>Mental State:</Text>
-        <TextInput
-          style={styles.input}
-          value={mentalState}
-          onChangeText={(value) => setMentalState(value)}
-          placeholder="Enter 'Normal', 'Drowsy', 'Confused', or 'Coma'"
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Mental State</InputLabel>
+          <Select
+            value={mentalState}
+            onChange={(e) => setMentalState(e.target.value)}
+            label="Mental State"
+          >
+            <MenuItem value="">Select</MenuItem>
+            <MenuItem value="Normal">Normal</MenuItem>
+            <MenuItem value="Drowsy">Drowsy</MenuItem>
+            <MenuItem value="Confused">Confused</MenuItem>
+            <MenuItem value="Coma">Coma</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Asterixis Input */}
-      <View style={styles.inputContainer}>
-        <Text>Asterixis (Present/Absent):</Text>
-        <TextInput
-          style={styles.input}
-          value={asterixis}
-          onChangeText={(value) => setAsterixis(value)}
-          placeholder="Enter 'Present' or 'Absent'"
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Asterixis</InputLabel>
+          <Select
+            value={asterixis}
+            onChange={(e) => setAsterixis(e.target.value)}
+            label="Asterixis"
+          >
+            <MenuItem value="">Select</MenuItem>
+            <MenuItem value="Absent">Absent</MenuItem>
+            <MenuItem value="Present">Present</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Level of Consciousness Input */}
-      <View style={styles.inputContainer}>
-        <Text>Level of Consciousness:</Text>
-        <TextInput
-          style={styles.input}
-          value={levelOfConsciousness}
-          onChangeText={(value) => setLevelOfConsciousness(value)}
-          placeholder="Enter 'Alert', 'Somnolent', or 'Comatose'"
-        />
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Level of Consciousness</InputLabel>
+          <Select
+            value={levelOfConsciousness}
+            onChange={(e) => setLevelOfConsciousness(e.target.value)}
+            label="Level of Consciousness"
+          >
+            <MenuItem value="">Select</MenuItem>
+            <MenuItem value="Alert">Alert</MenuItem>
+            <MenuItem value="Somnolent">Somnolent</MenuItem>
+            <MenuItem value="Comatose">Comatose</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      {/* Display the calculated score */}
-      <Text style={styles.result}>Severity Score: {calculateScore()}</Text>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
+        Severity Score: {calculateScore()}
+      </Typography>
 
-      {/* Reset Button */}
       <Button
-        title="Reset"
-        onPress={() => {
+        variant="outlined"
+        className="mt-4"
+        onClick={() => {
           setMentalState('');
           setAsterixis('');
           setLevelOfConsciousness('');
         }}
-      />
-    </View>
+      >
+        Reset
+      </Button>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    fontSize: 16,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default HepaticEncephalopathySeverity;

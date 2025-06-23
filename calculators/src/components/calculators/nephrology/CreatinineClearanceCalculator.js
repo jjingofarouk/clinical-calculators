@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Button, Card, TextField, Typography, Box, List, ListItem, ListItemText, Chip, Alert } from '@mui/material';
+import { motion } from 'framer-motion';
+import Select from 'react-select';
+import { AlertTriangle } from 'lucide-react';
 
 // Clinical reference ranges and guidelines
 const REFERENCE_RANGES = {
@@ -33,6 +35,12 @@ const CreatinineClearanceCalculator = () => {
     gender: null,
   });
   const [results, setResults] = useState(null);
+  const [error, setError] = useState(null);
+
+  const genderOptions = [
+    { value: 'female', label: 'Female' },
+    { value: 'male', label: 'Male' }
+  ];
 
   const calculateBMI = (weight, height) => {
     const heightInMeters = height / 100;
@@ -42,7 +50,7 @@ const CreatinineClearanceCalculator = () => {
   const calculateClearance = () => {
     // Validate inputs
     if (!inputs.creatinine || !inputs.age || !inputs.weight || !inputs.height || !inputs.gender) {
-      Alert.alert('Missing Information', 'Please fill in all required fields');
+      setError('Please fill in all required fields');
       return;
     }
 
@@ -74,6 +82,7 @@ const CreatinineClearanceCalculator = () => {
       bmi: Math.round(bmi * 10) / 10,
       stage: getCKDStage(clearance)
     });
+    setError(null);
   };
 
   const getCKDStage = (clearance) => {
@@ -84,350 +93,218 @@ const CreatinineClearanceCalculator = () => {
     return CKD_STAGES[5];
   };
 
-  const renderGenderSelection = () => (
-    <View style={styles.genderContainer}>
-      <Text style={styles.label}>Sex at Birth*</Text>
-      <View style={styles.genderButtons}>
-        <TouchableOpacity
-          style={[styles.genderButton, inputs.gender === 'female' && styles.genderButtonSelected]}
-          onPress={() => setInputs({...inputs, gender: 'female'})}
-        >
-          <Text style={[styles.genderButtonText, inputs.gender === 'female' && styles.genderButtonTextSelected]}>
-            Female
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.genderButton, inputs.gender === 'male' && styles.genderButtonSelected]}
-          onPress={() => setInputs({...inputs, gender: 'male'})}
-        >
-          <Text style={[styles.genderButtonText, inputs.gender === 'male' && styles.genderButtonTextSelected]}>
-            Male
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>Creatinine Clearance Calculator</Text>
-        <Text style={styles.subtitle}>Cockcroft-Gault Equation</Text>
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-md"
+      >
+        <Card className="p-6">
+          <Typography variant="h4" className="text-center font-bold mb-2">
+            Creatinine Clearance Calculator
+          </Typography>
+          <Typography variant="subtitle2" className="text-center text-gray-500 mb-6">
+            Cockcroft-Gault Equation
+          </Typography>
 
-        {renderGenderSelection()}
+          <Box className="space-y-4">
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Sex at Birth*</Typography>
+              <Select
+                options={genderOptions}
+                value={genderOptions.find(opt => opt.value === inputs.gender)}
+                onChange={(selected) => setInputs({...inputs, gender: selected.value})}
+                className="text-sm"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Serum Creatinine*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="mg/dL"
-            value={inputs.creatinine}
-            onChangeText={(text) => setInputs({...inputs, creatinine: text})}
-            keyboardType="decimal-pad"
-          />
-          <Text style={styles.hint}>
-            Reference Range: {inputs.gender === 'male' ? '0.7-1.3' : '0.6-1.1'} mg/dL
-          </Text>
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Serum Creatinine*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="mg/dL"
+                value={inputs.creatinine}
+                onChange={(e) => setInputs({...inputs, creatinine: e.target.value})}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                Reference Range: {inputs.gender === 'male' ? '0.7-1.3' : inputs.gender === 'female' ? '0.6-1.1' : 'Select gender'} mg/dL
+              </Typography>
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Age*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Years"
-            value={inputs.age}
-            onChangeText={(text) => setInputs({...inputs, age: text})}
-            keyboardType="number-pad"
-          />
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Age*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Years"
+                value={inputs.age}
+                onChange={(e) => setInputs({...inputs, age: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Weight*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="kg"
-            value={inputs.weight}
-            onChangeText={(text) => setInputs({...inputs, weight: text})}
-            keyboardType="decimal-pad"
-          />
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Weight*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="kg"
+                value={inputs.weight}
+                onChange={(e) => setInputs({...inputs, weight: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Height*</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="cm"
-            value={inputs.height}
-            onChangeText={(text) => setInputs({...inputs, height: text})}
-            keyboardType="decimal-pad"
-          />
-        </View>
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Height*</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="cm"
+                value={inputs.height}
+                onChange={(e) => setInputs({...inputs, height: e.target.value})}
+                type="number"
+                size="small"
+              />
+            </Box>
 
-        <TouchableOpacity style={styles.calculateButton} onPress={calculateClearance}>
-          <Text style={styles.calculateButtonText}>Calculate</Text>
-        </TouchableOpacity>
+            {error && (
+              <Alert severity="error" className="mt-4">
+                {error}
+              </Alert>
+            )}
 
-        {results && (
-          <View style={styles.resultsContainer}>
-            <View style={[styles.resultCard, { borderColor: results.stage.color }]}>
-              <Text style={styles.resultTitle}>Creatinine Clearance</Text>
-              <Text style={styles.resultValue}>{results.clearance}</Text>
-              <Text style={styles.resultUnit}>mL/min</Text>
-              
-              {results.adjustedClearance !== results.clearance && (
-                <View style={styles.adjustedContainer}>
-                  <Text style={styles.adjustedLabel}>Adjusted for Ideal Body Weight:</Text>
-                  <Text style={styles.adjustedValue}>{results.adjustedClearance} mL/min</Text>
-                </View>
-              )}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="mt-6"
+              onClick={calculateClearance}
+            >
+              Calculate
+            </Button>
+          </Box>
 
-              <View style={[styles.stageIndicator, { backgroundColor: results.stage.color }]}>
-                <Text style={styles.stageText}>
-                  CKD Stage - {results.stage.description}
-                </Text>
-              </View>
+          {results && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+              <Card className="p-6 border-2" sx={{ borderColor: results.stage.color }}>
+                <Typography variant="h6" className="font-bold mb-4 text-center">
+                  Creatinine Clearance
+                </Typography>
+                
+                <Typography variant="h3" className="text-center font-bold mb-2">
+                  {results.clearance}
+                </Typography>
+                <Typography variant="body2" className="text-center text-gray-500 mb-4">
+                  mL/min
+                </Typography>
 
-              <View style={styles.bmiContainer}>
-                <Text style={styles.bmiLabel}>BMI:</Text>
-                <Text style={styles.bmiValue}>{results.bmi} kg/m²</Text>
-              </View>
-            </View>
+                {results.adjustedClearance !== results.clearance && (
+                  <Box className="text-center mb-4">
+                    <Typography variant="caption" className="text-gray-700">
+                      Adjusted for Ideal Body Weight:
+                    </Typography>
+                    <Typography variant="body1" className="font-semibold">
+                      {results.adjustedClearance} mL/min
+                    </Typography>
+                  </Box>
+                )}
 
-            <View style={styles.clinicalCard}>
-              <Text style={styles.clinicalTitle}>Clinical Guidance</Text>
-              
-              <View style={styles.guidanceSection}>
-                <Text style={styles.guidanceTitle}>Medication Adjustments</Text>
-                <Text style={styles.guidanceText}>
-                  • Review medication dosing for renal adjustment
-                  {'\n'}• Consider anticoagulation modifications if CrCl {'<'} 30
-                  {'\n'}• Adjust antibiotics based on CrCl
-                </Text>
-              </View>
+                <Chip
+                  label={`CKD Stage - ${results.stage.description}`}
+                  style={{ 
+                    backgroundColor: results.stage.color,
+                    color: 'white',
+                    width: '100%',
+                    padding: 8
+                  }}
+                  className="mb-4"
+                />
 
-              <View style={styles.guidanceSection}>
-                <Text style={styles.guidanceTitle}>Monitoring</Text>
-                <Text style={styles.guidanceText}>
-                  • Regular monitoring of renal function
-                  {'\n'}• Assessment of fluid status
-                  {'\n'}• Electrolyte monitoring
-                </Text>
-              </View>
+                <Box className="flex justify-center gap-2">
+                  <Typography variant="body2" className="text-gray-700">
+                    BMI:
+                  </Typography>
+                  <Typography variant="body2" className="font-semibold">
+                    {results.bmi} kg/m²
+                  </Typography>
+                </Box>
+              </Card>
 
-              {results.clearance < 60 && (
-                <View style={styles.warningBox}>
-                  <Text style={styles.warningTitle}>Critical Considerations</Text>
-                  <Text style={styles.warningText}>
-                    • Nephrology referral recommended
-                    {'\n'}• Monitor for anemia
-                    {'\n'}• Assess bone mineral metabolism
-                    {'\n'}• Evaluate cardiovascular risk
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+              <Card className="p-6 mt-4">
+                <Typography variant="h6" className="font-bold mb-4">
+                  Clinical Guidance
+                </Typography>
+
+                <Box className="mb-4">
+                  <Typography variant="subtitle1" className="font-semibold mb-2">
+                    Medication Adjustments
+                  </Typography>
+                  <List>
+                    {[
+                      'Review medication dosing for renal adjustment',
+                      'Consider anticoagulation modifications if CrCl < 30',
+                      'Adjust antibiotics based on CrCl'
+                    ].map((item, index) => (
+                      <ListItem key={index} className="py-0">
+                        <ListItemText primary={`•${item}`} className="text-gray-700" />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+
+                <Box className="mb-4">
+                  <Typography variant="subtitle1" className="font-semibold mb-2">
+                    Monitoring
+                  </Typography>
+                  <List>
+                    {[
+                      'Regular monitoring of renal function',
+                      'Assessment of fluid status',
+                      'Electrolyte monitoring'
+                    ].map((item, index) => (
+                      <ListItem key={index} className="py-0">
+                        <ListItemText primary={`• ${item}`} className="text-gray-700" />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+
+                {results.clearance < 60 && (
+                  <Box className="bg-red-50 p-4 rounded-lg">
+                    <Box className="flex items-center mb-2">
+                      <AlertTriangle className="h-5 w-5 text-red-700 mr-2" />
+                      <Typography variant="subtitle1" className="font-semibold text-red-700">
+                        Critical Considerations
+                      </Typography>
+                    </Box>
+                    <List>
+                      {[
+                        'Nephrology referral recommended',
+                        'Monitor for anemia',
+                        'Assess bone mineral metabolism',
+                        'Evaluate cardiovascular risk'
+                      ].map((item, index) => (
+                        <ListItem key={index} className="py-0">
+                          <ListItemText primary={`• ${item}`} className="text-red-700" />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
+                )}
+              </Card>
+            </motion.div>
+          )}
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#2C3E50',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#7F8C8D',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  input: {
-    height: 48,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    fontSize: 16,
-    color: '#2C3E50',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  hint: {
-    fontSize: 12,
-    color: '#7F8C8D',
-    marginTop: 4,
-  },
-  genderContainer: {
-    marginBottom: 20,
-  },
-  genderButtons: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  genderButton: {
-    flex: 1,
-    height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  genderButtonSelected: {
-    backgroundColor: '#3498DB',
-    borderColor: '#3498DB',
-  },
-  genderButtonText: {
-    fontSize: 16,
-    color: '#2C3E50',
-    fontWeight: '600',
-  },
-  genderButtonTextSelected: {
-    color: '#FFFFFF',
-  },
-  calculateButton: {
-    height: 56,
-    backgroundColor: '#3498DB',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  calculateButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  resultsContainer: {
-    gap: 24,
-  },
-  resultCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
-    borderWidth: 2,
-    alignItems: 'center',
-  },
-  resultTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#2C3E50',
-    marginBottom: 16,
-  },
-  resultValue: {
-    fontSize: 48,
-    fontWeight: '700',
-    color: '#2C3E50',
-  },
-  resultUnit: {
-    fontSize: 16,
-    color: '#7F8C8D',
-    marginTop: 4,
-  },
-  stageIndicator: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginTop: 16,
-  },
-  stageText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  adjustedContainer: {
-    marginTop: 16,
-    alignItems: 'center',
-  },
-  adjustedLabel: {
-    fontSize: 14,
-    color: '#7F8C8D',
-  },
-  adjustedValue: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginTop: 4,
-  },
-  bmiContainer: {
-    marginTop: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  bmiLabel: {
-    fontSize: 16,
-    color: '#7F8C8D',
-  },
-  bmiValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
-  },
-  clinicalCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
-  },
-  clinicalTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#2C3E50',
-    marginBottom: 16,
-  },
-  guidanceSection: {
-    marginBottom: 16,
-  },
-  guidanceTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2C3E50',
-    marginBottom: 8,
-  },
-  guidanceText: {
-    fontSize: 14,
-    color: '#7F8C8D',
-    lineHeight: 22,
-  },
-  warningBox: {
-    backgroundColor: '#FFF5F5',
-    borderRadius: 8,
-    padding: 16,
-    marginTop: 16,
-  },
-  warningTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#E53E3E',
-    marginBottom: 8,
-  },
-  warningText: {
-    fontSize: 14,
-    color: '#E53E3E',
-    lineHeight: 22,
-  }
-});
 
 export default CreatinineClearanceCalculator;

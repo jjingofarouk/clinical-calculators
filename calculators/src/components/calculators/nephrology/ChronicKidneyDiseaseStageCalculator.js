@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Animated, Platform } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Button, Card, TextField, Typography, Box, List, ListItem, ListItemText, Chip } from '@mui/material';
+import { motion, useAnimation } from 'framer-motion';
+import { AlertTriangle } from 'lucide-react';
 
 const ChronicKidneyDiseaseStageCalculator = () => {
   const [gfr, setGfr] = useState('');
@@ -8,14 +9,10 @@ const ChronicKidneyDiseaseStageCalculator = () => {
   const [albuminuria, setAlbuminuria] = useState('');
   const [stage, setStage] = useState(null);
   const [error, setError] = useState('');
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const controls = useAnimation();
 
-  const fadeIn = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+  const fadeIn = async () => {
+    await controls.start({ opacity: 1, y: 0, transition: { duration: 0.5 } });
   };
 
   const getStageDetails = (gfrValue) => {
@@ -124,15 +121,10 @@ const ChronicKidneyDiseaseStageCalculator = () => {
   };
 
   const calculateRiskCategory = (gfrValue, albuminuriaValue) => {
-    // ACR categories (mg/g):
-    // A1: <30 (Normal to mildly increased)
-    // A2: 30-300 (Moderately increased)
-    // A3: >300 (Severely increased)
     const albuminuriaCategory = 
       albuminuriaValue < 30 ? 'A1' :
       albuminuriaValue <= 300 ? 'A2' : 'A3';
 
-    // Risk categories based on KDIGO 2012
     const riskMatrix = {
       'Stage 1': { A1: 'Low', A2: 'Moderate', A3: 'High' },
       'Stage 2': { A1: 'Low', A2: 'Moderate', A3: 'High' },
@@ -170,389 +162,183 @@ const ChronicKidneyDiseaseStageCalculator = () => {
     fadeIn();
   };
 
-  const CustomInput = ({ label, value, onChangeText, placeholder, hint }) => (
-    <View style={styles.inputContainer}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          value={value}
-          onChangeText={onChangeText}
-          placeholder={placeholder}
-          placeholderTextColor="#A0AEC0"
-          keyboardType="numeric"
-        />
-      </View>
-      <Text style={styles.hint}>{hint}</Text>
-    </View>
-  );
+  const riskColors = {
+    Low: '#48BB78',
+    Moderate: '#ECC94B',
+    High: '#ED8936',
+    'Very High': '#E53E3E'
+  };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        colors={['#ffffff', '#f7fafc']}
-        style={styles.gradientContainer}
+    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="w-full max-w-md"
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>CKD Stage Calculator</Text>
-          <Text style={styles.subtitle}>Advanced Clinical Edition</Text>
-          <Text style={styles.description}>
+        <Card className="p-6">
+          <Typography variant="h4" className="text-center font-bold mb-2">
+            CKD Stage Calculator
+          </Typography>
+          <Typography variant="subtitle2" className="text-center text-gray-500 mb-2">
+            Advanced Clinical Edition
+          </Typography>
+          <Typography variant="caption" className="text-center text-gray-500 mb-6 block">
             Comprehensive CKD staging and risk assessment tool
-          </Text>
-        </View>
+          </Typography>
 
-        <View style={styles.card}>
-          <CustomInput
-            label="eGFR (mL/min/1.73m²)"
-            value={gfr}
-            onChangeText={setGfr}
-            placeholder="Enter eGFR value"
-            hint="Reference: ≥90 mL/min/1.73m²"
-          />
+          <Box className="space-y-4">
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">eGFR (mL/min/1.73m²)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Enter eGFR value"
+                value={gfr}
+                onChange={(e) => setGfr(e.target.value)}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                Reference: ≥90 mL/min/1.73m²
+              </Typography>
+            </Box>
 
-          <CustomInput
-            label="Urine Albumin-to-Creatinine Ratio (mg/g)"
-            value={albuminuria}
-            onChangeText={setAlbuminuria}
-            placeholder="Enter ACR value (optional)"
-            hint="For risk stratification"
-          />
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Urine Albumin-to-Creatinine Ratio (mg/g)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Enter ACR value (optional)"
+                value={albuminuria}
+                onChange={(e) => setAlbuminuria(e.target.value)}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                For risk stratification
+              </Typography>
+            </Box>
 
-          <CustomInput
-            label="Patient Age (years)"
-            value={age}
-            onChangeText={setAge}
-            placeholder="Enter patient age (optional)"
-            hint="For context-specific recommendations"
-          />
+            <Box>
+              <Typography variant="subtitle2" className="mb-1">Patient Age (years)</Typography>
+              <TextField
+                fullWidth
+                variant="outlined"
+                placeholder="Enter patient age (optional)"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                type="number"
+                size="small"
+              />
+              <Typography variant="caption" className="text-gray-500 mt-1">
+                For context-specific recommendations
+              </Typography>
+            </Box>
 
-          {error ? (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
+            {error && (
+              <Box className="bg-red-50 p-3 rounded-lg">
+                <Typography variant="body2" className="text-red-600">{error}</Typography>
+              </Box>
+            )}
 
-          <TouchableOpacity
-            style={styles.calculateButton}
-            onPress={determineCKDStage}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={['#2D3748', '#1A202C']}
-              style={styles.buttonGradient}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="mt-6"
+              onClick={determineCKDStage}
             >
-              <Text style={styles.buttonText}>Calculate CKD Stage</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+              Calculate CKD Stage
+            </Button>
+          </Box>
 
           {stage && (
-            <Animated.View style={[styles.resultContainer, { opacity: fadeAnim }]}>
-              <Text style={styles.resultTitle}>Clinical Assessment</Text>
-              
-              <View style={styles.stageCard}>
-                <Text style={styles.stageText}>{stage.stage}</Text>
-                <Text style={styles.gfrRange}>GFR Range: {stage.details.range} mL/min/1.73m²</Text>
-                <Text style={styles.stageDescription}>{stage.details.description}</Text>
-                
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={controls}
+              className="mt-6"
+            >
+              <Typography variant="h6" className="font-bold mb-4">
+                Clinical Assessment
+              </Typography>
+
+              <Card className="p-4 mb-4">
+                <Typography variant="h5" className="font-bold mb-2">{stage.stage}</Typography>
+                <Typography variant="body2" className="text-gray-600 mb-2">
+                  GFR Range: {stage.details.range} mL/min/1.73m²
+                </Typography>
+                <Typography variant="body2" className="text-gray-600 mb-4">
+                  {stage.details.description}
+                </Typography>
+
                 {stage.riskInfo && (
-                  <View style={styles.riskSection}>
-                    <Text style={styles.riskTitle}>Risk Category</Text>
-                    <View style={[styles.riskBadge, styles[stage.riskInfo.riskLevel.toLowerCase().replace(' ', '')]]}>
-                      <Text style={styles.riskText}>{stage.riskInfo.riskLevel}</Text>
-                    </View>
-                    <Text style={styles.albuminuriaCategory}>
+                  <Box className="bg-gray-50 p-3 rounded-lg">
+                    <Typography variant="subtitle1" className="font-semibold mb-2">
+                      Risk Category
+                    </Typography>
+                    <Chip
+                      label={stage.riskInfo.riskLevel}
+                      style={{ backgroundColor: riskColors[stage.riskInfo.riskLevel], color: 'white' }}
+                      className="mb-2"
+                    />
+                    <Typography variant="body2" className="text-gray-600">
                       Albuminuria Category: {stage.riskInfo.albuminuriaCategory}
-                    </Text>
-                  </View>
+                    </Typography>
+                  </Box>
                 )}
-              </View>
+              </Card>
 
-              <View style={styles.recommendationsContainer}>
-                <Text style={styles.sectionTitle}>Key Recommendations</Text>
-                {stage.details.recommendations.map((rec, index) => (
-                  <View key={index} style={styles.recommendationItem}>
-                    <View style={styles.bullet} />
-                    <Text style={styles.recommendationText}>{rec}</Text>
-                  </View>
-                ))}
-              </View>
+              <Card className="p-4 mb-4">
+                <Typography variant="subtitle1" className="font-semibold mb-2">
+                  Key Recommendations
+                </Typography>
+                <List>
+                  {stage.details.recommendations.map((rec, index) => (
+                    <ListItem key={index} className="py-1">
+                      <ListItemText primary={`• ${rec}`} className="text-gray-600" />
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
 
-              <View style={styles.complicationsContainer}>
-                <Text style={styles.sectionTitle}>Monitor for Complications</Text>
-                {stage.details.complications.map((comp, index) => (
-                  <View key={index} style={styles.complicationItem}>
-                    <View style={styles.bullet} />
-                    <Text style={styles.complicationText}>{comp}</Text>
-                  </View>
-                ))}
-              </View>
-            </Animated.View>
+              <Card className="p-4 mb-4">
+                <Typography variant="subtitle1" className="font-semibold mb-2">
+                  Monitor for Complications
+                </Typography>
+                <List>
+                  {stage.details.complications.map((comp, index) => (
+                    <ListItem key={index} className="py-1">
+                      <ListItemText primary={`• ${comp}`} className="text-gray-600" />
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+
+              <Card className="p-4">
+                <Typography variant="h6" className="font-bold mb-2">
+                  Clinical Notes
+                </Typography>
+                <List>
+                  {[
+                    'eGFR should be stable over 3 months',
+                    'Consider age-related GFR decline',
+                    'Assess cardiovascular risk factors',
+                    'Review medication dosing per GFR',
+                    'Consider nephrology referral for stages 3b-5'
+                  ].map((note, index) => (
+                    <ListItem key={index} className="py-1">
+                      <ListItemText primary={`• ${note}`} className="text-gray-600" />
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+            </motion.div>
           )}
-
-          <View style={styles.notesContainer}>
-            <Text style={styles.notesTitle}>Clinical Notes</Text>
-            <View style={styles.noteCard}>
-              {[
-                'eGFR should be stable over 3 months',
-                'Consider age-related GFR decline',
-                'Assess cardiovascular risk factors',
-                'Review medication dosing per GFR',
-                'Consider nephrology referral for stages 3b-5'
-              ].map((note, index) => (
-                <View key={index} style={styles.noteItem}>
-                  <View style={styles.noteBullet} />
-                  <Text style={styles.noteText}>{note}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </View>
-      </LinearGradient>
-    </ScrollView>
+        </Card>
+      </motion.div>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-  },
-  gradientContainer: {
-    padding: 20,
-    minHeight: '100%',
-  },
-  header: {
-    marginBottom: 24,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#1A202C',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#4A5568',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 14,
-    color: '#718096',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 24,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
-    marginBottom: 8,
-  },
-  inputWrapper: {
-    backgroundColor: '#F7FAFC',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    overflow: 'hidden',
-  },
-  input: {
-    padding: 16,
-    fontSize: 16,
-    color: '#2D3748',
-  },
-  hint: {
-    marginTop: 4,
-    fontSize: 12,
-    color: '#718096',
-  },
-  errorContainer: {
-    backgroundColor: '#FFF5F5',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  errorText: {
-    color: '#E53E3E',
-    fontSize: 14,
-  },
-  calculateButton: {
-    marginVertical: 8,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  buttonGradient: {
-    padding: 16,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  resultContainer: {
-    marginTop: 24,
-  },
-  resultTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#2D3748',
-    marginBottom: 12,
-  },
-  stageCard: {
-    backgroundColor: '#F7FAFC',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  stageText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#2D3748',
-    marginBottom: 8,
-  },
-  gfrRange: {
-    fontSize: 16,
-    color: '#4A5568',
-    marginBottom: 8,
-  },
-  stageDescription: {
-    fontSize: 14,
-    color: '#718096',
-    marginBottom: 16,
-  },
-  riskSection: {
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: '#EDF2F7',
-    borderRadius: 8,
-  },
-  riskTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D3748',
-    marginBottom: 8,
-  },
-  riskBadge: {
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginBottom: 8,
-  },
-  low: {
-    backgroundColor: '#48BB78',
-  },
-  moderate: {
-    backgroundColor: '#ECC94B',
-  },
-  high: {
-    backgroundColor: '#ED8936',
-  },
-  veryhigh: {
-    backgroundColor: '#E53E3E',
-  },
-  riskText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  albuminuriaCategory: {
-    fontSize: 14,
-    color: '#4A5568',
-  },
-  recommendationsContainer: {
-    backgroundColor: '#F7FAFC',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  complicationsContainer: {
-    backgroundColor: '#F7FAFC',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2D3748',
-    marginBottom: 12,
-  },
-  recommendationItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  complicationItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  bullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#4A5568',
-    marginTop: 6,
-    marginRight: 12,
-  },
-  recommendationText: {
-    flex: 1,
-    fontSize: 14,
-    color: '#4A5568',
-  },
-  complicationText: {
-    flex: 1,
-    fontSize: 14,
-    color: '#4A5568',
-  },
-  notesContainer: {
-    marginTop: 24,
-  },
-  notesTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#2D3748',
-    marginBottom: 16,
-  },
-  noteCard: {
-    backgroundColor: '#F7FAFC',
-    padding: 16,
-    borderRadius: 12,
-  },
-  noteItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  noteBullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#4A5568',
-    marginRight: 12,
-  },
-  noteText: {
-    fontSize: 14,
-    color: '#4A5568',
-    flex: 1,
-  }
-});
 
 export default ChronicKidneyDiseaseStageCalculator;

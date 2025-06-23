@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text,  StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const BristolStoolChart = () => {
-  const [stoolType, setStoolType] = useState('1'); // Default to type 1
+  const [stoolType, setStoolType] = useState('1');
 
-  // Function to get description based on stool type
   const getStoolDescription = () => {
     switch (stoolType) {
       case '1':
@@ -28,56 +26,35 @@ const BristolStoolChart = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Bristol Stool Chart</Text>
+    <Box className="p-5 bg-white min-h-screen">
+      <Typography variant="h4" className="font-bold text-center mb-5">
+        Bristol Stool Chart
+      </Typography>
 
-      <View style={styles.inputContainer}>
-        <Text>Select Stool Type:</Text>
-        <Picker
-          selectedValue={stoolType}
-          style={styles.picker}
-          onValueChange={(itemValue) => setStoolType(itemValue)}>
-          <Picker.Item label="Type 1" value="1" />
-          <Picker.Item label="Type 2" value="2" />
-          <Picker.Item label="Type 3" value="3" />
-          <Picker.Item label="Type 4" value="4" />
-          <Picker.Item label="Type 5" value="5" />
-          <Picker.Item label="Type 6" value="6" />
-          <Picker.Item label="Type 7" value="7" />
-        </Picker>
-      </View>
+      <Box className="mb-4">
+        <FormControl className="w-52">
+          <InputLabel>Select Stool Type</InputLabel>
+          <Select
+            value={stoolType}
+            onChange={(e) => setStoolType(e.target.value)}
+            label="Select Stool Type"
+          >
+            <MenuItem value="1">Type 1</MenuItem>
+            <MenuItem value="2">Type 2</MenuItem>
+            <MenuItem value="3">Type 3</MenuItem>
+            <MenuItem value="4">Type 4</MenuItem>
+            <MenuItem value="5">Type 5</MenuItem>
+            <MenuItem value="6">Type 6</MenuItem>
+            <MenuItem value="7">Type 7</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      <Text style={styles.result}>{getStoolDescription()}</Text>
-    </View>
+      <Typography variant="h6" className="font-bold text-green-600 mt-5 text-center">
+        {getStoolDescription()}
+      </Typography>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 15,
-  },
-  picker: {
-    height: 50,
-    width: 200,
-  },
-  result: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#28a745',
-    marginTop: 20,
-    textAlign: 'center',
-  },
-});
 
 export default BristolStoolChart;

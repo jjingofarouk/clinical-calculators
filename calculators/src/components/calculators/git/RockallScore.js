@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import CustomSelect from '../../../utils/CustomSelect'; // Assuming CustomSelect is in the same directory
+import { TextField, Button, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+
+// Tailwind CSS classes are used for styling alongside Material UI components
 
 const RockallScore = () => {
   const [clinicalData, setClinicalData] = useState({
@@ -9,56 +10,50 @@ const RockallScore = () => {
     heartRate: '',
     comorbidities: '',
     diagnosis: '',
-    stigmata: ''
+    stigmata: '',
   });
 
   const [score, setScore] = useState(0);
   const [riskLevel, setRiskLevel] = useState('');
   const [showClinicalGuidance, setShowClinicalGuidance] = useState(false);
 
-  // Options for CustomSelect components
   const comorbidityOptions = [
     { label: 'No major comorbidity', value: 'none' },
     { label: 'Any comorbidity (except major)', value: 'minor' },
-    { label: 'Renal/Liver failure or malignancy', value: 'major' }
+    { label: 'Renal/Liver failure or malignancy', value: 'major' },
   ];
 
   const diagnosisOptions = [
     { label: 'Mallory-Weiss tear', value: 'mallory-weiss' },
     { label: 'Other diagnoses', value: 'other' },
-    { label: 'Upper GI malignancy', value: 'malignancy' }
+    { label: 'Upper GI malignancy', value: 'malignancy' },
   ];
 
   const stigmataOptions = [
     { label: 'None or dark spot only', value: 'none' },
     { label: 'Blood in upper GI tract', value: 'blood' },
     { label: 'Adherent clot', value: 'clot' },
-    { label: 'Visible or spurting vessel', value: 'vessel' }
+    { label: 'Visible or spurting vessel', value: 'vessel' },
   ];
 
   const calculateRockallScore = () => {
     let totalScore = 0;
 
-    // Age scoring
-    const age = parseInt(clinicalData.age);
+    const age = parseInt(clinicalData.age, 10);
     if (age >= 60 && age < 80) totalScore += 1;
     if (age >= 80) totalScore += 2;
 
-    // Shock scoring
-    const sbp = parseInt(clinicalData.systolicBP);
-    const hr = parseInt(clinicalData.heartRate);
+    const sbp = parseInt(clinicalData.systolicBP, 10);
+    const hr = parseInt(clinicalData.heartRate, 10);
     if (sbp >= 100 && hr >= 100) totalScore += 1;
     if (sbp < 100) totalScore += 2;
 
-    // Comorbidity scoring
     if (clinicalData.comorbidities === 'minor') totalScore += 2;
     if (clinicalData.comorbidities === 'major') totalScore += 3;
 
-    // Diagnosis scoring
     if (clinicalData.diagnosis === 'other') totalScore += 1;
     if (clinicalData.diagnosis === 'malignancy') totalScore += 2;
 
-    // Stigmata scoring
     if (['blood', 'clot', 'vessel'].includes(clinicalData.stigmata)) totalScore += 2;
 
     return totalScore;
@@ -77,238 +72,124 @@ const RockallScore = () => {
     setRiskLevel(getRiskLevel(newScore));
   }, [clinicalData]);
 
-  const renderInputField = (label, key, unit, keyboardType = 'numeric', placeholder) => (
-    <View style={styles.inputContainer}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          style={styles.input}
-          keyboardType={keyboardType}
-          value={clinicalData[key]}
-          onChangeText={(value) => setClinicalData({ ...clinicalData, [key]: value })}
-          placeholder={placeholder}
-          placeholderTextColor="#666"
-        />
-        {unit && <Text style={styles.unit}>{unit}</Text>}
-      </View>
-    </View>
+  const renderInputField = (label, key, unit, placeholder) => (
+    <div className="mb-4 flex items-center">
+      <TextField
+        className="flex-grow"
+        label={label}
+        variant="outlined"
+        type="number"
+        value={clinicalData[key]}
+        onChange={(e) => setClinicalData({ ...clinicalData, [key]: e.target.value })}
+        placeholder={placeholder}
+      />
+      {unit && <Typography className="ml-2">{unit}</Typography>}
+    </div>
+  );
+
+  const renderSelectField = (label, key, options) => (
+    <FormControl fullWidth className="mb-4">
+      <InputLabel>{label}</InputLabel>
+      <Select
+        value={clinicalData[key]}
+        onChange={(e) => setClinicalData({ ...clinicalData, [key]: e.target.value })}
+      >
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Rockall Score Calculator</Text>
-        <Text style={styles.subtitle}>Upper GI Bleeding Risk Assessment</Text>
-      </View>
+    <div className="p-4 bg-gray-100 min-h-screen">
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h5" className="text-blue-600">
+            Rockall Score Calculator
+          </Typography>
+          <Typography variant="subtitle1" className="text-gray-600">
+            Upper GI Bleeding Risk Assessment
+          </Typography>
+        </CardContent>
+      </Card>
 
-      <View style={styles.cardContainer}>
-        {/* Clinical Parameters */}
-        <Text style={styles.sectionTitle}>Clinical Parameters</Text>
-        {renderInputField('Age', 'age', 'years', 'numeric', '0-100')}
-        {renderInputField('Systolic BP', 'systolicBP', 'mmHg', 'numeric', '60-200')}
-        {renderInputField('Heart Rate', 'heartRate', 'bpm', 'numeric', '40-200')}
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h6" className="text-blue-600 mb-4">
+            Clinical Parameters
+          </Typography>
+          {renderInputField('Age', 'age', 'years', '0-100')}
+          {renderInputField('Systolic BP', 'systolicBP', 'mmHg', '60-200')}
+          {renderInputField('Heart Rate', 'heartRate', 'bpm', '40-200')}
+          {renderSelectField('Comorbidities', 'comorbidities', comorbidityOptions)}
+        </CardContent>
+      </Card>
 
-        <CustomSelect
-          label="Comorbidities"
-          options={comorbidityOptions}
-          placeholder="Select comorbidity"
-          onSelect={(item) => setClinicalData({ ...clinicalData, comorbidities: item.value })}
-        />
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h6" className="text-blue-600 mb-4">
+            Endoscopic Findings
+          </Typography>
+          {renderSelectField('Diagnosis', 'diagnosis', diagnosisOptions)}
+          {renderSelectField('Stigmata of Recent Hemorrhage', 'stigmata', stigmataOptions)}
+        </CardContent>
+      </Card>
 
-        {/* Endoscopic Findings */}
-        <Text style={styles.sectionTitle}>Endoscopic Findings</Text>
-        <CustomSelect
-          label="Diagnosis"
-          options={diagnosisOptions}
-          placeholder="Select diagnosis"
-          onSelect={(item) => setClinicalData({ ...clinicalData, diagnosis: item.value })}
-        />
+      <Card className="mb-4">
+        <CardContent>
+          <Typography variant="h6" className="text-gray-600">
+            Rockall Score
+          </Typography>
+          <Typography
+            className={`text-white text-center p-4 rounded ${
+              score <= 2 ? 'bg-green-500' : score <= 4 ? 'bg-yellow-500' : 'bg-red-500'
+            }`}
+          >
+            {score}
+          </Typography>
+          <Typography variant="h6" className="text-gray-600 mt-4">
+            Risk Level: {riskLevel.level}
+          </Typography>
+          <Typography variant="body1" className="text-gray-600">
+            Mortality Risk: {riskLevel.mortality}
+          </Typography>
+          <Typography variant="body1" className="text-gray-600">
+            Rebleeding Risk: {riskLevel.rebleed}
+          </Typography>
+        </CardContent>
+      </Card>
 
-        <CustomSelect
-          label="Stigmata of Recent Hemorrhage"
-          options={stigmataOptions}
-          placeholder="Select stigmata"
-          onSelect={(item) => setClinicalData({ ...clinicalData, stigmata: item.value })}
-        />
-      </View>
-
-      {/* Results Section */}
-      <View style={styles.resultsContainer}>
-        <View style={[styles.scoreCard, { backgroundColor: score <= 2 ? '#4CAF50' : score <= 4 ? '#FFC107' : '#F44336' }]}>
-          <Text style={styles.scoreTitle}>Rockall Score</Text>
-          <Text style={styles.scoreValue}>{score}</Text>
-        </View>
-
-        <View style={styles.riskCard}>
-          <Text style={styles.riskTitle}>Risk Assessment</Text>
-          <Text style={styles.riskLevel}>Risk Level: {riskLevel.level}</Text>
-          <Text style={styles.riskDetail}>Mortality Risk: {riskLevel.mortality}</Text>
-          <Text style={styles.riskDetail}>Rebleeding Risk: {riskLevel.rebleed}</Text>
-        </View>
-      </View>
-
-      {/* Clinical Guidance */}
-      <TouchableOpacity 
-        style={styles.guidanceButton}
-        onPress={() => setShowClinicalGuidance(!showClinicalGuidance)}>
-        <Text style={styles.guidanceButtonText}>
-          {showClinicalGuidance ? 'Hide Clinical Guidance' : 'Show Clinical Guidance'}
-        </Text>
-      </TouchableOpacity>
+      <Button
+        variant="contained"
+        color="primary"
+        className="w-full mb-4"
+        onClick={() => setShowClinicalGuidance(!showClinicalGuidance)}
+      >
+        {showClinicalGuidance ? 'Hide Clinical Guidance' : 'Show Clinical Guidance'}
+      </Button>
 
       {showClinicalGuidance && (
-        <View style={styles.guidanceContainer}>
-          <Text style={styles.guidanceTitle}>Clinical Recommendations</Text>
-          <Text style={styles.guidanceText}>
-            • Score 0-2: Consider outpatient management if social circumstances allow{'\n\n'}
-            • Score 3-4: Consider ward admission with regular monitoring{'\n\n'}
-            • Score ≥5: Consider ICU admission and urgent endoscopy{'\n\n'}
-            • All patients with active bleeding should receive IV PPI therapy{'\n\n'}
-            • Endoscopy should be performed within 24h for most patients{'\n\n'}
-            • Consider blood transfusion if Hb below 7 g/dL (or below 8 g/dL in patients with cardiovascular disease)
-          </Text>
-        </View>
+        <Card className="mb-4">
+          <CardContent>
+            <Typography variant="h6" className="text-gray-600">
+              Clinical Recommendations
+            </Typography>
+            <Typography variant="body2" className="text-gray-600 whitespace-pre-wrap">
+              • Score 0-2: Consider outpatient management if social circumstances allow
+              • Score 3-4: Consider ward admission with regular monitoring
+              • Score ≥5: Consider ICU admission and urgent endoscopy
+              • All patients with active bleeding should receive IV PPI therapy
+              • Endoscopy should be performed within 24h for most patients
+              • Consider blood transfusion if Hb below 7 g/dL (or below 8 g/dL in patients with cardiovascular disease)
+            </Typography>
+          </CardContent>
+        </Card>
       )}
-    </ScrollView>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-  header: {
-    padding: 20,
-    backgroundColor: '#1976D2',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#E3F2FD',
-  },
-  cardContainer: {
-    backgroundColor: '#FFFFFF',
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    elevation: 2,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1976D2',
-    marginBottom: 16,
-    marginTop: 8,
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333333',
-    marginBottom: 8,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    borderColor: '#E0E0E0',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    backgroundColor: '#F5F7FA',
-  },
-  unit: {
-    marginLeft: 8,
-    fontSize: 14,
-    color: '#666666',
-    width: 60,
-  },
-  resultsContainer: {
-    margin: 16,
-  },
-  scoreCard: {
-    padding: 20,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  scoreTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  scoreValue: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  riskCard: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 12,
-    elevation: 2,
-  },
-  riskTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333333',
-    marginBottom: 12,
-  },
-  riskLevel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333333',
-    marginBottom: 8,
-  },
-  riskDetail: {
-    fontSize: 14,
-    color: '#666666',
-    marginBottom: 4,
-  },
-  guidanceButton: {
-    backgroundColor: '#1976D2',
-    margin: 16,
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  guidanceButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  guidanceContainer: {
-    margin: 16,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    elevation: 2,
-  },
-  guidanceTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333333',
-    marginBottom: 12,
-  },
-  guidanceText: {
-    fontSize: 14,
-    color: '#666666',
-    lineHeight: 22,
-  }
-});
 
 export default RockallScore;

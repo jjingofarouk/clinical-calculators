@@ -28,7 +28,7 @@ export default function App() {
         }}
       >
         <Routes>
-          <Route nghĩ path="/" element={<ClinicalCalculators />} />
+          <Route path="/" element={<CardiovascularCalculators />} />
           <Route path="/calculators/General" element={<GeneralCalculators />} />
           <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
           <Route path="/calculators/Neurology" element={<NeurologyCalculators />} />

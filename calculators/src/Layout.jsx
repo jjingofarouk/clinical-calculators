@@ -8,12 +8,12 @@ const Layout = () => {
   const toggleMobile = () => setMobileOpen(!mobileOpen);
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen w-full bg-white">
       {/* Sidebar (Responsive) */}
       <Sidebar mobileOpen={mobileOpen} toggleMobile={toggleMobile} />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full max-w-full">
         {/* Mobile Top Navbar */}
         <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 shadow-sm">
           <button onClick={toggleMobile}>
@@ -24,7 +24,7 @@ const Layout = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-6">
+        <main className="flex-1 p-4 lg:p-6 w-full max-w-full overflow-x-hidden">
           <Outlet />
         </main>
       </div>

@@ -24,7 +24,7 @@ const Layout = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 w-full max-w-full overflow-x-hidden overflow-y-auto m-0 p-4">
+        <main className="flex-1 w-full max-w-full overflow-x-hidden overflow-y-auto m-0 p-0">
           <Outlet />
         </main>
       </div>

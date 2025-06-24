@@ -20,14 +20,14 @@ import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
 // 404 Fallback Page
 const NotFound = () => (
-  <div className="flex items-center justify-center h-full w-full bg-white">
+  <div className="flex items-center justify-center h-full w-full bg-gray-50">
     <h1 className="text-3xl font-bold text-gray-500">404 – Page Not Found</h1>
   </div>
 );
 
 export default function App() {
   return (
-    <div className="min-h-screen w-full bg-white p-0 m-0">
+    <div className="min-h-screen w-full bg-gray-50 p-0 m-0">
       <Router>
         <Routes>
           {/* All pages wrapped in Layout */}

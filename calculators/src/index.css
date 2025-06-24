@@ -6,7 +6,7 @@
 html,
 body,
 #root {
-  @apply h-full w-full overflow-hidden bg-white;
+  @apply h-full w-full bg-white;
   margin: 0;
   padding: 0;
   font-family: theme('fontFamily.sans');
@@ -30,4 +30,42 @@ body {
 /* Teal Button Styling */
 .btn-primary {
   @apply bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition;
+}
+
+/* Ensure sidebar and content are fully responsive */
+aside {
+  @apply w-64 lg:w-72 max-w-full;
+}
+
+main {
+  @apply w-full max-w-full overflow-x-hidden;
+}
+
+/* Calculator tabs container */
+.calculator-tabs {
+  @apply flex flex-row overflow-x-auto whitespace-nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+.calculator-tabs::-webkit-scrollbar {
+  @apply h-2;
+}
+
+.calculator-tabs::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.calculator-tabs::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+.calculator-tabs > * {
+  @apply flex-shrink-0 mx-1;
+}
+
+/* Responsive grid for calculator cards */
+.grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-full;
 }

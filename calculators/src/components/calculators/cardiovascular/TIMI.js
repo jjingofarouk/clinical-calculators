@@ -1,28 +1,71 @@
 import React, { useState } from 'react';
-import { Box, Typography, Switch, TextField, Button } from '@mui/material';
+import { Box, Typography, TextField, Switch, Button, FormControlLabel, Checkbox } from '@mui/material';
+
+const calculateTIMI = ({
+  age,
+  aspirinUseLast7Days,
+  anginaEpisodesLast24Hours,
+  stChanges,
+  elevatedBiomarkers,
+  coronaryArteryDisease,
+  cardiacRiskFactors,
+  setResult,
+}) => {
+  let score = 0;
+
+  if (parseInt(age) >= 65) score += 1;
+  if (aspirinUseLast7Days) score += 1;
+  if (parseInt(anginaEpisodesLast24Hours) >= 2) score += 1;
+  if (stChanges) score += 1;
+  if (elevatedBiomarkers) score += 1;
+  if (coronaryArteryDisease) score += 1;
+  if (Array.isArray(cardiacRiskFactors) && cardiacRiskFactors.length >= 3) score += 1;
+
+  const risk =
+    score === 0 || score === 1
+      ? '4.7%'
+      : score === 2
+      ? '8.3%'
+      : score === 3
+      ? '13.2%'
+      : score === 4
+      ? '19.9%'
+      : score === 5
+      ? '26.2%'
+      : '40.9% or higher';
+
+  setResult({ score, risk });
+};
 
 const TIMICalculator = () => {
-  const [ageOver65, setAgeOver65] = useState(false);
-  const [riskFactors, setRiskFactors] = useState(0);
-  const [knownCAD, setKnownCAD] = useState(false);
-  const [aspirinUse, setAspirinUse] = useState(false);
-  const [severeAngina, setSevereAngina] = useState(false);
-  const [stChanges, setSTChanges] = useState(false);
-  const [elevatedBiomarkers, setElevatedBiomarkers] = useState(false);
+  const [formValues, setFormValues] = useState({
+    age: '',
+    aspirinUseLast7Days: false,
+    anginaEpisodesLast24Hours: '',
+    stChanges: false,
+    elevatedBiomarkers: false,
+    coronaryArteryDisease: false,
+    cardiacRiskFactors: [],
+  });
+
   const [result, setResult] = useState(null);
 
-  const calculateTIMI = () => {
-    let score = 0;
+  const handleRiskFactorToggle = (factor) => {
+    setFormValues((prev) => ({
+      ...prev,
+      cardiacRiskFactors: prev.cardiacRiskFactors.includes(factor)
+        ? prev.cardiacRiskFactors.filter((f) => f !== factor)
+        : [...prev.cardiacRiskFactors, factor],
+    }));
+  };
 
-    score += ageOver65 ? 1 : 0;
-    score += riskFactors >= 3 ? 1 : 0;
-    score += knownCAD ? 1 : 0;
-    score += aspirinUse ? 1 : 0;
-    score += severeAngina ? 1 : 0;
-    score += stChanges ? 1 : 0;
-    score += elevatedBiomarkers ? 1 : 0;
+  const handleCalculate = () => {
+    if (!formValues.age || !formValues.anginaEpisodesLast24Hours) {
+      alert('Please fill out all required fields.');
+      return;
+    }
 
-    setResult(score);
+    calculateTIMI({ ...formValues, setResult });
   };
 
   return (
@@ -32,26 +75,15 @@ const TIMICalculator = () => {
       </Typography>
 
       <Box className="card w-full max-w-full p-4">
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Age ≥ 65 years
-          </Typography>
-          <Switch
-            checked={ageOver65}
-            onChange={(e) => setAgeOver65(e.target.checked)}
-            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-          />
-        </Box>
-
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Number of Risk Factors (Hypertension, Smoking, Diabetes, Family History, Hyperlipidemia)
+          Age
         </Typography>
         <TextField
           fullWidth
           type="number"
-          value={String(riskFactors)}
-          onChange={(e) => setRiskFactors(parseInt(e.target.value) || 0)}
-          placeholder="Enter Number of Risk Factors (0-5)"
+          placeholder="Enter age"
+          value={formValues.age}
+          onChange={(e) => setFormValues((prev) => ({ ...prev, age: e.target.value }))}
           variant="outlined"
           className="mb-4"
           sx={{
@@ -67,62 +99,106 @@ const TIMICalculator = () => {
 
         <Box className="flex items-center mb-4">
           <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Known Coronary Artery Disease (CAD)
+            Aspirin use in the last 7 days
           </Typography>
           <Switch
-            checked={knownCAD}
-            onChange={(e) => setKnownCAD(e.target.checked)}
+            checked={formValues.aspirinUseLast7Days}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, aspirinUseLast7Days: e.target.checked }))
+            }
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          />
+        </Box>
+
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Angina episodes in the last 24 hours
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
+          placeholder="Enter number"
+          value={formValues.anginaEpisodesLast24Hours}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, anginaEpisodesLast24Hours: e.target.value }))
+          }
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
+
+        <Box className="flex items-center mb-4">
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
+            ST changes (≥0.5 mm)
+          </Typography>
+          <Switch
+            checked={formValues.stChanges}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, stChanges: e.target.checked }))
+            }
             sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
         <Box className="flex items-center mb-4">
           <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Aspirin Use in Past 7 Days
+            Elevated cardiac biomarkers
           </Typography>
           <Switch
-            checked={aspirinUse}
-            onChange={(e) => setAspirinUse(e.target.checked)}
+            checked={formValues.elevatedBiomarkers}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, elevatedBiomarkers: e.target.checked }))
+            }
             sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
         <Box className="flex items-center mb-4">
           <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Severe Angina (≥2 episodes in 24 hours)
+            Known coronary artery disease
           </Typography>
           <Switch
-            checked={severeAngina}
-            onChange={(e) => setSevereAngina(e.target.checked)}
+            checked={formValues.coronaryArteryDisease}
+            onChange={(e) =>
+              setFormValues((prev) => ({ ...prev, coronaryArteryDisease: e.target.checked }))
+            }
             sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            ST Changes (≥0.5 mm)
-          </Typography>
-          <Switch
-            checked={stChanges}
-            onChange={(e) => setSTChanges(e.target.checked)}
-            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-          />
-        </Box>
-
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Elevated Cardiac Biomarkers
-          </Typography>
-          <Switch
-            checked={elevatedBiomarkers}
-            onChange={(e) => setElevatedBiomarkers(e.target.checked)}
-            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-          />
-        </Box>
+        <Typography variant="h6" className="header mb-3 mt-5">
+          Cardiac Risk Factors
+        </Typography>
+        {['Hypertension', 'Smoking', 'Low HDL Cholesterol', 'Diabetes Mellitus', 'Family History of Premature CAD'].map(
+          (factor) => (
+            <FormControlLabel
+              key={factor}
+              control={
+                <Checkbox
+                  checked={formValues.cardiacRiskFactors.includes(factor)}
+                  onChange={() => handleRiskFactorToggle(factor)}
+                  sx={{
+                    color: '#d1d5db',
+                    '&.Mui-checked': { color: '#0d9488' },
+                  }}
+                />
+              }
+              label={factor}
+              className="mb-2 text-gray-900"
+            />
+          )
+        )}
 
         <Button
           variant="contained"
-          onClick={calculateTIMI}
+          onClick={handleCalculate}
           className="w-full py-3"
           sx={{
             backgroundColor: '#0d9488',
@@ -134,13 +210,19 @@ const TIMICalculator = () => {
           Calculate TIMI
         </Button>
 
-        {result !== null && (
+        {result && (
           <Box className="mt-5 pt-4 border-t border-gray-200">
             <Typography variant="h6" className="header">
               TIMI Score
             </Typography>
+            <Typography variant="body1" className="font-medium text-gray-900 mb-2">
+              {result.score}
+            </Typography>
+            <Typography variant="h6" className="header">
+              Risk
+            </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">
-              {result}
+              {result.risk}
             </Typography>
           </Box>
         )}

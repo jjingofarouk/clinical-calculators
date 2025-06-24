@@ -6,7 +6,7 @@
 html,
 body,
 #root {
-  @apply h-full w-full bg-white;
+  @apply min-h-full w-full bg-white overflow-y-auto;
   margin: 0;
   padding: 0;
   font-family: theme('fontFamily.sans');
@@ -19,17 +19,17 @@ body {
 
 /* Card Styling */
 .card {
-  @apply rounded-lg shadow-md p-4 bg-white border border-gray-200;
+  @apply rounded-lg shadow-md bg-white border border-gray-200;
 }
 
 /* Section Header Styling */
 .header {
-  @apply text-teal-600 font-semibold text-xl mb-2;
+  @apply text-teal-600 font-semibold text-xl;
 }
 
 /* Teal Button Styling */
 .btn-primary {
-  @apply bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 transition;
+  @apply bg-teal-600 text-white rounded hover:bg-teal-700 transition;
 }
 
 /* Ensure sidebar and content are fully responsive */
@@ -38,7 +38,7 @@ aside {
 }
 
 main {
-  @apply w-full max-w-full overflow-x-hidden;
+  @apply w-full max-w-full overflow-x-hidden overflow-y-auto;
 }
 
 /* Calculator tabs container */

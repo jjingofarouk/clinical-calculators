@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronRight, Menu, Calculator, Stethoscope, Brain, Wind, Activity, Baby, Bone, Droplets, Monitor } from 'lucide-react';
+import {
+  Activity,
+  Baby,
+  Bone,
+  Brain,
+  Calculator,
+  ChevronDown,
+  ChevronRight,
+  Droplets,
+  Menu,
+  Monitor,
+  Stethoscope,
+  Wind,
+} from 'lucide-react';
 
 const sidebarItems = [
-  {
-    label: 'General',
-    path: '/calculators/General',
-    icon: Calculator,
-    calculators: [
-      'BMI',
-      'BMR',
-      'Ideal Body Weight',
-      'Caloric Needs',
-      'Waist Circumference',
-      'Body Fat %',
-    ],
-  },
   {
     label: 'Cardiovascular',
     path: '/calculators/Cardiovascular',
@@ -23,22 +23,34 @@ const sidebarItems = [
     calculators: ['ASCVD', 'Framingham', 'CHA2DS2VASc', 'HAS-BLED', 'GRACE', 'TIMI'],
   },
   {
-    label: 'Neurology',
-    path: '/calculators/Neurology',
-    icon: Brain,
-    calculators: ['GCS', 'NIHSS', 'MMSE', 'MoCA', 'PHQ9', 'GAD7', 'TBI Severity'],
-  },
-  {
-    label: 'Pulmonary',
-    path: '/calculators/Pulmonary',
-    icon: Wind,
-    calculators: ['BODE', 'CURB-65', 'PSI', 'PERC', 'ACT', 'CAT', 'PEFR'],
-  },
-  {
     label: 'Gastroenterology',
     path: '/calculators/Gastroenterology',
     icon: Stethoscope,
     calculators: ['MELD', 'Child-Pugh', 'Ranson', 'Rockall', 'BISAP', 'FIB-4'],
+  },
+  {
+    label: 'General',
+    path: '/calculators/General',
+    icon: Calculator,
+    calculators: ['BMI', 'BMR', 'Ideal Body Weight', 'Caloric Needs', 'Waist Circumference', 'Body Fat %'],
+  },
+  {
+    label: 'ICU',
+    path: '/calculators/ICU',
+    icon: Monitor,
+    calculators: ['SOFA', 'APACHE II', 'qSOFA'],
+  },
+  {
+    label: 'Nephrology',
+    path: '/calculators/Nephrology',
+    icon: Droplets,
+    calculators: ['GFR', 'CKD-EPI', 'Creatinine Clearance', 'Uric Acid', 'Electrolytes'],
+  },
+  {
+    label: 'Neurology',
+    path: '/calculators/Neurology',
+    icon: Brain,
+    calculators: ['GCS', 'NIHSS', 'MMSE', 'MoCA', 'PHQ9', 'GAD7', 'TBI Severity'],
   },
   {
     label: 'Obstetrics',
@@ -53,16 +65,10 @@ const sidebarItems = [
     calculators: ['Wells Score', 'Harris Hip Score', 'WOMAC', 'Oswestry'],
   },
   {
-    label: 'Nephrology',
-    path: '/calculators/Nephrology',
-    icon: Droplets,
-    calculators: ['GFR', 'CKD-EPI', 'Creatinine Clearance', 'Uric Acid', 'Electrolytes'],
-  },
-  {
-    label: 'ICU',
-    path: '/calculators/ICU',
-    icon: Monitor,
-    calculators: ['SOFA', 'APACHE II', 'qSOFA'],
+    label: 'Pulmonary',
+    path: '/calculators/Pulmonary',
+    icon: Wind,
+    calculators: ['BODE', 'CURB-65', 'PSI', 'PERC', 'ACT', 'CAT', 'PEFR'],
   },
 ];
 

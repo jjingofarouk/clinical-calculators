@@ -143,7 +143,18 @@ const ASCVDCalculator = () => {
         <Button
           variant="contained"
           onClick={calculateASCVD}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg"
+          sx={{
+            width: '100%',
+            backgroundColor: '#0d9488',
+            '&:hover': {
+              backgroundColor: '#0f766e',
+            },
+            color: '#fff',
+            fontWeight: 600,
+            padding: '8px 16px',
+            borderRadius: '8px',
+            textTransform: 'none',
+          }}
         >
           Calculate ASCVD
         </Button>

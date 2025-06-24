@@ -31,7 +31,7 @@ const sidebarItems = [
   {
     label: 'Pulmonary',
     path: '/calculators/Pulmonary',
-    icon: Lungs,
+    icon: Wind,
     calculators: ['BODE', 'CURB-65', 'PSI', 'PERC', 'ACT', 'CAT', 'PEFR'],
   },
   {
@@ -55,13 +55,13 @@ const sidebarItems = [
   {
     label: 'Nephrology',
     path: '/calculators/Nephrology',
-    icon: Kidney,
+    icon: Droplets,
     calculators: ['GFR', 'CKD-EPI', 'Creatinine Clearance', 'Uric Acid', 'Electrolytes'],
   },
   {
     label: 'ICU',
     path: '/calculators/ICU',
-    icon: MonitorSpeaker,
+    icon: Monitor,
     calculators: ['SOFA', 'APACHE II', 'qSOFA'],
   },
 ];
@@ -115,7 +115,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       {/* Navigation */}
       <nav className="p-4 space-y-2">
         {sidebarItems.map((item) => {
-          const isActive = location.pathname.startsWith(item.path);
+          const isActive = location.pathname === item.path;
           const isOpen = expanded === item.label;
           const Icon = item.icon;
 
@@ -140,8 +140,8 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                   <span className="text-sm font-semibold">{item.label}</span>
                 </div>
                 <div className={`transition-transform duration-200 ${
-                  isOpen ? 'rotate-0' : 'rotate-0'
-                } ${isActive ? 'text-teal-600' : 'text-gray-400'}`}>
+                  isActive ? 'text-teal-600' : 'text-gray-400'
+                }`}>
                   {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </div>
               </button>

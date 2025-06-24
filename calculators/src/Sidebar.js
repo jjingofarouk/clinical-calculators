@@ -46,12 +46,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         const query = searchQuery.trim().toLowerCase();
         if (!query) return false;
         const calcLower = calc.toLowerCase();
-        if (calcLower === query) return true;
-        const queryWords = query.split(/\s+/).filter(word => word.length > 0);
-        const calcWords = calcLower.split(/\s+/);
-        return queryWords.every(qWord => 
-          calcWords.some(cWord => cWord === qWord)
-        );
+        return calcLower.includes(query);
       })
       .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
   );
@@ -119,7 +114,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                 </li>
               ))
             ) : (
-              <li className="py-2.5 px-3 text-sm text-gray-500">No exact matches found</li>
+              <li className="py-2.5 px-3 text-sm text-gray-500">No matches found</li>
             )}
           </ul>
         ) : (

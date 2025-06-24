@@ -43,13 +43,13 @@ const FraminghamRiskCalculator = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-100 p-5">
-      <Typography variant="h4" className="font-semibold text-gray-900 mb-8">
+    <Box className="min-h-screen bg-gray-50 w-full max-w-full p-2">
+      <Typography variant="h4" className="font-semibold text-gray-900 mb-4">
         Framingham Risk Calculator
       </Typography>
 
-      <Box className="w-full bg-white rounded-xl p-5 shadow-md">
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+      <Box className="w-full max-w-full bg-white rounded-xl shadow-md p-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Age (years)
         </Typography>
         <TextField
@@ -59,11 +59,20 @@ const FraminghamRiskCalculator = () => {
           onChange={(e) => setAge(e.target.value)}
           placeholder="Enter Age"
           variant="outlined"
-          className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          className="mb-2"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+            '& .MuiInputBase-input': { color: '#1f2937' },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Total Cholesterol (mg/dL)
         </Typography>
         <TextField
@@ -73,11 +82,20 @@ const FraminghamRiskCalculator = () => {
           onChange={(e) => setCholesterol(e.target.value)}
           placeholder="Enter Cholesterol"
           variant="outlined"
-          className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          className="mb-2"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+            '& .MuiInputBase-input': { color: '#1f2937' },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           HDL (mg/dL)
         </Typography>
         <TextField
@@ -87,11 +105,20 @@ const FraminghamRiskCalculator = () => {
           onChange={(e) => setHdl(e.target.value)}
           placeholder="Enter HDL"
           variant="outlined"
-          className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          className="mb-2"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+            '& .MuiInputBase-input': { color: '#1f2937' },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Systolic Blood Pressure (mmHg)
         </Typography>
         <TextField
@@ -101,28 +128,57 @@ const FraminghamRiskCalculator = () => {
           onChange={(e) => setSystolicBP(e.target.value)}
           placeholder="Enter Systolic BP"
           variant="outlined"
-          className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          className="mb-2"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+            '& .MuiInputBase-input': { color: '#1f2937' },
+          }}
         />
 
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+        <Box className="flex items-center mb-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-1">
             Smoker
           </Typography>
-          <Switch checked={smoking} onChange={(e) => setSmoking(e.target.checked)} />
+          <Switch
+            checked={smoking}
+            onChange={(e) => setSmoking(e.target.checked)}
+            sx={{
+              '& .MuiSwitch-switchBase.Mui-checked': {
+                color: '#0d9488',
+                '& + .MuiSwitch-track': { backgroundColor: '#0d9488' },
+              },
+            }}
+          />
         </Box>
 
         <Button
           variant="contained"
           onClick={calculateFramingham}
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg"
+          sx={{
+            width: '100%',
+            backgroundColor: '#0d9488',
+            '&:hover': {
+              backgroundColor: '#0f766e',
+            },
+            color: '#fff',
+            fontWeight: 600,
+            padding: '8px 16px',
+            borderRadius: '8px',
+            textTransform: 'none',
+          }}
         >
           Calculate Framingham Risk
         </Button>
 
         {result !== null && (
-          <Box className="mt-5 pt-4 border-t border-gray-300">
-            <Typography variant="h6" className="font-semibold text-teal-500">
+          <Box className="mt-2 pt-2 border-t border-gray-300">
+            <Typography variant="h6" className="font-semibold text-teal-600">
               Framingham Risk Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">

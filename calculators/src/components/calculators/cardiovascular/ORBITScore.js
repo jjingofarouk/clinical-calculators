@@ -66,7 +66,7 @@ const ORBITScore = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Anemia (Hb < 13 g/dL men, <12 g/dL women)
+          Anemia (Hb less than 13 g/dL men, less than 12 g/dL women)
         </Typography>
         <Switch
           checked={anemia}

@@ -2,46 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* GLOBAL LAYOUT FIXES */
+/* Root layout fix */
 html,
 body,
 #root {
-  @apply min-h-full w-full bg-gray-50 overflow-y-auto;
+  @apply min-h-screen w-screen bg-gray-50 overflow-y-auto overflow-x-hidden;
   margin: 0;
   padding: 0;
   font-family: theme('fontFamily.sans');
 }
 
-/* Base font and color */
+/* Base font and color for body */
 body {
   @apply text-gray-900 antialiased;
 }
 
-/* Card Styling */
+/* Card styling */
 .card {
   @apply rounded-lg shadow-md bg-white border border-gray-200 p-4;
 }
 
-/* Section Header Styling */
+/* Section headers */
 .header {
   @apply text-teal-600 font-semibold text-xl mb-2;
 }
 
-/* Teal Button Styling */
+/* Teal primary buttons */
 .btn-primary {
   @apply bg-teal-600 text-white rounded hover:bg-teal-700 transition px-4 py-2;
 }
 
-/* Ensure sidebar and content are fully responsive */
+/* Sidebar layout */
 aside {
-  @apply w-64 lg:w-72 max-w-full bg-white;
+  @apply w-64 lg:w-72 max-w-full bg-white h-full;
 }
 
+/* Main layout */
 main {
-  @apply w-full max-w-full overflow-x-hidden overflow-y-auto bg-gray-50;
+  @apply w-full max-w-full h-full overflow-y-auto overflow-x-hidden bg-gray-50;
 }
 
-/* Calculator tabs container */
+/* Calculator tab scroll container */
 .calculator-tabs {
   @apply flex flex-row overflow-x-auto whitespace-nowrap bg-white;
   -webkit-overflow-scrolling: touch;
@@ -65,7 +66,12 @@ main {
   @apply flex-shrink-0 mx-1;
 }
 
-/* Responsive grid for calculator cards */
+/* Grid for category/home cards */
 .custom-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-full;
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full;
+}
+
+/* Remove padding and margin from container wrappers */
+.container, .wrapper {
+  @apply w-full max-w-full m-0 p-0;
 }

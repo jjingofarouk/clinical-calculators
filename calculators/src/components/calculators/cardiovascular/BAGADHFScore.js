@@ -196,7 +196,7 @@ const BAGADHFScore = () => {
 
         <Box className="flex items-center mb-4">
           <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
-            Hypotension (SBP < 90 mmHg)
+            Hypotension (SBP &lt; 90 mmHg)
           </Typography>
           <Switch
             checked={hypotension}

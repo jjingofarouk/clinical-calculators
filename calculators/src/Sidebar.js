@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
-import { sidebarItems } from './data/sidebarItems';
+import { Menu, ChevronDown, ChevronRight, Search } from 'lucide-react';
+import { sidebarItems } from '../data/sidebarItems';
 import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {
   const location = useLocation();
   const [expanded, setExpanded] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const sidebarRef = useRef(null);
 
   const toggleExpand = (label) => {
@@ -25,6 +26,12 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [mobileOpen, toggleMobile]);
+
+  const filteredCalculators = sidebarItems.flatMap(item =>
+    item.calculators
+      .filter(calc => calc.toLowerCase().includes(searchQuery.toLowerCase()))
+      .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
+  );
 
   return (
     <aside
@@ -60,59 +67,88 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         </div>
       </div>
 
-      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
-        {sidebarItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          const isOpen = expanded === item.label;
-          const Icon = item.icon;
+      <div className="p-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search calculators..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-2 pl-10 bg-gray-800 text-gray-300 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          />
+          <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+        </div>
+      </div>
 
-          return (
-            <div key={item.label} className="group">
-              <button
-                onClick={() => toggleExpand(item.label)}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm ${
-                  isActive 
-                    ? 'bg-teal-900 text-teal-300 border border-teal-800 shadow-sm' 
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                }`}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-lg transition-colors duration-200 ${
+      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
+        {searchQuery ? (
+          <ul className="space-y-1">
+            {filteredCalculators.map(({ calc, path, specialty }) => (
+              <li key={calc}>
+                <Link
+                  to={path}
+                  onClick={toggleMobile}
+                  className="block py-2.5 px-3 text-sm text-gray-400 hover:text-teal-400 hover:bg-teal-900 rounded-lg transition-all duration-200 font-medium"
+                >
+                  {calc} <span className="text-xs text-gray-500">({specialty})</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          sidebarItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            const isOpen = expanded === item.label;
+            const Icon = item.icon;
+
+            return (
+              <div key={item.label} className="group">
+                <button
+                  onClick={() => toggleExpand(item.label)}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm ${
                     isActive 
-                      ? 'bg-teal-800 text-teal-400' 
-                      : 'bg-gray-800 text-gray-400 group-hover:bg-gray-700 group-hover:text-gray-300'
-                  }`}>
-                    <Icon size={18} />
+                      ? 'bg-teal-900 text-teal-300 border border-teal-800 shadow-sm' 
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg transition-colors duration-200 ${
+                      isActive 
+                        ? 'bg-teal-800 text-teal-400' 
+                        : 'bg-gray-800 text-gray-400 group-hover:bg-gray-700 group-hover:text-gray-300'
+                    }`}>
+                      <Icon size={18} />
+                    </div>
+                    <span className="text-sm font-semibold">{item.label}</span>
                   </div>
-                  <span className="text-sm font-semibold">{item.label}</span>
-                </div>
-                <div className={`transition-transform duration-200 ${
-                  isActive ? 'text-teal-400' : 'text-gray-500'
-                }`}>
-                  {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                </div>
-              </button>
-              
-              {isOpen && (
-                <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-700">
-                  <ul className="space-y-1">
-                    {item.calculators.map((calc) => (
-                      <li key={calc}>
-                        <Link
-                          to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
-                          onClick={toggleMobile}
-                          className="block py-2.5 px-3 text-sm text-gray-400 hover:text-teal-400 hover:bg-teal-900 rounded-lg transition-all duration-200 font-medium"
-                        >
-                          {calc}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                  <div className={`transition-transform duration-200 ${
+                    isActive ? 'text-teal-400' : 'text-gray-500'
+                  }`}>
+                    {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                  </div>
+                </button>
+                
+                {isOpen && (
+                  <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-700">
+                    <ul className="space-y-1">
+                      {item.calculators.map((calc) => (
+                        <li key={calc}>
+                          <Link
+                            to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
+                            onClick={toggleMobile}
+                            className="block py-2.5 px-3 text-sm text-gray-400 hover:text-teal-400 hover:bg-teal-900 rounded-lg transition-all duration-200 font-medium"
+                          >
+                            {calc}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </nav>
 
       <div className="p-6 border-t border-gray-800 bg-gray-800">

@@ -1,4 +1,4 @@
-This one must have 0 padding import React from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Layout with responsive sidebar
@@ -27,7 +27,7 @@ const NotFound = () => (
 
 export default function App() {
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-white p-0 m-0">
       <Router>
         <Routes>
           {/* All pages wrapped in Layout */}

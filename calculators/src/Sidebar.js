@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown, ChevronRight, Search } from 'lucide-react';
-import { sidebarItems } from './data/sidebarItems';
+import { sidebarItems } from '../data/sidebarItems';
 import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {
@@ -30,10 +30,15 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
   const filteredCalculators = sidebarItems.flatMap(item =>
     item.calculators
       .filter(calc => {
-        const queryWords = searchQuery.toLowerCase().split(/\s+/).filter(word => word.length > 0);
-        const calcWords = calc.toLowerCase().split(/\s+/);
-        return queryWords.every(queryWord => 
-          calcWords.some(calcWord => calcWord.startsWith(queryWord))
+        const query = searchQuery.trim().toLowerCase();
+        if (!query) return false;
+        const calcLower = calc.toLowerCase();
+        // Exact match for full calculator name or individual words
+        if (calcLower === query) return true;
+        const queryWords = query.split(/\s+/).filter(word => word.length > 0);
+        const calcWords = calcLower.split(/\s+/);
+        return queryWords.every(qWord => 
+          calcWords.some(cWord => cWord === qWord)
         );
       })
       .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
@@ -89,17 +94,21 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
         {searchQuery ? (
           <ul className="space-y-1">
-            {filteredCalculators.map(({ calc, path, specialty }) => (
-              <li key={calc}>
-                <Link
-                  to={path}
-                  onClick={toggleMobile}
-                  className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
-                >
-                  {calc} <span className="text-xs text-gray-500">({specialty})</span>
-                </Link>
-              </li>
-            ))}
+            {filteredCalculators.length > 0 ? (
+              filteredCalculators.map(({ calc, path, specialty }) => (
+                <li key={calc}>
+                  <Link
+                    to={path}
+                    onClick={toggleMobile}
+                    className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    {calc} <span className="text-xs text-gray-500">({specialty})</span>
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li className="py-2.5 px-3 text-sm text-gray-500">No exact matches found</li>
+            )}
           </ul>
         ) : (
           sidebarItems.map((item) => {

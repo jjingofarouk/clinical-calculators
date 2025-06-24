@@ -49,13 +49,13 @@ const ASCVDCalculator = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-100 p-5">
-      <Typography variant="h4" className="font-semibold text-gray-900 mb-8">
+    <Box className="min-h-screen bg-gray-50 w-full max-w-full p-2">
+      <Typography variant="h4" className="font-semibold text-gray-900 mb-4">
         ASCVD Risk Calculator
       </Typography>
 
-      <Box className="w-full bg-white rounded-xl p-5 shadow-md">
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+      <Box className="w-full max-w-full bg-white rounded-xl shadow-md p-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Age (years)
         </Typography>
         <TextField
@@ -65,11 +65,11 @@ const ASCVDCalculator = () => {
           onChange={(e) => setAge(e.target.value)}
           placeholder="Enter Age"
           variant="outlined"
-          className="mb-4"
+          className="mb-2"
           sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Total Cholesterol (mg/dL)
         </Typography>
         <TextField
@@ -79,11 +79,11 @@ const ASCVDCalculator = () => {
           onChange={(e) => setCholesterol(e.target.value)}
           placeholder="Enter Cholesterol"
           variant="outlined"
-          className="mb-4"
+          className="mb-2"
           sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           HDL (mg/dL)
         </Typography>
         <TextField
@@ -93,11 +93,11 @@ const ASCVDCalculator = () => {
           onChange={(e) => setHdl(e.target.value)}
           placeholder="Enter HDL"
           variant="outlined"
-          className="mb-4"
+          className="mb-2"
           sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-1">
           Systolic Blood Pressure (mmHg)
         </Typography>
         <TextField
@@ -107,26 +107,26 @@ const ASCVDCalculator = () => {
           onChange={(e) => setSystolicBP(e.target.value)}
           placeholder="Enter Systolic BP"
           variant="outlined"
-          className="mb-4"
+          className="mb-2"
           sx={{ backgroundColor: '#fff', borderRadius: 2 }}
         />
 
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+        <Box className="flex items-center mb-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-1">
             Smoker
           </Typography>
           <Switch checked={smoking} onChange={(e) => setSmoking(e.target.checked)} />
         </Box>
 
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+        <Box className="flex items-center mb-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-1">
             Diabetes
           </Typography>
           <Switch checked={diabetes} onChange={(e) => setDiabetes(e.target.checked)} />
         </Box>
 
-        <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+        <Box className="flex items-center mb-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-1">
             Sex (Male/Female)
           </Typography>
           <FormControlLabel
@@ -143,20 +143,20 @@ const ASCVDCalculator = () => {
         <Button
           variant="contained"
           onClick={calculateASCVD}
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg"
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 rounded-lg"
         >
           Calculate ASCVD
         </Button>
 
         {result && (
-          <Box className="mt-5 pt-4 border-t border-gray-300">
-            <Typography variant="h6" className="font-semibold text-teal-500">
+          <Box className="mt-2 pt-2 border-t border-gray-300">
+            <Typography variant="h6" className="font-semibold text-teal-600">
               ASCVD Risk Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">
               {result}%
             </Typography>
-            <Typography variant="h6" className="font-semibold text-teal-500 mt-4">
+            <Typography variant="h6" className="font-semibold text-teal-600 mt-2">
               Recommendation
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">

@@ -119,7 +119,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           </ul>
         ) : (
           sidebarItems.map((item) => {
-            const isActive = location.pathname.startsWith(item.path);
+            const isActive = location.pathname === item.path;
             const isOpen = expanded === item.label;
             const Icon = item.icon;
 
@@ -156,7 +156,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                       {item.calculators.map((calc) => (
                         <li key={calc}>
                           <Link
-                            to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
+                            to={item.path}
                             onClick={toggleMobile}
                             className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
                           >

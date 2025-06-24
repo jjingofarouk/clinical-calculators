@@ -1,6 +1,5 @@
-// EuroSCOREII.js
 import React, { useState } from 'react';
-import { TextField, Typography, Box, Select, MenuItem, Slider } from '@mui/material';
+import { TextField, Typography, Box, Select, MenuItem } from '@mui/material';
 import { HeartPulse, AlertTriangle } from 'lucide-react';
 
 const EuroSCOREII = () => {
@@ -25,16 +24,9 @@ const EuroSCOREII = () => {
   const calculateScore = () => {
     let score = 0;
     
-    // Age
     if (age >= 60) score += (age - 60) * 0.07;
-    
-    // Gender
     if (gender === 'female') score += 0.22;
-    
-    // Renal impairment
     if (creatinine && parseFloat(creatinine) > 2.0) score += 0.64;
-    
-    // Other factors
     if (extracardiacArteriopathy) score += 0.43;
     if (poorMobility) score += 0.85;
     if (previousCardiacSurgery) score += 1.0;
@@ -42,8 +34,6 @@ const EuroSCOREII = () => {
     if (chronicLungDisease === 'severe') score += 0.89;
     if (activeEndocarditis) score += 0.61;
     if (criticalPreoperativeState) score += 1.13;
-    
-    // Cardiac factors
     if (diabetes === 'insulin') score += 0.67;
     if (nyha === 'II') score += 0.85;
     if (nyha === 'III') score += 1.10;
@@ -54,8 +44,6 @@ const EuroSCOREII = () => {
     if (lvFunction === 'veryPoor') score += 1.28;
     if (pulmonaryHypertension === 'moderate') score += 0.45;
     if (pulmonaryHypertension === 'severe') score += 0.92;
-    
-    // Procedure factors
     if (urgency === 'urgent') score += 0.55;
     if (urgency === 'emergency') score += 1.10;
     if (urgency === 'salvage') score += 1.61;
@@ -90,7 +78,6 @@ const EuroSCOREII = () => {
           onChange={(e) => setAge(e.target.value)}
           fullWidth
         />
-        
         <Select
           value={gender}
           onChange={(e) => setGender(e.target.value)}
@@ -111,7 +98,6 @@ const EuroSCOREII = () => {
           onChange={(e) => setCreatinine(e.target.value)}
           fullWidth
         />
-        
         <Select
           value={chronicLungDisease}
           onChange={(e) => setChronicLungDisease(e.target.value)}
@@ -138,7 +124,6 @@ const EuroSCOREII = () => {
           <MenuItem value="III">III</MenuItem>
           <MenuItem value="IV">IV</MenuItem>
         </Select>
-        
         <Select
           value={lvFunction}
           onChange={(e) => setLvFunction(e.target.value)}
@@ -148,7 +133,7 @@ const EuroSCOREII = () => {
           <MenuItem value="">LV function</MenuItem>
           <MenuItem value="good">Good (>50%)</MenuItem>
           <MenuItem value="moderate">Moderate (30-50%)</MenuItem>
-          <MenuItem value="poor">Poor (&lt; 30%)</MenuItem>
+          <MenuItem value="poor">Poor (< 30%)</MenuItem>
           <MenuItem value="veryPoor">Very poor (<20%)</MenuItem>
         </Select>
       </Box>

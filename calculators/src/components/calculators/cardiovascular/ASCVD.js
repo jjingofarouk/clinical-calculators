@@ -20,14 +20,39 @@ const ASCVDCalculator = () => {
     const hdlNum = Number(hdl);
     const systolicBPNum = Number(systolicBP);
 
-    if (
-      isNaN(ageNum) || ageNum < 40 || ageNum > 79 ||
-      isNaN(cholesterolNum) || cholesterolNum < 130 || cholesterolNum > 320 ||
-      isNaN(hdlNum) || hdlNum < 20 || hdlNum > 100 ||
-      isNaN(systolicBPNum) || systolicBPNum < 90 || systolicBPNum > 200
-    ) {
-      setError('Please enter valid values: Age (40-79 years), Total Cholesterol (130-320 mg/dL), HDL (20-100 mg/dL), Systolic BP (90-200 mmHg).');
+    if (isNaN(ageNum) || isNaN(cholesterolNum) || isNaN(hdlNum) || isNaN(systolicBPNum)) {
+      setError('Please enter valid numeric values for all fields.');
       return;
+    }
+
+    if (ageNum < 0 || ageNum > 120) {
+      setError('Age is outside the plausible range (0-120 years). Please verify.');
+      return;
+    }
+    if (cholesterolNum < 0 || cholesterolNum > 500) {
+      setError('Total Cholesterol is outside the plausible range (0-500 mg/dL). Please verify.');
+      return;
+    }
+    if (hdlNum < 0 || hdlNum > 150) {
+      setError('HDL Cholesterol is outside the plausible range (0-150 mg/dL). Please verify.');
+      return;
+    }
+    if (systolicBPNum < 0 || systolicBPNum > 300) {
+      setError('Systolic BP is outside the plausible range (0-300 mmHg). Please verify.');
+      return;
+    }
+
+    if (ageNum < 40 || ageNum > 79) {
+      setError('Warning: Age is outside the validated range (40-79 years) for ASCVD calculation. Results may be less accurate.');
+    }
+    if (cholesterolNum < 130 || cholesterolNum > 320) {
+      setError('Warning: Total Cholesterol is outside the validated range (130-320 mg/dL). Results may be less accurate.');
+    }
+    if (hdlNum < 20 || hdlNum > 100) {
+      setError('Warning: HDL Cholesterol is outside the validated range (20-100 mg/dL). Results may be less accurate.');
+    }
+    if (systolicBPNum < 90 || systolicBPNum > 200) {
+      setError('Warning: Systolic BP is outside the validated range (90-200 mmHg). Results may be less accurate.');
     }
 
     const lnAge = Math.log(ageNum);
@@ -99,13 +124,13 @@ const ASCVDCalculator = () => {
       <Box className="flex items-center mb-4">
         <Info className="w-5 h-5 text-teal-600 mr-2" />
         <Typography variant="body2" className="text-gray-600">
-          The ASCVD Risk Calculator estimates 10-year cardiovascular event risk in adults aged 40-79 with no prior cardiovascular disease.
+          The ASCVD Risk Calculator estimates 10-year cardiovascular event risk in adults with no prior cardiovascular disease.
         </Typography>
       </Box>
 
       <Box className="card w-full max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
         {error && (
-          <Alert severity="error" className="mb-4 flex items-center">
+          <Alert severity="warning" className="mb-4 flex items-center">
             <AlertCircle className="w-5 h-5 mr-2" />
             {error}
           </Alert>
@@ -122,7 +147,6 @@ const ASCVDCalculator = () => {
           placeholder="Normal range: 40-79"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 40, max: 79 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -145,7 +169,6 @@ const ASCVDCalculator = () => {
           placeholder="Normal range: 130-320"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 130, max: 320 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -168,7 +191,6 @@ const ASCVDCalculator = () => {
           placeholder="Normal range: 20-100"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 20, max: 100 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -191,7 +213,6 @@ const ASCVDCalculator = () => {
           placeholder="Normal range: 90-200"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 90, max: 200 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,

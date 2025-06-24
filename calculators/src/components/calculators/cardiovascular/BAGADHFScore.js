@@ -19,13 +19,43 @@ const BAGADHFScore = () => {
     const diureticResponseValue = parseFloat(diureticResponse);
 
     if (
-      isNaN(bunValue) || bunValue < 0 || bunValue > 200 ||
-      isNaN(ageValue) || ageValue < 18 || ageValue > 120 ||
-      isNaN(gfrValue) || gfrValue < 0 || gfrValue > 200 ||
-      isNaN(diureticResponseValue) || diureticResponseValue < 0 || diureticResponseValue > 10
+      isNaN(bunValue) ||
+      isNaN(ageValue) ||
+      isNaN(gfrValue) ||
+      isNaN(diureticResponseValue)
     ) {
-      setError('Please enter valid values: BUN (0-200 mg/dL), Age (18-120 years), eGFR (0-200 mL/min/1.73 m²), Diuretic Response (0-10 kg/mg).');
+      setError('Please enter valid numeric values for all fields.');
       return;
+    }
+
+    if (bunValue < 0 || bunValue > 1000) {
+      setError('BUN is outside the plausible range (0-1000 mg/dL). Please verify.');
+      return;
+    }
+    if (ageValue < 0 || ageValue > 150) {
+      setError('Age is outside the plausible range (0-150 years). Please verify.');
+      return;
+    }
+    if (gfrValue < 0 || gfrValue > 300) {
+      setError('eGFR is outside the plausible range (0-300 mL/min/1.73 m²). Please verify.');
+      return;
+    }
+    if (diureticResponseValue < 0 || diureticResponseValue > 50) {
+      setError('Diuretic Response is outside the plausible range (0-50 kg/mg). Please verify.');
+      return;
+    }
+
+    if (bunValue < 0 || bunValue > 200) {
+      setError('Warning: BUN is outside the typical range (0-200 mg/dL). Results may be less accurate.');
+    }
+    if (ageValue < 18 || ageValue > 120) {
+      setError('Warning: Age is outside the typical range (18-120 years). Results may be less accurate.');
+    }
+    if (gfrValue < 0 || gfrValue > 200) {
+      setError('Warning: eGFR is outside the typical range (0-200 mL/min/1.73 m²). Results may be less accurate.');
+    }
+    if (diureticResponseValue < 0 || diureticResponseValue > 10) {
+      setError('Warning: Diuretic Response is outside the typical range (0-10 kg/mg). Results may be less accurate.');
     }
 
     let score = 0;
@@ -70,7 +100,7 @@ const BAGADHFScore = () => {
 
       <Box className="card w-full max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
         {error && (
-          <Alert severity="error" className="mb-4 flex items-center">
+          <Alert severity="warning" className="mb-4 flex items-center">
             <AlertCircle className="w-5 h-5 mr-2" />
             {error}
           </Alert>
@@ -84,10 +114,9 @@ const BAGADHFScore = () => {
           type="number"
           value={bun}
           onChange={(e) => setBUN(e.target.value)}
-          placeholder="Normal range: 7-20"
+          placeholder="Typical range: 7-20"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 200, step: 0.1 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -107,10 +136,9 @@ const BAGADHFScore = () => {
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          placeholder="Normal range: 18-120"
+          placeholder="Typical range: 18-120"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 18, max: 120 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -130,10 +158,9 @@ const BAGADHFScore = () => {
           type="number"
           value={gfr}
           onChange={(e) => setGFR(e.target.value)}
-          placeholder="Normal range: 90-120"
+          placeholder="Typical range: 90-120"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 200, step: 0.1 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -153,10 +180,9 @@ const BAGADHFScore = () => {
           type="number"
           value={diureticResponse}
           onChange={(e) => setDiureticResponse(e.target.value)}
-          placeholder="Normal range: 0-10"
+          placeholder="Typical range: 0-10"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 10, step: 0.01 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,

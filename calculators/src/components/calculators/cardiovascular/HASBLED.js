@@ -43,18 +43,23 @@ const HASBLED = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-100 p-5">
-      <Typography variant="h4" className="font-semibold text-gray-900 mb-8">
+    <Box className="min-h-screen w-full bg-gray-50 p-2">
+      <Typography variant="h4" className="header mb-4">
         HAS-BLED Risk Calculator
       </Typography>
 
-      <Box className="w-full bg-white rounded-xl p-5 shadow-md">
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+      <Box className="card w-full max-w-full p-4">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Hypertension
         </Typography>
-        <Switch checked={hypertension} onChange={(e) => setHypertension(e.target.checked)} className="mb-4" />
+        <Switch
+          checked={hypertension}
+          onChange={(e) => setHypertension(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Creatinine Level (mg/dl)
         </Typography>
         <TextField
@@ -65,20 +70,38 @@ const HASBLED = () => {
           placeholder="Enter Creatinine Level"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Stroke History
         </Typography>
-        <Switch checked={stroke} onChange={(e) => setStroke(e.target.checked)} className="mb-4" />
+        <Switch
+          checked={stroke}
+          onChange={(e) => setStroke(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Bleeding History
         </Typography>
-        <Switch checked={bleedingHistory} onChange={(e) => setBleedingHistory(e.target.checked)} className="mb-4" />
+        <Switch
+          checked={bleedingHistory}
+          onChange={(e) => setBleedingHistory(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Age
         </Typography>
         <TextField
@@ -89,36 +112,55 @@ const HASBLED = () => {
           placeholder="Enter Age"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Medications (Aspirin, NSAIDs)
         </Typography>
-        <Switch checked={drugs} onChange={(e) => setDrugs(e.target.checked)} className="mb-4" />
+        <Switch
+          checked={drugs}
+          onChange={(e) => setDrugs(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Alcohol Consumption (≥8 units/week)
         </Typography>
-        <Switch checked={alcohol} onChange={(e) => setAlcohol(e.target.checked)} className="mb-4" />
+        <Switch
+          checked={alcohol}
+          onChange={(e) => setAlcohol(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
 
         <Button
           variant="contained"
           onClick={handleCalculate}
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg"
+          className="btn-primary w-full py-3"
+          sx={{ textTransform: 'none', fontWeight: '600' }}
         >
           Calculate HAS-BLED
         </Button>
 
         {result && (
-          <Box className="mt-5 pt-4 border-t border-gray-300">
-            <Typography variant="h6" className="font-semibold text-teal-500">
+          <Box className="mt-5 pt-4 border-t border-gray-200">
+            <Typography variant="h6" className="header">
               HAS-BLED Score
             </Typography>
-            <Typography variant="body1" className="font-medium text-gray-900">
+            <Typography variant="body1" className="font-medium text-gray-900 mb-2">
               {result.score}
             </Typography>
-            <Typography variant="h6" className="font-semibold text-teal-500 mt-2">
+            <Typography variant="h6" className="header">
               Risk Level
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">

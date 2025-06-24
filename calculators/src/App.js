@@ -1,8 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Layout with responsive sidebar
 import Layout from './Layout';
+
+// Pages
 import Home from './Home';
-import { sidebarItems } from './data/sidebarItems';
 
 // Calculator Category Pages
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
@@ -15,26 +18,10 @@ import NephrologyCalculators from './components/calculators/nephrology/Nephrolog
 import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
-// Map sidebar labels to components
-const categoryComponents = {
-  General: GeneralCalculators,
-  Cardiovascular: CardiovascularCalculators,
-  Pulmonary: PulmonaryCalculators,
-  Gastroenterology: GastroenterologyCalculators,
-  Obstetrics: ObstetricsCalculators,
-  Neurology: NeurologyCalculators,
-  Nephrology: NephrologyCalculators,
-  Orthopedics: OrthopedicsCalculators,
-  ICU: ICUCalculators,
-};
-
 // 404 Fallback Page
 const NotFound = () => (
-  <div className="min-h-screen flex items-center justify-center w-full bg-gray-50">
-    <div className="text-center">
-      <h1 className="text-4xl font-bold text-gray-800 mb-4">404 - Page Not Found</h1>
-      <p className="text-lg text-gray-600">The page you're looking for doesn't exist or has been moved.</p>
-    </div>
+  <div className="flex items-center justify-center h-full w-full bg-gray-50">
+    <h1 className="text-3xl font-bold text-gray-500">404 – Page Not Found</h1>
   </div>
 );
 
@@ -43,23 +30,19 @@ export default function App() {
     <div className="min-h-screen w-full bg-gray-50 p-0 m-0">
       <Router>
         <Routes>
+          {/* All pages wrapped in Layout */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            {sidebarItems.map(item => {
-              const Component = categoryComponents[item.label.replace(/\s+/g, '')] || NotFound;
-              const path = `/calculators/${item.label.replace(/\s+/g, '')}`;
-              return (
-                <Route key={item.label} path={path} element={<Component />}>
-                  {item.calculators.map(calc => (
-                    <Route
-                      key={calc}
-                      path={`${path}/${calc.replace(/\s+/g, '-')}`}
-                      element={<Component />}
-                    />
-                  ))}
-                </Route>
-              );
-            })}
+            <Route path="/calculators/General" element={<GeneralCalculators />} />
+            <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
+            <Route path="/calculators/Pulmonary" element={<PulmonaryCalculators />} />
+            <Route path="/calculators/Gastroenterology" element={<GastroenterologyCalculators />} />
+            <Route path="/calculators/Obstetrics" element={<ObstetricsCalculators />} />
+            <Route path="/calculators/Neurology" element={<NeurologyCalculators />} />
+            <Route path="/calculators/Nephrology" element={<NephrologyCalculators />} />
+            <Route path="/calculators/Orthopedics" element={<OrthopedicsCalculators />} />
+            <Route path="/calculators/ICU" element={<ICUCalculators />} />
+            {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

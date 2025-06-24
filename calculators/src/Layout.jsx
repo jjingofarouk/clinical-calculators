@@ -1,35 +1,52 @@
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
-import { Outlet } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-const Layout = () => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const toggleMobile = () => setMobileOpen(!mobileOpen);
+// Layout with responsive sidebar
+import Layout from './Layout';
 
+// Pages
+import Home from './Home';
+
+// Calculator Category Pages
+import GeneralCalculators from './components/calculators/general/GeneralCalculators';
+import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
+import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
+import GastroenterologyCalculators from './components/calculators/git/GastroenterologyCalculators';
+import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
+import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';
+import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
+import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
+import ICUCalculators from './components/calculators/icu/ICUCalculators';
+
+// 404 Fallback Page
+const NotFound = () => (
+  <div className="flex items-center justify-center h-full w-full bg-white">
+    <h1 className="text-3xl font-bold text-gray-500">404 – Page Not Found</h1>
+  </div>
+);
+
+export default function App() {
   return (
-    <div className="flex min-h-screen w-full bg-white">
-      {/* Sidebar (Responsive) */}
-      <Sidebar mobileOpen={mobileOpen} toggleMobile={toggleMobile} />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col w-full max-w-full">
-        {/* Mobile Top Navbar */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 shadow-sm">
-          <button onClick={toggleMobile}>
-            <Menu className="text-gray-700" />
-          </button>
-          <h1 className="text-lg font-semibold text-teal-600">Clinical Calculators</h1>
-          <div className="w-6" /> {/* Spacer for symmetry */}
-        </div>
-
-        {/* Page Content */}
-        <main className="flex-1 p-4 lg:p-6 w-full max-w-full overflow-x-hidden">
-          <Outlet />
-        </main>
-      </div>
+    <div className="min-h-screen w-full bg-white m-0 p-0">
+      <Router>
+        <Routes>
+          {/* All pages wrapped in Layout */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="/calculators/General" element={<GeneralCalculators />} />
+            <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
+            <Route path="/calculators/Pulmonary" element={<PulmonaryCalculators />} />
+            <Route path="/calculators/Gastroenterology" element={<GastroenterologyCalculators />} />
+            <Route path="/calculators/Obstetrics" element={<ObstetricsCalculators />} />
+            <Route path="/calculators/Neurology" element={<NeurologyCalculators />} />
+            <Route path="/calculators/Nephrology" element={<NephrologyCalculators />} />
+            <Route path="/calculators/Orthopedics" element={<OrthopedicsCalculators />} />
+            <Route path="/calculators/ICU" element={<ICUCalculators />} />
+            {/* Catch-all */}
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Router>
     </div>
   );
-};
-
-export default Layout;
+}

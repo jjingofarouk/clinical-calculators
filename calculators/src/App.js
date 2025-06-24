@@ -4,77 +4,38 @@ import Layout from './Layout';
 import Home from './Home';
 import { sidebarItems } from './data/sidebarItems';
 
-// Define the NotFound component within App.js
-const NotFound = () => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <h1 className="text-4xl font-bold text-gray-800">404 - Page Not Found</h1>
-      <p className="mt-4 text-lg text-gray-600">
-        Sorry, the page you are looking for does not exist.
-      </p>
-      <a
-        href="/"
-        className="mt-6 text-blue-600 hover:underline"
-      >
-        Return to Home
-      </a>
-    </div>
-  );
+// Calculator Category Pages
+import GeneralCalculators from './components/calculators/general/GeneralCalculators';
+import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
+import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
+import GastroenterologyCalculators from './components/calculators/git/GastroenterologyCalculators';
+import ObstetricsCalculators from './components/calculators/obstetrics/ObstetricsCalculators';
+import NeurologyCalculators from './components/calculators/neurology/NeurologyCalculators';
+import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
+import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
+import ICUCalculators from './components/calculators/icu/ICUCalculators';
+
+// Map sidebar labels to components
+const categoryComponents = {
+  General: GeneralCalculators,
+  Cardiovascular: CardiovascularCalculators,
+  Pulmonary: PulmonaryCalculators,
+  Gastroenterology: GastroenterologyCalculators,
+  Obstetrics: ObstetricsCalculators,
+  Neurology: NeurologyCalculators,
+  Nephrology: NephrologyCalculators,
+  Orthopedics: OrthopedicsCalculators,
+  ICU: ICUCalculators,
 };
 
-// Dynamically import calculator category pages
-const calculatorCategories = [
-  'AllergyAndImmunology',
-  'Anesthesiology',
-  'BariatricSurgery',
-  'Cardiology',
-  'CardiothoracicSurgery',
-  'ColorectalSurgery',
-  'CriticalCare',
-  'Dermatology',
-  'EmergencyMedicine',
-  'Endocrinology',
-  'ENT',
-  'FamilyMedicine',
-  'Gastroenterology',
-  'GeneralSurgery',
-  'Geriatrics',
-  'Hematology',
-  'Hepatology',
-  'InfectiousDisease',
-  'InternalMedicine',
-  'MedicalGenetics',
-  'Nephrology',
-  'Neurology',
-  'Neurosurgery',
-  'Obstetrics',
-  'Oncology',
-  'Ophthalmology',
-  'Orthopedics',
-  'PainMedicine',
-  'PalliativeCare',
-  'Pathology',
-  'Pediatrics',
-  'PhysicalMedicine',
-  'PlasticSurgery',
-  'Psychiatry',
-  'Pulmonary',
-  'RadiationOncology',
-  'Rheumatology',
-  'SportsMedicine',
-  'Toxicology',
-  'TransplantMedicine',
-  'TraumaSurgery',
-  'Urology',
-  'VascularSurgery',
-];
-
-// Create a mapping of category components
-const categoryComponents = Object.fromEntries(
-  calculatorCategories.map(category => [
-    category,
-    React.lazy(() => import(`./components/calculators/${category.toLowerCase()}/${category}Calculators`))
-  ])
+// 404 Fallback Page
+const NotFound = () => (
+  <div className="min-h-screen flex items-center justify-center w-full bg-gray-50">
+    <div className="text-center">
+      <h1 className="text-4xl font-bold text-gray-800 mb-4">404 - Page Not Found</h1>
+      <p className="text-lg text-gray-600">The page you're looking for doesn't exist or has been moved.</p>
+    </div>
+  </div>
 );
 
 export default function App() {
@@ -86,16 +47,13 @@ export default function App() {
             <Route index element={<Home />} />
             {sidebarItems.map(item => {
               const Component = categoryComponents[item.label.replace(/\s+/g, '')] || NotFound;
+              const path = `/calculators/${item.label.replace(/\s+/g, '')}`;
               return (
-                <Route
-                  key={item.label}
-                  path={`/calculators/${item.label.replace(/\s+/g, '')}`}
-                  element={<Component />}
-                >
+                <Route key={item.label} path={path} element={<Component />}>
                   {item.calculators.map(calc => (
                     <Route
                       key={calc}
-                      path={`/calculators/${item.label.replace(/\s+/g, '')}/${calc.replace(/\s+/g, '-')}`}
+                      path={`${path}/${calc.replace(/\s+/g, '-')}`}
                       element={<Component />}
                     />
                   ))}

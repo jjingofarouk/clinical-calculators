@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown, ChevronRight, Search } from 'lucide-react';
-import { sidebarItems } from '../data/sidebarItems';
+import { sidebarItems } from './data/sidebarItems';
 import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {

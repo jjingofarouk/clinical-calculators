@@ -136,7 +136,7 @@ const BAGADHFScore = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Hypotension (SBP <90 mmHg)
+          Hypotension (SBP &lt; 90 mmHg)
         </Typography>
         <Switch
           checked={hypotension}

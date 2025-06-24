@@ -146,8 +146,13 @@ const HASBLED = () => {
         <Button
           variant="contained"
           onClick={handleCalculate}
-          className="btn-primary w-full py-3"
-          sx={{ textTransform: 'none', fontWeight: '600' }}
+          className="w-full py-3"
+          sx={{
+            backgroundColor: '#0d9488',
+            '&:hover': { backgroundColor: '#0b8276' },
+            textTransform: 'none',
+            fontWeight: '600',
+          }}
         >
           Calculate HAS-BLED
         </Button>

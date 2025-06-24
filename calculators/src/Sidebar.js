@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown, ChevronRight } from 'lucide-react';
-import { sidebarItems } from './data/sidebarItems';
+import { sidebarItems } from '../data/sidebarItems';
 import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {
   const location = useLocation();
   const [expanded, setExpanded] = useState('');
+  const sidebarRef = useRef(null);
 
   const toggleExpand = (label) => {
     setExpanded(expanded === label ? '' : label);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && mobileOpen) {
+        toggleMobile();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobileOpen, toggleMobile]);
+
   return (
     <aside
-      className={`bg-gray-900 border-r border-gray-800 h-full overflow-y-auto
-        fixed inset-y-0 left-0 transform ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full'
-        } transition-transform duration-300 ease-out
-        lg:translate-x-0 lg:static lg:inset-0 w-72 lg:w-80 max-w-full z-50 
-        shadow-2xl lg:shadow-none backdrop-blur-sm`}
+      ref={sidebarRef}
+      className={`bg-gray-900 border-r border-gray-800 h-full fixed inset-y-0 left-0 transform ${
+        mobileOpen ? 'translate-x-0' : '-translate-x-full'
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-72 lg:w-80 max-w-full z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
     >
       <div className="flex items-center justify-between lg:hidden border-b border-gray-800 p-6 bg-gray-800">
         <div className="flex items-center space-x-3">
@@ -48,7 +60,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         </div>
       </div>
 
-      <nav className="p-4 space-y-2">
+      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
         {sidebarItems.map((item) => {
           const isActive = location.pathname === item.path;
           const isOpen = expanded === item.label;
@@ -103,7 +115,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         })}
       </nav>
 
-      <div className="mt-auto p-6 border-t border-gray-800 bg-gray-800">
+      <div className="p-6 border-t border-gray-800 bg-gray-800">
         <div className="text-center">
           <p className="text-xs text-gray-400 font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available

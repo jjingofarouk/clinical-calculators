@@ -18,7 +18,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full max-w-full m-0 p-4">
+    <div className="min-h-screen bg-gray-50 w-full max-w-full m-0 p-0">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">Clinical Calculators</h1>
       <p className="text-gray-600 mb-6">
         Quickly access a range of evidence-based medical calculators by category.

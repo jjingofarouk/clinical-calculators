@@ -40,9 +40,9 @@ const CardiovascularCalculators = () => {
   };
 
   return (
-    <Box className="h-full w-full overflow-hidden flex flex-col bg-white">
+    <Box className="h-full w-full max-w-full flex flex-col bg-white">
       {/* Search Bar */}
-      <Box className="p-4 border-b border-gray-200 bg-white">
+      <Box className="p-4 border-b border-gray-200 bg-white w-full">
         <TextField
           fullWidth
           variant="outlined"
@@ -56,13 +56,15 @@ const CardiovascularCalculators = () => {
             input: {
               fontFamily: 'Inter, sans-serif',
               color: '#1F2937'
-            }
+            },
+            width: '100%',
+            maxWidth: '100%'
           }}
         />
       </Box>
 
       {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB' }}>
+      <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -70,6 +72,9 @@ const CardiovascularCalculators = () => {
           scrollButtons={isMobile ? 'auto' : false}
           allowScrollButtonsMobile
           sx={{
+            '& .MuiTabs-flexContainer': {
+              flexWrap: 'nowrap'
+            },
             '& .MuiTab-root': {
               borderRadius: 3,
               m: 0.5,
@@ -82,16 +87,33 @@ const CardiovascularCalculators = () => {
               px: 2,
               py: 1,
               boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+              flexShrink: 0,
+              minWidth: 'auto'
             },
             '& .Mui-selected': {
               bgcolor: '#27C7B8',
               color: '#fff',
               fontWeight: 600,
-              boxShadow: '0 2px 4px rgba(39,199,184,0.2)',
+              boxShadow: '0 2px 4px rgba(39,199,184,0.2)'
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#27C7B8',
+              backgroundColor: '#27C7B8'
             },
+            '& .MuiTabs-scroller': {
+              overflowX: 'auto !important',
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#d1d5db transparent',
+              '&::-webkit-scrollbar': {
+                height: '8px'
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'transparent'
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: '#d1d5db',
+                borderRadius: '4px'
+              }
+            }
           }}
         >
           {filteredCalculators.map((calc, index) => (
@@ -101,7 +123,7 @@ const CardiovascularCalculators = () => {
       </Box>
 
       {/* Calculator Display Area */}
-      <Box className="flex-1 overflow-y-auto p-4 bg-white">
+      <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
         {filteredCalculators.length > 0 ? (
           filteredCalculators[selectedTab]?.component
         ) : (

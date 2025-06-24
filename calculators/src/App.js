@@ -2,8 +2,25 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './Home';
-import NotFound from './components/NotFound';
 import { sidebarItems } from './data/sidebarItems';
+
+// Define the NotFound component within App.js
+const NotFound = () => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-4xl font-bold text-gray-800">404 - Page Not Found</h1>
+      <p className="mt-4 text-lg text-gray-600">
+        Sorry, the page you are looking for does not exist.
+      </p>
+      <a
+        href="/"
+        className="mt-6 text-blue-600 hover:underline"
+      >
+        Return to Home
+      </a>
+    </div>
+  );
+};
 
 // Dynamically import calculator category pages
 const calculatorCategories = [

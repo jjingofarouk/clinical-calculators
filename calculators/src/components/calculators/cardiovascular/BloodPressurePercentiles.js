@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, MenuItem } from '@mui/material';
+import { Box, TextField, MenuItem, Typography, Select } from '@mui/material';
 import { HeartPulse, AlertTriangle } from 'lucide-react';
 
 const BloodPressurePercentiles = () => {
@@ -13,11 +13,10 @@ const BloodPressurePercentiles = () => {
     const ageNum = parseFloat(age) || 0;
     const heightNum = parseFloat(height) || 0;
     const sysBP = parseFloat(systolicBP) || 0;
-    const diaBP = parseFloat(diastBPolicBP) || 0;
+    const diaBP = parseFloat(diastolicBP) || 0;
     let sysPercentile = 0, diaPercentile = 0, guidance = '';
 
     if (ageNum && heightNum && sysBP && diaBP) {
-      // Simplified percentile logic
       sysPercentile = (sysBP / (ageNum * 1.5)).toFixed(2);
       diaPercentile = (diaBP / (heightNum * 0.5)).toFixed(2);
       if (sysPercentile > 95 || diaPercentile > 95) {
@@ -30,7 +29,7 @@ const BloodPressurePercentiles = () => {
     return { sysPercentile, diaPercentile, guidance };
   };
 
-  const { sysPercentile,, diaPercentile, guidance } = calculatePercentiles();
+  const { sysPercentile, diaPercentile, guidance } = calculatePercentiles();
 
   return (
     <Box className="card">
@@ -45,14 +44,14 @@ const BloodPressurePercentiles = () => {
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-            fullWidth
-          />
+          fullWidth
+        />
         <TextField
           label="Height (cm)"
           type="number"
           value={height}
           onChange={(e) => setHeight(e.target.value)}
-            fullWidth
+          fullWidth
         />
         <Select
           value={gender}
@@ -74,15 +73,15 @@ const BloodPressurePercentiles = () => {
         <TextField
           label="Diastolic BP (mmHg)"
           type="number"
-          value={diastolBP}
-          onChange={(e) => setDiastolBP(e.target.value)}
+          value={diastolicBP}
+          onChange={(e) => setDiastolicBP(e.target.value)}
           fullWidth
         />
       </Box>
 
       <Box className="mt-6 p-4 bg-teal-50 rounded-lg">
         <Typography variant="h6" className="text-teal-700">
-          Systolic Percentile: {sysPercentile}%, Diastol Percentile: {diaPercentile}%
+          Systolic Percentile: {sysPercentile}%, Diastolic Percentile: {diaPercentile}%
         </Typography>
         <Typography variant="body1" className="text-teal-700 mt-2">
           Guidance: {guidance}

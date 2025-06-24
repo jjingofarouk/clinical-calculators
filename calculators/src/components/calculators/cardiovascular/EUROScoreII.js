@@ -133,7 +133,7 @@ const EuroSCOREII = () => {
           <MenuItem value="">LV function</MenuItem>
           <MenuItem value="good">Good (>50%)</MenuItem>
           <MenuItem value="moderate">Moderate (30-50%)</MenuItem>
-          <MenuItem value="poor">Poor (< 30%)</MenuItem>
+          <MenuItem value="poor">Poor (Less than 30%)</MenuItem>
           <MenuItem value="veryPoor">Very poor (<20%)</MenuItem>
         </Select>
       </Box>

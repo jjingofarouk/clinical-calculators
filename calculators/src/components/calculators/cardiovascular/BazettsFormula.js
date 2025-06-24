@@ -13,12 +13,25 @@ const BazettsFormula = () => {
     const qt = parseFloat(qtInterval);
     const hr = parseFloat(heartRate);
 
-    if (
-      isNaN(qt) || qt < 200 || qt > 600 ||
-      isNaN(hr) || hr < 30 || hr > 200
-    ) {
-      setError('Please enter valid values: QT Interval (200-600 ms), Heart Rate (30-200 bpm).');
+    if (isNaN(qt) || isNaN(hr)) {
+      setError('Please enter valid numeric values for all fields.');
       return;
+    }
+
+    if (qt < 0 || qt > 1000) {
+      setError('QT Interval is outside the plausible range (0-1000 ms). Please verify.');
+      return;
+    }
+    if (hr < 0 || hr > 300) {
+      setError('Heart Rate is outside the plausible range (0-300 bpm). Please verify.');
+      return;
+    }
+
+    if (qt < 200 || qt > 600) {
+      setError('Warning: QT Interval is outside the typical range (200-600 ms). Results may be less accurate.');
+    }
+    if (hr < 30 || hr > 200) {
+      setError('Warning: Heart Rate is outside the typical range (30-200 bpm). Results may be less accurate.');
     }
 
     const qtc = (qt / Math.sqrt(60 / hr)).toFixed(0);
@@ -57,7 +70,7 @@ const BazettsFormula = () => {
 
       <Box className="card w-full max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
         {error && (
-          <Alert severity="error" className="mb-4 flex items-center">
+          <Alert severity="warning" className="mb-4 flex items-center">
             <AlertCircle className="w-5 h-5 mr-2" />
             {error}
           </Alert>
@@ -71,10 +84,9 @@ const BazettsFormula = () => {
           type="number"
           value={qtInterval}
           onChange={(e) => setQtInterval(e.target.value)}
-          placeholder="Normal range: 200-600"
+          placeholder="Typical range: 200-600"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 200, max: 600, step: 1 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -94,10 +106,9 @@ const BazettsFormula = () => {
           type="number"
           value={heartRate}
           onChange={(e) => setHeartRate(e.target.value)}
-          placeholder="Normal range: 30-200"
+          placeholder="Typical range: 30-200"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 30, max: 200, step: 1 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,

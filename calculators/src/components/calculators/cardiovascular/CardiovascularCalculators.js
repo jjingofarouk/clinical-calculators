@@ -9,6 +9,7 @@ import {
   useMediaQuery
 } from '@mui/material';
 import ASCVDCalculator from './ASCVD';
+import ADHERE from './ADHERE';
 import FraminghamRiskCalculator from './Framingham';
 import CHA2DS2VASc from './CHA2DS2VASc';
 import HASBLED from './HASBLED';
@@ -61,6 +62,7 @@ import BloodPressurePercentiles from './BloodPressurePercentiles';
 const calculators = [
   { label: 'ASCVD', component: <ASCVDCalculator /> },
   { label: 'Framingham', component: <FraminghamRiskCalculator /> },
+  { label: 'ADHERE', component: <ADHERE /> },
   { label: 'CHA2DS2-VASc', component: <CHA2DS2VASc /> },
   { label: 'HAS-BLED', component: <HASBLED /> },
   { label: 'GRACE', component: <GRACECalculator /> },

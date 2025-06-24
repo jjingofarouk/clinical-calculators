@@ -15,12 +15,21 @@ const ADHERE = () => {
     const systolicBPValue = parseInt(systolicBP);
     const creatinineValue = parseFloat(creatinine);
 
-    if (
-      isNaN(bunValue) || bunValue < 0 || bunValue > 200 ||
-      isNaN(systolicBPValue) || systolicBPValue < 0 || systolicBPValue > 300 ||
-      isNaN(creatinineValue) || creatinineValue < 0 || creatinineValue > 20
-    ) {
-      setError('Please enter valid values: BUN (0-200 mg/dL), Systolic BP (0-300 mmHg), Creatinine (0-20 mg/dL).');
+    if (isNaN(bunValue) || isNaN(systolicBPValue) || isNaN(creatinineValue)) {
+      setError('Please enter valid numeric values for all fields.');
+      return;
+    }
+
+    if (bunValue < 0 || bunValue > 1000) {
+      setError('BUN value is outside the plausible range (0-1000 mg/dL). Please verify.');
+      return;
+    }
+    if (systolicBPValue < 0 || systolicBPValue > 400) {
+      setError('Systolic BP is outside the plausible range (0-400 mmHg). Please verify.');
+      return;
+    }
+    if (creatinineValue < 0 || creatinineValue > 50) {
+      setError('Creatinine is outside the plausible range (0-50 mg/dL). Please verify.');
       return;
     }
 
@@ -81,7 +90,6 @@ const ADHERE = () => {
           placeholder="Normal range: 7-20"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 200, step: 0.1 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -104,7 +112,6 @@ const ADHERE = () => {
           placeholder="Normal range: 90-120"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 300 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,
@@ -127,7 +134,6 @@ const ADHERE = () => {
           placeholder="Normal range: 0.6-1.2"
           variant="outlined"
           className="mb-4"
-          inputProps={{ min: 0, max: 20, step: 0.01 }}
           sx={{
             backgroundColor: '#fff',
             borderRadius: 2,

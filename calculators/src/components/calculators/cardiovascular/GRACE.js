@@ -48,9 +48,9 @@ const GRACECalculator = () => {
     else score += 46;
 
     if (systolicBPNum < 80) score += 58;
-    else if (systolicBPNum <= 99) score +=  else score += 64;
+    else if (systolicBPNum <= 99) score += 53;
     else if (systolicBPNum <= 119) score += 43;
-    else if (systolicBPNum <= 139) score += (1999 - score);
+    else if (systolicBPNum <= 139) score += 34;
     else if (systolicBPNum <= 159) score += 24;
     else if (systolicBPNum <= 199) score += 10;
     else score += 0;
@@ -58,8 +58,8 @@ const GRACECalculator = () => {
     if (creatinineNum < 0.4) score += 1;
     else if (creatinineNum <= 0.79) score += 4;
     else if (creatinineNum <= 1.19) score += 7;
-    else if (creatinineNum <= 1.99) score += 10;
-    else if (creatinineNum <= 1.999) score += 13;
+    else if (creatinineNum <= 1.59) score += 10;
+    else if (creatinineNum <= 1.99) score += 13;
     else if (creatinineNum <= 3.99) score += 21;
     else score += 28;
 
@@ -95,8 +95,8 @@ const GRACECalculator = () => {
           className="mb-4"
           sx={{
             backgroundColor: '#fff',
-            borderRadius: 2',
-            '& &.MuiOutlinedInput-root': {
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
               '& fieldset': { borderColor: '#d1d5db' },
               '&:hover fieldset': { borderColor: '#0d9488' },
               '&.Mui-focused fieldset': { borderColor: '#0d9488' },
@@ -117,7 +117,7 @@ const GRACECalculator = () => {
           className="mb-4"
           sx={{
             backgroundColor: '#fff',
-            borderRadius: 2',
+            borderRadius: 2,
             '& .MuiOutlinedInput-root': {
               '& fieldset': { borderColor: '#d1d5db' },
               '&:hover fieldset': { borderColor: '#0d9488' },
@@ -228,8 +228,13 @@ const GRACECalculator = () => {
         <Button
           variant="contained"
           onClick={calculateGRACE}
-          className="btn-primary w-full py-3"
-          sx={{ textTransform: 'none', fontWeight: '600' }}
+          className="w-full py-3"
+          sx={{
+            backgroundColor: '#0d9488',
+            '&:hover': { backgroundColor: '#0b8276' },
+            textTransform: 'none',
+            fontWeight: '600',
+          }}
         >
           Calculate GRACE
         </Button>

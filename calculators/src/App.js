@@ -1,4 +1,4 @@
-import React from 'react';
+This one must have 0 padding import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Layout with responsive sidebar
@@ -18,7 +18,7 @@ import NephrologyCalculators from './components/calculators/nephrology/Nephrolog
 import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
-// 404 Page
+// 404 Fallback Page
 const NotFound = () => (
   <div className="flex items-center justify-center h-full w-full bg-white">
     <h1 className="text-3xl font-bold text-gray-500">404 – Page Not Found</h1>
@@ -27,14 +27,12 @@ const NotFound = () => (
 
 export default function App() {
   return (
-    <div className="fixed inset-0 bg-white overflow-hidden">
+    <div className="min-h-screen w-full bg-white">
       <Router>
         <Routes>
+          {/* All pages wrapped in Layout */}
           <Route path="/" element={<Layout />}>
-            {/* Home */}
             <Route index element={<Home />} />
-
-            {/* Calculator Category Pages */}
             <Route path="/calculators/General" element={<GeneralCalculators />} />
             <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
             <Route path="/calculators/Pulmonary" element={<PulmonaryCalculators />} />
@@ -44,8 +42,7 @@ export default function App() {
             <Route path="/calculators/Nephrology" element={<NephrologyCalculators />} />
             <Route path="/calculators/Orthopedics" element={<OrthopedicsCalculators />} />
             <Route path="/calculators/ICU" element={<ICUCalculators />} />
-
-            {/* Fallback */}
+            {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

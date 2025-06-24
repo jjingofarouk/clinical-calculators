@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, ChevronDown, ChevronRight, Search } from 'lucide-react';
-import { sidebarItems } from './data/sidebarItems';
+import { sidebarItems } from '../data/sidebarItems';
 import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {
@@ -29,7 +29,13 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
 
   const filteredCalculators = sidebarItems.flatMap(item =>
     item.calculators
-      .filter(calc => calc.toLowerCase().includes(searchQuery.toLowerCase()))
+      .filter(calc => {
+        const queryWords = searchQuery.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+        const calcWords = calc.toLowerCase().split(/\s+/);
+        return queryWords.every(queryWord => 
+          calcWords.some(calcWord => calcWord.startsWith(queryWord))
+        );
+      })
       .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
   );
 

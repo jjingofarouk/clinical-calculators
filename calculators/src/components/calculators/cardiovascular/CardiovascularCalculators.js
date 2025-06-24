@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Tabs, Tab, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Tabs,
+  Tab,
+  TextField,
+  Typography,
+  useTheme,
+  useMediaQuery
+} from '@mui/material';
+
 import ASCVDCalculator from './ASCVD';
 import FraminghamRiskCalculator from './Framingham';
 import CHA2DS2VASc from './CHA2DS2VASc';
@@ -7,110 +16,99 @@ import HASBLED from './HASBLED';
 import GRACECalculator from './GRACE';
 import TIMICalculator from './TIMI';
 
+const calculators = [
+  { label: 'ASCVD', component: <ASCVDCalculator /> },
+  { label: 'Framingham', component: <FraminghamRiskCalculator /> },
+  { label: 'CHA2DS2VASc', component: <CHA2DS2VASc /> },
+  { label: 'HAS-BLED', component: <HASBLED /> },
+  { label: 'GRACE', component: <GRACECalculator /> },
+  { label: 'TIMI', component: <TIMICalculator /> }
+];
+
 const CardiovascularCalculators = () => {
-  const [selectedCalculator, setSelectedCalculator] = useState('ASCVD');
+  const [selectedTab, setSelectedTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const calculators = [
-    'ASCVD',
-    'Framingham',
-    'CHA2DS2VASc',
-    'HAS-BLED',
-    'GRACE',
-    'TIMI'
-  ];
-
-  const filteredCalculators = calculators.filter(calculator =>
-    calculator.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCalculators = calculators.filter(c =>
+    c.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleChange = (event, newValue) => {
-    setSelectedCalculator(newValue);
-  };
-
-  const renderCalculator = () => {
-    switch (selectedCalculator) {
-      case 'ASCVD':
-        return <ASCVDCalculator />;
-      case 'Framingham':
-        return <FraminghamRiskCalculator />;
-      case 'CHA2DS2VASc':
-        return <CHA2DS2VASc />;
-      case 'HAS-BLED':
-        return <HASBLED />;
-      case 'GRACE':
-        return <GRACECalculator />;
-      case 'TIMI':
-        return <TIMICalculator />;
-      default:
-        return (
-          <Typography variant="body1" className="text-gray-500 text-center mt-5">
-            Select a calculator to get started
-          </Typography>
-        );
-    }
+  const handleTabChange = (_, newIndex) => {
+    setSelectedTab(newIndex);
   };
 
   return (
-    <Box className="min-h-screen bg-white p-6">
-      <Box className="p-6 bg-white border-b border-gray-300">
+    <Box className="h-full w-full overflow-hidden flex flex-col bg-white">
+      {/* Search Bar */}
+      <Box className="p-4 border-b border-gray-200 bg-white">
         <TextField
           fullWidth
           variant="outlined"
           placeholder="Search calculators..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-white rounded-lg"
-          sx={{ input: { color: '#1F2937', fontFamily: 'Inter, sans-serif' } }}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setSelectedTab(0); // reset tab when filtering
+          }}
+          sx={{
+            input: {
+              fontFamily: 'Inter, sans-serif',
+              color: '#1F2937'
+            }
+          }}
         />
       </Box>
 
-      <Tabs
-        value={selectedCalculator}
-        onChange={handleChange}
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{
-          backgroundColor: '#F9FAFB',
-          borderBottom: 1,
-          borderColor: '#E5E7EB',
-          padding: '0 24px',
-          '& .MuiTab-root': {
-            borderRadius: 3,
-            margin: '0 6px',
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #E5E7EB',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '14px',
-            color: '#1F2937',
-            textTransform: 'none',
-            padding: '10px 18px',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-          },
-          '& .Mui-selected': {
-            backgroundColor: '#27C7B8',
-            color: '#FFFFFF',
-            fontFamily: 'Inter, sans-serif',
-            fontWeight: 600,
-            border: 'none',
-            boxShadow: '0 2px 4px rgba(39,199,184,0.2)',
-          },
-          '& .MuiTabs-indicator': {
-            backgroundColor: '#27C7B8',
-          },
-        }}
-      >
-        {filteredCalculators.map((calculator) => (
-          <Tab
-            key={calculator}
-            label={calculator}
-            value={calculator}
-          />
-        ))}
-      </Tabs>
+      {/* Tabs */}
+      <Box sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB' }}>
+        <Tabs
+          value={selectedTab}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons={isMobile ? 'auto' : false}
+          allowScrollButtonsMobile
+          sx={{
+            '& .MuiTab-root': {
+              borderRadius: 3,
+              m: 0.5,
+              bgcolor: '#fff',
+              border: '1px solid #E5E7EB',
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 14,
+              textTransform: 'none',
+              color: '#1F2937',
+              px: 2,
+              py: 1,
+              boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
+            },
+            '& .Mui-selected': {
+              bgcolor: '#27C7B8',
+              color: '#fff',
+              fontWeight: 600,
+              boxShadow: '0 2px 4px rgba(39,199,184,0.2)',
+            },
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#27C7B8',
+            },
+          }}
+        >
+          {filteredCalculators.map((calc, index) => (
+            <Tab key={calc.label} label={calc.label} />
+          ))}
+        </Tabs>
+      </Box>
 
-      <Box className="p-6">
-        {renderCalculator()}
+      {/* Calculator Display Area */}
+      <Box className="flex-1 overflow-y-auto p-4 bg-white">
+        {filteredCalculators.length > 0 ? (
+          filteredCalculators[selectedTab]?.component
+        ) : (
+          <Typography variant="body1" className="text-gray-500 text-center mt-8">
+            No calculators match your search.
+          </Typography>
+        )}
       </Box>
     </Box>
   );

@@ -17,12 +17,35 @@ const AorticValveCalciumScore = () => {
     const area = parseFloat(valveArea);
 
     if (
-      (agatstonScore && (isNaN(score) || score < 0 || score > 10000)) ||
-      (calciumVolume && (isNaN(volume) || volume < 0 || volume > 5000)) ||
-      (valveArea && (isNaN(area) || area < 0 || area > 5))
+      (agatstonScore && isNaN(score)) ||
+      (calciumVolume && isNaN(volume)) ||
+      (valveArea && isNaN(area))
     ) {
-      setError('Please enter valid values: Agatston Score (0-10000 HU), Calcium Volume (0-5000 mm³), Valve Area (0-5 cm²).');
+      setError('Please enter valid numeric values for all fields.');
       return;
+    }
+
+    if (agatstonScore && (score < 0 || score > 20000)) {
+      setError('Agatston Score is outside the plausible range (0-20000 HU). Please verify.');
+      return;
+    }
+    if (calciumVolume && (volume < 0 || volume > 10000)) {
+      setError('Calcium Volume is outside the plausible range (0-10000 mm³). Please verify.');
+      return;
+    }
+    if (valveArea && (area < 0 || area > 10)) {
+      setError('Valve Area is outside the plausible range (0-10 cm²). Please verify.');
+      return;
+    }
+
+    if (agatstonScore && (score < 0 || score > 10000)) {
+      setError('Warning: Agatston Score is outside the typical range (0-10000 HU). Results may be less accurate.');
+    }
+    if (calciumVolume && (volume < 0 || volume > 5000)) {
+      setError('Warning: Calcium Volume is outside the typical range (0-5000 mm³). Results may be less accurate.');
+    }
+    if (valveArea && (area < 0 || area > 5)) {
+      setError('Warning: Valve Area is outside the typical range (0-5 cm²). Results may be less accurate.');
     }
 
     let riskLevel = 'None';
@@ -84,7 +107,7 @@ const AorticValveCalciumScore = () => {
 
       <Box className="card w-full max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
         {error && (
-          <Alert severity="error" className="mb-4 flex items-center">
+          <Alert severity="warning" className="mb-4 flex items-center">
             <AlertTriangle className="w-5 h-5 mr-2" />
             {error}
           </Alert>
@@ -100,9 +123,8 @@ const AorticValveCalciumScore = () => {
               type="number"
               value={agatstonScore}
               onChange={(e) => setAgatstonScore(e.target.value)}
-              placeholder="Normal range: 0-10000"
+              placeholder="Typical range: 0-10000"
               variant="outlined"
-              inputProps={{ min: 0, max: 10000, step: 1 }}
               sx={{
                 backgroundColor: '#fff',
                 borderRadius: 2,
@@ -123,9 +145,8 @@ const AorticValveCalciumScore = () => {
               type="number"
               value={calciumVolume}
               onChange={(e) => setCalciumVolume(e.target.value)}
-              placeholder="Normal range: 0-5000"
+              placeholder="Typical range: 0-5000"
               variant="outlined"
-              inputProps={{ min: 0, max: 5000, step: 1 }}
               sx={{
                 backgroundColor: '#fff',
                 borderRadius: 2,
@@ -149,9 +170,8 @@ const AorticValveCalciumScore = () => {
               type="number"
               value={valveArea}
               onChange={(e) => setValveArea(e.target.value)}
-              placeholder="Normal range: 0-5"
+              placeholder="Typical range: 0-5"
               variant="outlined"
-              inputProps={{ min: 0, max: 5, step: 0.1 }}
               sx={{
                 backgroundColor: '#fff',
                 borderRadius: 2,

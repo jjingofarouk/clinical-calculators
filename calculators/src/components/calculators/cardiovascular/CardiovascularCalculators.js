@@ -42,7 +42,7 @@ import FridericiasFormula from './FridericiasFormula';
 import FraminghamFormula from './FraminghamFormula';
 import LeesRevisedCardiacRiskIndex from './LeesRevisedCardiacRiskIndex';
 import GuptaMICAScore from './GuptaMICAScore';
-import EuroScoreII from './EuroScoreII';
+import EUROScoreII from './EUROScoreII';
 import ModifiedDukeCriteria from './ModifiedDukeCriteria';
 import EmbolicRiskScore from './EmbolicRiskScore';
 import AorticValveCalciumScore from './AorticValveCalciumScore';
@@ -93,7 +93,7 @@ const calculators = [
   { label: 'Framingham Formula', component: <FraminghamFormula /> },
   { label: 'Lee’s Revised Cardiac Risk', component: <LeesRevisedCardiacRiskIndex /> },
   { label: 'Gupta MICA', component: <GuptaMICAScore /> },
-  { label: 'EuroScore II', component: <EuroScoreII /> },
+  { label: 'EuroScore II', component: <EUROScoreII /> },
   { label: 'Modified Duke Criteria', component: <ModifiedDukeCriteria /> },
   { label: 'Embolic Risk Score', component: <EmbolicRiskScore /> },
   { label: 'Aortic Valve Calcium', component: <AorticValveCalciumScore /> },

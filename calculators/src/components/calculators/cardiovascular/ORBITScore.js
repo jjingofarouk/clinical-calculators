@@ -1,43 +1,37 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Switch, Button } from '@mui/material';
+import { Box, Typography, Switch, TextField, Button } from '@mui/material';
 
-const HASBLED = () => {
-  const [hypertension, setHypertension] = useState(false);
-  const [creatinine, setCreatinine] = useState('');
-  const [stroke, setStroke] = useState(false);
-  const [bleedingHistory, setBleedingHistory] = useState(false);
+const ORBITScore = () => {
   const [age, setAge] = useState('');
-  const [drugs, setDrugs] = useState(false);
-  const [alcohol, setAlcohol] = useState(false);
+  const [anemia, setAnemia] = useState(false);
+  const [bleedingHistory, setBleedingHistory] = useState(false);
+  const [renalFunction, setRenalFunction] = useState('');
+  const [antiplateletTherapy, setAntiplateletTherapy] = useState(false);
   const [result, setResult] = useState(null);
 
   const handleCalculate = () => {
-    const creatinineValue = parseFloat(creatinine);
     const ageValue = parseInt(age);
-    if (isNaN(creatinineValue) || creatinineValue <= 0) {
-      alert("Please enter a valid creatinine value.");
-      return;
-    }
+    const renalValue = parseFloat(renalFunction);
     if (isNaN(ageValue) || ageValue <= 0) {
       alert("Please enter a valid age.");
       return;
     }
+    if (isNaN(renalValue) || renalValue <= 0) {
+      alert("Please enter a valid GFR value.");
+      return;
+    }
 
     let score = 0;
-    score += hypertension ? 1 : 0;
-    score += creatinineValue > 2 ? 1 : 0;
-    score += stroke ? 1 : 0;
-    score += bleedingHistory ? 1 : 0;
-    score += ageValue >= 65 ? 1 : 0;
-    score += drugs ? 1 : 0;
-    score += alcohol ? 1 : 0;
+    score += ageValue >= 75 ? 1 : 0;
+    score += anemia ? 2 : 0;
+    score += bleedingHistory ? 2 : 0;
+    score += renalValue < 60 ? 1 : 0;
+    score += antiplateletTherapy ? 1 : 0;
 
     let riskLevel = '';
-    if (score === 0) riskLevel = 'Low risk for major bleeding';
-    else if (score === 1) riskLevel = 'Moderate risk for major bleeding';
-    else if (score === 2) riskLevel = 'Moderate to high risk for major bleeding';
-    else if (score >= 3 && score <= 4) riskLevel = 'High risk of major bleeding';
-    else if (score >= 5) riskLevel = 'Very high risk of major bleeding';
+    if (score <= 2) riskLevel = 'Low risk';
+    else if (score === 3) riskLevel = 'Medium risk';
+    else riskLevel = 'High risk';
 
     setResult({ score, riskLevel });
   };
@@ -45,62 +39,10 @@ const HASBLED = () => {
   return (
     <Box className="min-h-screen w-full bg-gray-50 p-2">
       <Typography variant="h4" className="header mb-4">
-        HAS-BLED Risk Calculator
+        ORBIT Bleeding Risk Calculator
       </Typography>
 
       <Box className="card w-full max-w-full p-4">
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Hypertension
-        </Typography>
-        <Switch
-          checked={hypertension}
-          onChange={(e) => setHypertension(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Creatinine Level (mg/dl)
-        </Typography>
-        <TextField
-          fullWidth
-          type="number"
-          value={creatinine}
-          onChange={(e) => setCreatinine(e.target.value)}
-          placeholder="Enter Creatinine Level"
-          variant="outlined"
-          className="mb-4"
-          sx={{
-            backgroundColor: '#fff',
-            borderRadius: 2,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#d1d5db' },
-              '&:hover fieldset': { borderColor: '#0d9488' },
-              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-            },
-          }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Stroke History
-        </Typography>
-        <Switch
-          checked={stroke}
-          onChange={(e) => setStroke(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Bleeding History
-        </Typography>
-        <Switch
-          checked={bleedingHistory}
-          onChange={(e) => setBleedingHistory(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Age
         </Typography>
@@ -124,21 +66,53 @@ const HASBLED = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Medications (Aspirin, NSAIDs)
+          Anemia (Hb less than 13 g/dL men, less than 12 g/dL women)
         </Typography>
         <Switch
-          checked={drugs}
-          onChange={(e) => setDrugs(e.target.checked)}
+          checked={anemia}
+          onChange={(e) => setAnemia(e.target.checked)}
           className="mb-4"
           sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Alcohol Consumption (≥8 units/week)
+          History of Bleeding
         </Typography>
         <Switch
-          checked={alcohol}
-          onChange={(e) => setAlcohol(e.target.checked)}
+          checked={bleedingHistory}
+          onChange={(e) => setBleedingHistory(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
+
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Estimated GFR (mL/min/1.73 m²)
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
+          value={renalFunction}
+          onChange={(e) => setRenalFunction(e.target.value)}
+          placeholder="Enter GFR"
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
+
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Antiplatelet Therapy
+        </Typography>
+        <Switch
+          checked={antiplateletTherapy}
+          onChange={(e) => setAntiplateletTherapy(e.target.checked)}
           className="mb-4"
           sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
         />
@@ -154,13 +128,13 @@ const HASBLED = () => {
             fontWeight: '600',
           }}
         >
-          Calculate HAS-BLED
+          Calculate ORBIT
         </Button>
 
         {result && (
           <Box className="mt-5 pt-4 border-t border-gray-200">
             <Typography variant="h6" className="header">
-              HAS-BLED Score
+              ORBIT Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900 mb-2">
               {result.score}
@@ -178,4 +152,4 @@ const HASBLED = () => {
   );
 };
 
-export default HASBLED;
+export default ORBITScore;

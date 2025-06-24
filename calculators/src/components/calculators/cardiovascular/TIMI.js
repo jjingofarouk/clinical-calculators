@@ -69,14 +69,14 @@ const TIMICalculator = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-200 p-5">
-      <Typography variant="h4" className="font-bold text-gray-900 mb-5">
-        TIMI Calculator
+    <Box className="min-h-screen w-full bg-gray-50 p-2">
+      <Typography variant="h4" className="header mb-4">
+        TIMI Risk Calculator
       </Typography>
 
-      <Box className="w-full bg-white rounded-lg p-5 mb-5">
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
-          Age:
+      <Box className="card w-full max-w-full p-4">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Age
         </Typography>
         <TextField
           fullWidth
@@ -86,75 +86,95 @@ const TIMICalculator = () => {
           onChange={(e) => setFormValues((prev) => ({ ...prev, age: e.target.value }))}
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
-            Aspirin use in the last 7 days:
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
+            Aspirin use in the last 7 days
           </Typography>
           <Switch
             checked={formValues.aspirinUseLast7Days}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, aspirinUseLast7Days: e.target.checked }))
             }
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
-          Angina episodes in the last 24 hours:
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Angina episodes in the last 24 hours
         </Typography>
-          <TextField
-            fullWidth
-            type="number"
-            placeholder="Enter number"
-            value={formValues.anginaEpisodesLast24Hours}
-            onChange={(e) =>
-              setFormValues((prev) => ({ ...prev, anginaEpisodesLast24Hours: e.target.value }))
-            }
-            variant="outlined"
-            className="mb-4"
-            sx={{ backgroundColor: '#fff', borderRadius: 2 }}
-          />
+        <TextField
+          fullWidth
+          type="number"
+          placeholder="Enter number"
+          value={formValues.anginaEpisodesLast24Hours}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, anginaEpisodesLast24Hours: e.target.value }))
+          }
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
-            ST changes (≥0.5 mm):
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
+            ST changes (≥0.5 mm)
           </Typography>
           <Switch
             checked={formValues.stChanges}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, stChanges: e.target.checked }))
             }
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
-            Elevated cardiac biomarkers:
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
+            Elevated cardiac biomarkers
           </Typography>
           <Switch
             checked={formValues.elevatedBiomarkers}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, elevatedBiomarkers: e.target.checked }))
             }
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
-            Known coronary artery disease:
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
+            Known coronary artery disease
           </Typography>
           <Switch
             checked={formValues.coronaryArteryDisease}
             onChange={(e) =>
               setFormValues((prev) => ({ ...prev, coronaryArteryDisease: e.target.checked }))
             }
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
           />
         </Box>
 
-        <Typography variant="h6" className="font-bold text-orange-500 mb-3 mt-5">
-          Cardiac Risk Factors:
+        <Typography variant="h6" className="header mb-3 mt-5">
+          Cardiac Risk Factors
         </Typography>
         {['Hypertension', 'Smoking', 'Low HDL Cholesterol', 'Diabetes Mellitus', 'Family History of Premature CAD'].map(
           (factor) => (
@@ -164,6 +184,10 @@ const TIMICalculator = () => {
                 <Checkbox
                   checked={formValues.cardiacRiskFactors.includes(factor)}
                   onChange={() => handleRiskFactorToggle(factor)}
+                  sx={{
+                    color: '#d1d5db',
+                    '&.Mui-checked': { color: '#0d9488' },
+                  }}
                 />
               }
               label={factor}
@@ -175,18 +199,30 @@ const TIMICalculator = () => {
         <Button
           variant="contained"
           onClick={handleCalculate}
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg mt-4"
+          className="w-full py-3"
+          sx={{
+            backgroundColor: '#0d9488',
+            '&:hover': { backgroundColor: '#0b8276' },
+            textTransform: 'none',
+            fontWeight: '600',
+          }}
         >
           Calculate TIMI
         </Button>
 
         {result && (
-          <Box className="mt-5 p-4 bg-orange-500 rounded-lg">
-            <Typography variant="body1" className="text-white">
-              TIMI Score: {result.score}
+          <Box className="mt-5 pt-4 border-t border-gray-200">
+            <Typography variant="h6" className="header">
+              TIMI Score
             </Typography>
-            <Typography variant="body1" className="text-white">
-              Risk: {result.risk}
+            <Typography variant="body1" className="font-medium text-gray-900 mb-2">
+              {result.score}
+            </Typography>
+            <Typography variant="h6" className="header">
+              Risk
+            </Typography>
+            <Typography variant="body1" className="font-medium text-gray-900">
+              {result.risk}
             </Typography>
           </Box>
         )}

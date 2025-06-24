@@ -76,13 +76,13 @@ const GRACECalculator = () => {
   };
 
   return (
-    <Box className="min-h-screen bg-gray-100 p-5">
-      <Typography variant="h4" className="font-semibold text-gray-900 mb-8">
+    <Box className="min-h-screen w-full bg-gray-50 p-2">
+      <Typography variant="h4" className="header mb-4">
         GRACE Risk Calculator
       </Typography>
 
-      <Box className="w-full bg-white rounded-xl p-5 shadow-md">
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+      <Box className="card w-full max-w-full p-4">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Age
         </Typography>
         <TextField
@@ -93,10 +93,18 @@ const GRACECalculator = () => {
           placeholder="Enter Age"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Heart Rate (bpm)
         </Typography>
         <TextField
@@ -107,10 +115,18 @@ const GRACECalculator = () => {
           placeholder="Enter Heart Rate"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Systolic Blood Pressure (mmHg)
         </Typography>
         <TextField
@@ -121,10 +137,18 @@ const GRACECalculator = () => {
           placeholder="Enter Systolic BP"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Creatinine (mg/dl)
         </Typography>
         <TextField
@@ -135,10 +159,18 @@ const GRACECalculator = () => {
           placeholder="Enter Serum Creatinine"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
-        <Typography variant="subtitle1" className="font-semibold text-gray-900 mb-2">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Killip Class
         </Typography>
         <TextField
@@ -149,41 +181,67 @@ const GRACECalculator = () => {
           placeholder="Enter Killip Class (1-4)"
           variant="outlined"
           className="mb-4"
-          sx={{ backgroundColor: '#fff', borderRadius: 2 }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
             Cardiac Arrest at Admission
           </Typography>
-          <Switch checked={cardiacArrest} onChange={(e) => setCardiacArrest(e.target.checked)} />
+          <Switch
+            checked={cardiacArrest}
+            onChange={(e) => setCardiacArrest(e.target.checked)}
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          />
         </Box>
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
             ST Segment Deviation
           </Typography>
-          <Switch checked={stSegmentDeviation} onChange={(e) => setSTSegmentDeviation(e.target.checked)} />
+          <Switch
+            checked={stSegmentDeviation}
+            onChange={(e) => setSTSegmentDeviation(e.target.checked)}
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          />
         </Box>
 
         <Box className="flex items-center mb-4">
-          <Typography variant="subtitle1" className="font-semibold text-gray-900 mr-2">
+          <Typography variant="subtitle1" className="font-semibold text-gray-700 mr-2">
             Elevated Cardiac Biomarkers
           </Typography>
-          <Switch checked={elevatedBiomarkers} onChange={(e) => setElevatedBiomarkers(e.target.checked)} />
+          <Switch
+            checked={elevatedBiomarkers}
+            onChange={(e) => setElevatedBiomarkers(e.target.checked)}
+            sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          />
         </Box>
 
         <Button
           variant="contained"
           onClick={calculateGRACE}
-          className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg"
+          className="w-full py-3"
+          sx={{
+            backgroundColor: '#0d9488',
+            '&:hover': { backgroundColor: '#0b8276' },
+            textTransform: 'none',
+            fontWeight: '600',
+          }}
         >
           Calculate GRACE
         </Button>
 
         {result !== null && (
-          <Box className="mt-5 pt-4 border-t border-gray-300">
-            <Typography variant="h6" className="font-semibold text-teal-500">
+          <Box className="mt-5 pt-4 border-t border-gray-200">
+            <Typography variant="h6" className="header">
               GRACE Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900">

@@ -1,43 +1,38 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Switch, Button } from '@mui/material';
+import { Box, Typography, Switch, TextField, Button } from '@mui/material';
 
-const HASBLED = () => {
-  const [hypertension, setHypertension] = useState(false);
-  const [creatinine, setCreatinine] = useState('');
-  const [stroke, setStroke] = useState(false);
-  const [bleedingHistory, setBleedingHistory] = useState(false);
+const HEARTRiskScore = () => {
+  const [history, setHistory] = useState('');
+  const [ecg, setECG] = useState('');
   const [age, setAge] = useState('');
-  const [drugs, setDrugs] = useState(false);
-  const [alcohol, setAlcohol] = useState(false);
+  const [riskFactors, setRiskFactors] = useState('');
+  const [troponin, setTroponin] = useState('');
   const [result, setResult] = useState(null);
 
   const handleCalculate = () => {
-    const creatinineValue = parseFloat(creatinine);
+    const historyValue = parseInt(history);
+    const ecgValue = parseInt(ecg);
     const ageValue = parseInt(age);
-    if (isNaN(creatinineValue) || creatinineValue <= 0) {
-      alert("Please enter a valid creatinine value.");
-      return;
-    }
-    if (isNaN(ageValue) || ageValue <= 0) {
-      alert("Please enter a valid age.");
+    const riskFactorsValue = parseInt(riskFactors);
+    const troponinValue = parseInt(troponin);
+
+    if (
+      isNaN(historyValue) ||
+      isNaN(ecgValue) ||
+      isNaN(ageValue) ||
+      isNaN(riskFactorsValue) ||
+      isNaN(troponinValue)
+    ) {
+      alert("Please enter valid numeric values.");
       return;
     }
 
-    let score = 0;
-    score += hypertension ? 1 : 0;
-    score += creatinineValue > 2 ? 1 : 0;
-    score += stroke ? 1 : 0;
-    score += bleedingHistory ? 1 : 0;
-    score += ageValue >= 65 ? 1 : 0;
-    score += drugs ? 1 : 0;
-    score += alcohol ? 1 : 0;
+    let score = historyValue + ecgValue + ageValue + riskFactorsValue + troponinValue;
 
     let riskLevel = '';
-    if (score === 0) riskLevel = 'Low risk for major bleeding';
-    else if (score === 1) riskLevel = 'Moderate risk for major bleeding';
-    else if (score === 2) riskLevel = 'Moderate to high risk for major bleeding';
-    else if (score >= 3 && score <= 4) riskLevel = 'High risk of major bleeding';
-    else if (score >= 5) riskLevel = 'Very high risk of major bleeding';
+    if (score <= 3) riskLevel = 'Low risk';
+    else if (score <= 6) riskLevel = 'Moderate risk';
+    else riskLevel = 'High risk';
 
     setResult({ score, riskLevel });
   };
@@ -45,29 +40,19 @@ const HASBLED = () => {
   return (
     <Box className="min-h-screen w-full bg-gray-50 p-2">
       <Typography variant="h4" className="header mb-4">
-        HAS-BLED Risk Calculator
+        HEART Risk Score Calculator
       </Typography>
 
       <Box className="card w-full max-w-full p-4">
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Hypertension
-        </Typography>
-        <Switch
-          checked={hypertension}
-          onChange={(e) => setHypertension(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Creatinine Level (mg/dl)
+          History (0-2)
         </Typography>
         <TextField
           fullWidth
           type="number"
-          value={creatinine}
-          onChange={(e) => setCreatinine(e.target.value)}
-          placeholder="Enter Creatinine Level"
+          value={history}
+          onChange={(e) => setHistory(e.target.value)}
+          placeholder="Enter History Score (0-2)"
           variant="outlined"
           className="mb-4"
           sx={{
@@ -82,34 +67,36 @@ const HASBLED = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Stroke History
+          ECG (0-2)
         </Typography>
-        <Switch
-          checked={stroke}
-          onChange={(e) => setStroke(e.target.checked)}
+        <TextField
+          fullWidth
+          type="number"
+          value={ecg}
+          onChange={(e) => setECG(e.target.value)}
+          placeholder="Enter ECG Score (0-2)"
+          variant="outlined"
           className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Bleeding History
-        </Typography>
-        <Switch
-          checked={bleedingHistory}
-          onChange={(e) => setBleedingHistory(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Age
+          Age (0-2)
         </Typography>
         <TextField
           fullWidth
           type="number"
           value={age}
           onChange={(e) => setAge(e.target.value)}
-          placeholder="Enter Age"
+          placeholder="Enter Age Score (0-2)"
           variant="outlined"
           className="mb-4"
           sx={{
@@ -124,23 +111,47 @@ const HASBLED = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Medications (Aspirin, NSAIDs)
+          Risk Factors (0-2)
         </Typography>
-        <Switch
-          checked={drugs}
-          onChange={(e) => setDrugs(e.target.checked)}
+        <TextField
+          fullWidth
+          type="number"
+          value={riskFactors}
+          onChange={(e) => setRiskFactors(e.target.value)}
+          placeholder="Enter Risk Factors Score (0-2)"
+          variant="outlined"
           className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Alcohol Consumption (≥8 units/week)
+          Troponin (0-2)
         </Typography>
-        <Switch
-          checked={alcohol}
-          onChange={(e) => setAlcohol(e.target.checked)}
+        <TextField
+          fullWidth
+          type="number"
+          value={troponin}
+          onChange={(e) => setTroponin(e.target.value)}
+          placeholder="Enter Troponin Score (0-2)"
+          variant="outlined"
           className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
         />
 
         <Button
@@ -154,13 +165,13 @@ const HASBLED = () => {
             fontWeight: '600',
           }}
         >
-          Calculate HAS-BLED
+          Calculate HEART Risk Score
         </Button>
 
         {result && (
           <Box className="mt-5 pt-4 border-t border-gray-200">
             <Typography variant="h6" className="header">
-              HAS-BLED Score
+              HEART Risk Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900 mb-2">
               {result.score}
@@ -178,4 +189,4 @@ const HASBLED = () => {
   );
 };
 
-export default HASBLED;
+export default HEARTRiskScore;

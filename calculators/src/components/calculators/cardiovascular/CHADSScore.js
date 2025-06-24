@@ -1,43 +1,36 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField, Switch, Button } from '@mui/material';
+import { Box, Typography, Switch, TextField, Button } from '@mui/material';
 
-const HASBLED = () => {
+const CHADSScore = () => {
+  const [congestiveHeartFailure, setCongestiveHeartFailure] = useState(false);
   const [hypertension, setHypertension] = useState(false);
-  const [creatinine, setCreatinine] = useState('');
-  const [stroke, setStroke] = useState(false);
-  const [bleedingHistory, setBleedingHistory] = useState(false);
   const [age, setAge] = useState('');
-  const [drugs, setDrugs] = useState(false);
-  const [alcohol, setAlcohol] = useState(false);
+  const [diabetes, setDiabetes] = useState(false);
+  const [strokeHistory, setStrokeHistory] = useState(false);
   const [result, setResult] = useState(null);
 
   const handleCalculate = () => {
-    const creatinineValue = parseFloat(creatinine);
     const ageValue = parseInt(age);
-    if (isNaN(creatinineValue) || creatinineValue <= 0) {
-      alert("Please enter a valid creatinine value.");
-      return;
-    }
     if (isNaN(ageValue) || ageValue <= 0) {
       alert("Please enter a valid age.");
       return;
     }
 
     let score = 0;
+    score += congestiveHeartFailure ? 1 : 0;
     score += hypertension ? 1 : 0;
-    score += creatinineValue > 2 ? 1 : 0;
-    score += stroke ? 1 : 0;
-    score += bleedingHistory ? 1 : 0;
-    score += ageValue >= 65 ? 1 : 0;
-    score += drugs ? 1 : 0;
-    score += alcohol ? 1 : 0;
+    score += ageValue >= 75 ? 1 : 0;
+    score += diabetes ? 1 : 0;
+    score += strokeHistory ? 2 : 0;
 
     let riskLevel = '';
-    if (score === 0) riskLevel = 'Low risk for major bleeding';
-    else if (score === 1) riskLevel = 'Moderate risk for major bleeding';
-    else if (score === 2) riskLevel = 'Moderate to high risk for major bleeding';
-    else if (score >= 3 && score <= 4) riskLevel = 'High risk of major bleeding';
-    else if (score >= 5) riskLevel = 'Very high risk of major bleeding';
+    if (score === 0) riskLevel = 'Low risk (0%)';
+    else if (score === 1) riskLevel = 'Low-moderate risk (1.3%)';
+    else if (score === 2) riskLevel = 'Moderate risk (2.2%)';
+    else if (score === 3) riskLevel = 'Moderate-high risk (3.2%)';
+    else if (score === 4) riskLevel = 'High risk (4.0%)';
+    else if (score === 5) riskLevel = 'Very high risk (6.7%)';
+    else riskLevel = 'Extremely high risk (9.8%)';
 
     setResult({ score, riskLevel });
   };
@@ -45,58 +38,26 @@ const HASBLED = () => {
   return (
     <Box className="min-h-screen w-full bg-gray-50 p-2">
       <Typography variant="h4" className="header mb-4">
-        HAS-BLED Risk Calculator
+        CHADS₂ Risk Calculator
       </Typography>
 
       <Box className="card w-full max-w-full p-4">
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Congestive Heart Failure
+        </Typography>
+        <Switch
+          checked={congestiveHeartFailure}
+          onChange={(e) => setCongestiveHeartFailure(e.target.checked)}
+          className="mb-4"
+          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
+        />
+
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Hypertension
         </Typography>
         <Switch
           checked={hypertension}
           onChange={(e) => setHypertension(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Creatinine Level (mg/dl)
-        </Typography>
-        <TextField
-          fullWidth
-          type="number"
-          value={creatinine}
-          onChange={(e) => setCreatinine(e.target.value)}
-          placeholder="Enter Creatinine Level"
-          variant="outlined"
-          className="mb-4"
-          sx={{
-            backgroundColor: '#fff',
-            borderRadius: 2,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#d1d5db' },
-              '&:hover fieldset': { borderColor: '#0d9488' },
-              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-            },
-          }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Stroke History
-        </Typography>
-        <Switch
-          checked={stroke}
-          onChange={(e) => setStroke(e.target.checked)}
-          className="mb-4"
-          sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
-        />
-
-        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Bleeding History
-        </Typography>
-        <Switch
-          checked={bleedingHistory}
-          onChange={(e) => setBleedingHistory(e.target.checked)}
           className="mb-4"
           sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
         />
@@ -124,21 +85,21 @@ const HASBLED = () => {
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Medications (Aspirin, NSAIDs)
+          Diabetes Mellitus
         </Typography>
         <Switch
-          checked={drugs}
-          onChange={(e) => setDrugs(e.target.checked)}
+          checked={diabetes}
+          onChange={(e) => setDiabetes(e.target.checked)}
           className="mb-4"
           sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
         />
 
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-          Alcohol Consumption (≥8 units/week)
+          Stroke/TIA History
         </Typography>
         <Switch
-          checked={alcohol}
-          onChange={(e) => setAlcohol(e.target.checked)}
+          checked={strokeHistory}
+          onChange={(e) => setStrokeHistory(e.target.checked)}
           className="mb-4"
           sx={{ '& .MuiSwitch-switchBase.Mui-checked': { color: '#0d9488' } }}
         />
@@ -154,13 +115,13 @@ const HASBLED = () => {
             fontWeight: '600',
           }}
         >
-          Calculate HAS-BLED
+          Calculate CHADS₂
         </Button>
 
         {result && (
           <Box className="mt-5 pt-4 border-t border-gray-200">
             <Typography variant="h6" className="header">
-              HAS-BLED Score
+              CHADS₂ Score
             </Typography>
             <Typography variant="body1" className="font-medium text-gray-900 mb-2">
               {result.score}
@@ -178,4 +139,4 @@ const HASBLED = () => {
   );
 };
 
-export default HASBLED;
+export default CHADSScore;

@@ -73,7 +73,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         } transition-transform duration-200 ease-in-out
         lg:translate-x-0 lg:static lg:inset-0 w-64 lg:w-72 max-w-full z-50 shadow-lg`}
     >
-      <div className="p-4 flex items-center justify-between lg:hidden border-b border-gray-200">
+      <div className="flex items-center justify-between lg:hidden border-b border-gray-200 p-4">
         <h2 className="text-lg font-semibold text-teal-600">Menu</h2>
         <button onClick={toggleMobile}>
           <Menu />

@@ -1,8 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, ChevronDown, ChevronRight, Search } from 'lucide-react';
+import {
+  Activity,
+  Baby,
+  Bone,
+  Brain,
+  Calculator,
+  ChevronDown,
+  ChevronRight,
+  Droplets,
+  Menu,
+  Monitor,
+  Search,
+  Stethoscope,
+  Wind,
+} from 'lucide-react';
 import { sidebarItems } from './data/sidebarItems';
-import { Calculator } from 'lucide-react';
 
 export default function Sidebar({ mobileOpen, toggleMobile }) {
   const location = useLocation();
@@ -33,7 +46,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         const query = searchQuery.trim().toLowerCase();
         if (!query) return false;
         const calcLower = calc.toLowerCase();
-        // Exact match for full calculator name or individual words
         if (calcLower === query) return true;
         const queryWords = query.split(/\s+/).filter(word => word.length > 0);
         const calcWords = calcLower.split(/\s+/);
@@ -47,11 +59,11 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
   return (
     <aside
       ref={sidebarRef}
-      className={`border-r border-gray-200 h-full fixed inset-y-0 left-0 transform ${
+      className={`bg-white border-r border-gray-100 h-full fixed inset-y-0 left-0 transform ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-64 lg:w-72 max-w-full shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-72 lg:w-80 max-w-full z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
     >
-      <div className="flex items-center justify-between lg:hidden border-b border-gray-200 p-6 bg-white">
+      <div className="flex items-center justify-between lg:hidden border-b border-gray-100 p-6 bg-gray-50">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
             <Calculator className="w-5 h-5 text-white" />
@@ -60,13 +72,13 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         </div>
         <button 
           onClick={toggleMobile}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          className="p-2 rounded-lg hover:bg-gray-200 transition-colors duration-200"
         >
           <Menu className="w-6 h-6 text-gray-600" />
         </button>
       </div>
 
-      <div className="hidden lg:block p-6 border-b border-gray-200 bg-white">
+      <div className="hidden lg:block p-6 border-b border-gray-100 bg-gray-50">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg">
             <Calculator className="w-6 h-6 text-white" />
@@ -112,7 +124,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           </ul>
         ) : (
           sidebarItems.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.startsWith(item.path);
             const isOpen = expanded === item.label;
             const Icon = item.icon;
 
@@ -122,7 +134,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                   onClick={() => toggleExpand(item.label)}
                   className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm ${
                     isActive 
-                      ? 'bg-teal-50 text-teal-600 border border-teal-100 shadow-sm' 
+                      ? 'bg-teal-50 text-teal-700 border border-teal-100 shadow-sm' 
                       : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                   }`}
                 >
@@ -144,7 +156,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                 </button>
                 
                 {isOpen && (
-                  <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-200">
+                  <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-100">
                     <ul className="space-y-1">
                       {item.calculators.map((calc) => (
                         <li key={calc}>
@@ -166,7 +178,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         )}
       </nav>
 
-      <div className="p-6 border-t border-gray-200 bg-white">
+      <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50">
         <div className="text-center">
           <p className="text-xs text-gray-500 font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available

@@ -71,7 +71,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         fixed inset-y-0 left-0 transform ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         } transition-transform duration-200 ease-in-out
-        lg:translate-x-0 lg:static lg:inset-0 w-64 z-50 shadow-lg`}
+        lg:translate-x-0 lg:static lg:inset-0 w-64 lg:w-72 max-w-full z-50 shadow-lg`}
     >
       <div className="p-4 flex items-center justify-between lg:hidden border-b border-gray-200">
         <h2 className="text-lg font-semibold text-teal-600">Menu</h2>
@@ -79,13 +79,13 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           <Menu />
         </button>
       </div>
-      <nav className="p-4">
+      <nav className="p-4 w-full">
         {sidebarItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
           const isOpen = expanded === item.label;
 
           return (
-            <div key={item.label} className="mb-2">
+            <div key={item.label} className="mb-2 w-full">
               <button
                 onClick={() => toggleExpand(item.label)}
                 className={`w-full flex justify-between items-center px-2 py-2 rounded-md text-left text-sm font-medium ${
@@ -96,13 +96,13 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                 {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
               </button>
               {isOpen && (
-                <ul className="mt-1 pl-4 text-sm text-gray-700">
+                <ul className="mt-1 pl-4 text-sm text-gray-700 w-full">
                   {item.calculators.map((calc) => (
                     <li key={calc}>
                       <Link
                         to={item.path}
                         onClick={toggleMobile}
-                        className="block py-1 hover:text-teal-600"
+                        className="block py-1 hover:text-teal-600 w-full"
                       >
                         {calc}
                       </Link>

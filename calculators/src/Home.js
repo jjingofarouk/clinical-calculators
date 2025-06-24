@@ -18,7 +18,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white w-full max-w-full m-0 p-0">
+    <div className="min-h-screen bg-gray-50 w-full max-w-full m-0 p-4">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">Clinical Calculators</h1>
       <p className="text-gray-600 mb-6">
         Quickly access a range of evidence-based medical calculators by category.
@@ -31,7 +31,7 @@ export default function Home() {
             className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer w-full"
             onClick={() => navigate(cat.path)}
           >
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 p-4">
               <cat.icon size={32} style={{ color: cat.color }} />
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">{cat.label}</h2>

@@ -18,17 +18,17 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-white px-4 py-6 md:px-8">
+    <div className="min-h-screen bg-white px-4 py-6 md:px-8 w-full max-w-full">
       <h1 className="text-3xl font-bold text-gray-800 mb-2">Clinical Calculators</h1>
       <p className="text-gray-600 mb-6">
         Quickly access a range of evidence-based medical calculators by category.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-full">
         {categories.map((cat) => (
           <div
             key={cat.label}
-            className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer"
+            className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer w-full"
             onClick={() => navigate(cat.path)}
           >
             <div className="flex items-center gap-4 p-4">

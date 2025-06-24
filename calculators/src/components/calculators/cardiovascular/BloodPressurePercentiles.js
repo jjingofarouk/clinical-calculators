@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, MenuItem } from '@mui/material';
-import { HeartPulse,, AlertTriangle } from 'lucide-react';
+import { HeartPulse, AlertTriangle } from 'lucide-react';
 
 const BloodPressurePercentiles = () => {
   const [age, setAge] = useState('');

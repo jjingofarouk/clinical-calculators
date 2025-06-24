@@ -31,7 +31,7 @@ export default function Home() {
             className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer w-full"
             onClick={() => navigate(cat.path)}
           >
-            <div className="flex items-center gap-4 p-4">
+            <div className="flex items-center gap-4 p-0">
               <cat.icon size={32} style={{ color: cat.color }} />
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">{cat.label}</h2>

@@ -51,9 +51,6 @@ import C1Inhibitor from './C1Inhibitor';
 import CH50 from './CH50';
 import AH50 from './AH50';
 import MannoseBindingLectin from './MannoseBindingLectin';
-import CytokineLevels from './CytokineLevels';
-import TCellCount from './TCellCount';
-import BCellCount from './BCellCount';
 import NKCellActivity from './NKCellActivity';
 import ImmunoglobulinRatio from './ImmunoglobulinRatio';
 import VaccineResponse from './VaccineResponse';
@@ -103,9 +100,6 @@ const calculators = [
   { label: 'CH50', component: <CH50 /> },
   { label: 'AH50', component: <AH50 /> },
   { label: 'Mannose-Binding Lectin', component: <MannoseBindingLectin /> },
-  { label: 'Cytokine Levels', component: <CytokineLevels /> },
-  { label: 'T-Cell Count', component: <TCellCount /> },
-  { label: 'B-Cell Count', component: <BCellCount /> },
   { label: 'NK Cell Activity', component: <NKCellActivity /> },
   { label: 'Immunoglobulin Ratio', component: <ImmunoglobulinRatio /> },
   { label: 'Vaccine Response', component: <VaccineResponse /> },

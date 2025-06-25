@@ -94,7 +94,7 @@ const SCORAD = () => {
         SCORAD Calculator
       </Typography>
       <Box className="flex items-center mb-4">
-        <Info className="w-5 h-5 text-teal-600 mr-2" />
+        <Info className="w-5 h-5 text-teal-400 mr-2" />
         <Typography variant="body2" className="text-gray-600">
           The SCORAD assesses atopic dermatitis severity in patients using extent, intensity, and subjective symptoms.
         </Typography>
@@ -243,123 +243,123 @@ const SCORAD = () => {
         <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
           Dryness (0-3)
         </Typography>
-          <TextField
-            fullWidth
-            type="number"
-            value={dryness}
-            onChange={(e) => setDryness(e.target.value)}
-            placeholder="Score: 0 (none) to 3 (severe)"
-            variant="outlined"
-            className="mb-4"
-            sx={{
-              backgroundColor: '#fff',
-              borderRadius: '#e2e',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: '#d1d5db' },
-                '&:hover fieldset': { borderColor: '#0d9488' },
-                '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-              },
-            }}
-          />
+        <TextField
+          fullWidth
+          type="number"
+          value={dryness}
+          onChange={(e) => setDryness(e.target.value)}
+          placeholder="Score: 0 (none) to 3 (severe)"
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
 
-          <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-            Pruritus (0-10)
-          </Typography>
-            <TextField
-              fullWidth
-              type="number"
-              value={pruritus}
-              onChange={(e) => setPruritus(e.target.value))}
-              placeholder="Score: 0 (none) to 10 (severe)"
-              variant="outlined"
-              className="mb-4"
-              sx={{
-                backgroundColor: '#fff',
-                borderRadius: 2,
-                '&.MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#d1d5db' },
-                  '&:hover fieldset': { borderColor: '#0d9488' },
-                  '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-                },
-              }}
-            />
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Pruritus (0-10)
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
+          value={pruritus}
+          onChange={(e) => setPruritus(e.target.value)}
+          placeholder="Score: 0 (none) to 10 (severe)"
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
 
-            <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
-              Sleep Loss (0-10)
+        <Typography variant="subtitle1" className="font-semibold text-gray-700 mb-2">
+          Sleep Loss (0-10)
+        </Typography>
+        <TextField
+          fullWidth
+          type="number"
+          value={sleepLoss}
+          onChange={(e) => setSleepLoss(e.target.value)}
+          placeholder="Score: 0 (none) to 10 (severe)"
+          variant="outlined"
+          className="mb-4"
+          sx={{
+            backgroundColor: '#fff',
+            borderRadius: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+            },
+          }}
+        />
+
+        <Button
+          variant="contained"
+          onClick={handleCalculate}
+          className="w-full py-3 btn-primary"
+          sx={{
+            backgroundColor: '#0d9488',
+            '&:hover': { backgroundColor: '#0b8276' },
+            textTransform: 'none',
+            fontWeight: '600',
+            borderRadius: 2,
+          }}
+        >
+          Calculate SCORAD Score
+        </Button>
+
+        {result && (
+          <Box className="mt-6 pt-4 border-t border-gray-200">
+            <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
+              SCORAD Score
             </Typography>
-              <TextField
-                fullWidth
-                type="number"
-                value={sleepLoss}
-                onChange={(e) => setSleepLoss(e.target.value)}
-                placeholder="Score: 0 (none) to 10 (severe)"
-                variant="outlined"
-                className="mb-4"
-                sx={{
-                  backgroundColor: '#fff',
-                  borderRadius: 2,
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#d1d5db' },
-                    '&:hover fieldset': { borderColor: '#0d9488' },
-                    '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-                  },
-                }}
-              />
-
-              <Button
-                variant="contained"
-                onClick={handleCalculate}
-                className="w-full py-3 btn-primary"
-                sx={{
-                  backgroundColor: '#0d9488',
-                  '&:hover': { backgroundColor: '#0b8276' },
-                  textTransform: 'none',
-                  fontWeight: '600',
-                  borderRadius: 2,
-                }}
-              >
-                Calculate SCORAD Score
-              </Button>
-
-              {result && (
-                <Box className="mt-6 pt-4 border-t border-gray-200">
-                  <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
-                    SCORAD Score
-                  </Typography>
-                  <Typography variant="body1" className="font-medium text-gray-900 mb-2">
-                    {result.score}
-                  </Typography>
-                  <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
-                    Severity
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    className={`font-medium p-2 rounded ${result.riskColor}`}
-                  >
-                    {result.severity}
-                  </Typography>
-                  <Typography variant="body2" className="text-gray-600 mt-2">
-                    <strong>Interpretation:</strong> {result.interpretation}
-                  </Typography>
-                  <Box className="flex items-center mt-2">
-                    <Info className="w-4 h-4 text-teal-600 mr-1" />
-                    <Typography variant="body2" className="text-gray-600">
-                      Source: European Task Force on Atopic Dermatitis, Dermatology 1993;186:23-31.{' '}
-                      <a
-                        href="https://pubmed.ncbi.nlm.nih.gov/8435513/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-teal-600 underline"
-                      >
-                        Read study
-                      </a>
-                    </Typography>
-                  </Box>
-                </Box>
-              )}
+            <Typography variant="body1" className="font-medium text-gray-900 mb-2">
+              {result.score}
+            </Typography>
+            <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
+              Severity
+            </Typography>
+            <Typography
+              variant="body1"
+              className={`font-medium p-2 rounded ${result.riskColor}`}
+            >
+              {result.severity}
+            </Typography>
+            <Typography variant="body2" className="text-gray-600 mt-2">
+              <strong>Interpretation:</strong> {result.interpretation}
+            </Typography>
+            <Box className="flex items-center mt-2">
+              <Info className="w-4 h-4 text-teal-400 mr-1" />
+              <Typography variant="body2" className="text-gray-600">
+                Source: European Task Force on Atopic Dermatitis, Dermatology 1993;186:23-31.{' '}
+                <a
+                  href="https://pubmed.ncbi.nlm.nih.gov/8435513/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-400 underline"
+                >
+                  Read study
+                </a>
+              </Typography>
             </Box>
           </Box>
-        );
-      };
+        )}
+      </Box>
+    </Box>
+  );
+};
 
-      export default SCORAD;
+export default SCORAD;

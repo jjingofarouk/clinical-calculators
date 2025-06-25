@@ -11,7 +11,8 @@ const AngioedemaScore = () => {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
 
-  const handleCalculate = setError('');
+  const handleCalculate = () => {
+    setError('');
 
     const frequencyValue = parseInt(frequency);
     const durationValue = parseFloat(duration);
@@ -151,7 +152,7 @@ const AngioedemaScore = () => {
           variant="contained"
           onClick={handleCalculate}
           className="w-full py-3 btn-primary"
-          sx={{ backgroundColor: '#0d9488', '&:hover': { backgroundColor: '#0b8276' }, textTransform: 'none', fontWeight': '600', borderRadius: 2 }}
+          sx={{ backgroundColor: '#0d9488', '&:hover': { backgroundColor: '#0b8276' }, textTransform: 'none', fontWeight: '600', borderRadius: 2 }}
         >
           Calculate Angioedema Score
         </Button>
@@ -167,17 +168,17 @@ const AngioedemaScore = () => {
             <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
               Severity
             </Typography>
-            <Typography variant="body1" className="font-medium p-2 rounded ${result.riskColor}">
+            <Typography variant="body1" className={`font-medium p-2 rounded ${result.riskColor}`}>
               {result.severityLevel}
             </Typography>
             <Typography variant="body2" className="text-gray-600 mt-2">
-              <strong>Interpretation:</strong> {result.interpretation}
+              <strong by>Interpretation:</strong> {result.interpretation}
             </Typography>
             <Box className="flex items-center mt-2">
               <Info className="w-4 h-4 text-teal-600 mr-1" />
               <Typography variant="body2" className="text-gray-600">
                 Source: Cicardi M, et al., J Allergy Clin Immunol 2014;133:1236-44.{' '}
-                <a href="https://pubmed.ncbi.nlm.nih.gov/24565617/" target="_blank" rel="noopener noreferrer" target="_blank" rel="noopener noreferrer" className="text-teal-600 underline">
+                <a href="https://pubmed.ncbi.nlm.nih.gov/24565617/" target="_blank" rel="noopener noreferrer" className="text-teal-600 underline">
                   Read study
                 </a>
               </Typography>

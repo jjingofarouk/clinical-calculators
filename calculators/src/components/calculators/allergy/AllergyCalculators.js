@@ -8,6 +8,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
+
 import SCORAD from './SCORAD';
 import EASI from './EASI';
 import IgELevel from './IgELevel';
@@ -28,33 +29,10 @@ import HereditaryAngioedema from './HereditaryAngioedema';
 import ImmunodeficiencyRisk from './ImmunodeficiencyRisk';
 import ComplementDeficiency from './ComplementDeficiency';
 import SLEDAI from './SLEDAI';
-import ANATiter from './ANATiter';
-import AntiDsDNA from './AntiDsDNA';
-import C3C4Levels from './C3C4Levels';
 import LupusActivityIndex from './LupusActivityIndex';
 import BILAG from './BILAG';
-import RALatexTest from './RALatexTest';
-import CCPAntibody from './CCPAntibody';
-import RFTiter from './RFTiter';
-import HLAB27 from './HLAB27';
 import ASASCriteria from './ASASCriteria';
-import ASCA from './ASCA';
-import pANCA from './pANCA';
-import EosinophilCount from './EosinophilCount';
-import BasophilActivation from './BasophilActivation';
 import PatchTestScore from './PatchTestScore';
-import SkinPrickTest from './SkinPrickTest';
-import TotalIgG from './TotalIgG';
-import IgGSubclass from './IgGSubclass';
-import IgADeficiency from './IgADeficiency';
-import C1Inhibitor from './C1Inhibitor';
-import CH50 from './CH50';
-import AH50 from './AH50';
-import MannoseBindingLectin from './MannoseBindingLectin';
-import NKCellActivity from './NKCellActivity';
-import ImmunoglobulinRatio from './ImmunoglobulinRatio';
-import VaccineResponse from './VaccineResponse';
-import AllergySeverityScore from './AllergySeverityScore';
 
 const calculators = [
   { label: 'SCORAD', component: <SCORAD /> },
@@ -77,33 +55,10 @@ const calculators = [
   { label: 'Immunodeficiency Risk', component: <ImmunodeficiencyRisk /> },
   { label: 'Complement Deficiency', component: <ComplementDeficiency /> },
   { label: 'SLEDAI', component: <SLEDAI /> },
-  { label: 'ANA Titer', component: <ANATiter /> },
-  { label: 'Anti-dsDNA', component: <AntiDsDNA /> },
-  { label: 'C3/C4 Levels', component: <C3C4Levels /> },
   { label: 'Lupus Activity Index', component: <LupusActivityIndex /> },
   { label: 'BILAG', component: <BILAG /> },
-  { label: 'RA Latex Test', component: <RALatexTest /> },
-  { label: 'CCP Antibody', component: <CCPAntibody /> },
-  { label: 'RF Titer', component: <RFTiter /> },
-  { label: 'HLA-B27', component: <HLAB27 /> },
   { label: 'ASAS Criteria', component: <ASASCriteria /> },
-  { label: 'ASCA', component: <ASCA /> },
-  { label: 'pANCA', component: <pANCA /> },
-  { label: 'Eosinophil Count', component: <EosinophilCount /> },
-  { label: 'Basophil Activation', component: <BasophilActivation /> },
-  { label: 'Patch Test Score', component: <PatchTestScore /> },
-  { label: 'Skin Prick Test', component: <SkinPrickTest /> },
-  { label: 'Total IgG', component: <TotalIgG /> },
-  { label: 'IgG Subclass', component: <IgGSubclass /> },
-  { label: 'IgA Deficiency', component: <IgADeficiency /> },
-  { label: 'C1 Inhibitor', component: <C1Inhibitor /> },
-  { label: 'CH50', component: <CH50 /> },
-  { label: 'AH50', component: <AH50 /> },
-  { label: 'Mannose-Binding Lectin', component: <MannoseBindingLectin /> },
-  { label: 'NK Cell Activity', component: <NKCellActivity /> },
-  { label: 'Immunoglobulin Ratio', component: <ImmunoglobulinRatio /> },
-  { label: 'Vaccine Response', component: <VaccineResponse /> },
-  { label: 'Allergy Severity Score', component: <AllergySeverityScore /> }
+  { label: 'Patch Test Score', component: <PatchTestScore /> }
 ];
 
 const AllergyCalculators = () => {

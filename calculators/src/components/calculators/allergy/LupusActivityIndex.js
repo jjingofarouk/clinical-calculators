@@ -1,15 +1,10 @@
-import React, { useState } from 'react";
-import { Box,
-Typography,
-TextField,
-Switch,
-Button,
-Alert } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Switch, Button, Alert } from '@mui/material';
 import { AlertCircle, Info } from 'lucide-react';
 
 const LupusActivityIndex = () => {
   const [arthritisScore, setArthritisScore] = useState('');
-  const [renalActivity, setRenalScore] = useState('');
+  const [renalScore, setRenalScore] = useState('');
   const [rash, setRash] = useState(false);
   const [serositis, setSerositis] = useState(false);
   const [hematologic, setHematologic] = useState(false);
@@ -64,7 +59,7 @@ const LupusActivityIndex = () => {
       interpretation = 'High lupus activity; urgent rheumatology evaluation and therapy escalation required.';
     }
 
-    setResult({ score, riskColor, interpretation });
+    setResult({ score, activity, riskColor, interpretation });
   };
 
   return (
@@ -154,7 +149,7 @@ const LupusActivityIndex = () => {
             <Typography variant="h6" className="font-semibold text-gray-800 mb-2">
               Activity Level
             </Typography>
-            <Typography variant="body1" className="font-medium p-2 rounded ${result.riskColor}">
+            <Typography variant="body1" className={`font-medium p-2 rounded ${result.riskColor}`}>
               {result.activity}
             </Typography>
             <Typography variant="body2" className="text-gray-600 mt-2">

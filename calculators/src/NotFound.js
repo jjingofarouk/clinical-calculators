@@ -359,7 +359,7 @@ const NotFound = () => {
       icon: Calculator
     },
     {
-      title:  Calculator Clinical Review",
+      title:  "Calculator Clinical Review",
       subtitle: "This diagnostic tool is undergoing comprehensive clinical review and validation studies by medical experts.",
       icon: Calculator
     },

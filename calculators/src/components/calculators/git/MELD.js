@@ -205,7 +205,7 @@ const MELDScore = () => {
             • MELD Score 30-39: High priority for transplantation (52.6% 1-month mortality risk).
             • MELD Score 20-29: Evaluate for transplant listing (19.6% 1-month mortality risk).
             • MELD Score 10-19: Close monitoring required (6.0% 1-month mortality risk).
-            • MELD Score < 10: Routine follow-up recommended (1.9% 1-month mortality risk).
+            • MELD Score &lt; 10: Routine follow-up recommended (1.9% 1-month mortality risk).
             {'\n'}
             **Next Steps**:
             - Consult a hepatologist for comprehensive evaluation.

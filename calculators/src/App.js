@@ -6,7 +6,7 @@ import Layout from './Layout';
 
 // Pages
 import Home from './Home';
-import NotFound from './components/NotFound';
+import NotFound from './NotFound';
 
 // Calculator Category Pages
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';

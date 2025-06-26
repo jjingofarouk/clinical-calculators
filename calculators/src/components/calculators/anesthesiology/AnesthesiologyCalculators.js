@@ -126,7 +126,7 @@ const calculators = [
   { label: 'Blood Loss Estimation Methods', component: <BloodLossEstimation /> },
   { label: 'Perioperative Fluid Management Calculators', component: <PerioperativeFluid /> },
   { label: 'Transfusion Trigger Guidelines', component: <TransfusionTrigger /> },
-  { label: ‘Thromboelastography (TEG) Interpretation’, component: <TEGInterpretation /> },
+  { label: ‘Thromboelastography Interpretation’, component: <TEGInterpretation /> },
   { label: ‘Rotational Thromboelastometry (ROTEM) Interpretation’, component: <ROTEMInterpretation /> },
   { label: ‘Nerve Block Volume Calculators’, component: <NerveBlockVolume /> },
   { label: ‘Spinal Anesthesia Dosing Guidelines’, component: <SpinalAnesthesiaDosing /> },

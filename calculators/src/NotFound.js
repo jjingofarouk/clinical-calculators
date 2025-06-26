@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Construction, Home, ArrowLeft, Wrench, Hammer, Building, Cog, Sparkles, Rocket, Stethoscope, FileText, Activity, Clipboard, Calculator, Database, FlaskConical, Microscope, Shield, Clock, BookOpen, TrendingUp, Target, Users, Settings, Zap, Star, Award, CheckCircle, RefreshCw, Search, BarChart, Layers, Brain, Heart, Pill, Syringe, Thermometer, Eye, Ear, Bone, Dna, Bandage, Monitor, Timer, AlertTriangle, Info, Lightbulb, Puzzle, Gauge, Radio, Wifi, Cloud, Server, HardDrive, Cpu, MemoryStick, Smartphone, Tablet, Laptop, Printer, Scanner, Camera, Video, Headphones, Speaker, Mouse, Keyboard, GameController, Joystick, Gamepad2, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Shuffle, Repeat, SkipForward, SkipBack, Play, Pause, Stop, Volume2, VolumeX, Mute, FastForward, Rewind, Record, Download, Upload, Share, Send, Mail, MessageCircle, Phone, PhoneCall, Video as VideoIcon, Calendar, Clock3, AlarmClock, Stopwatch, Timer as TimerIcon, Hourglass, Sun, Moon, CloudRain, CloudSnow, Zap as Lightning, Flame, Snowflake, Droplet, Umbrella, Rainbow, Sunrise, Sunset, Mountain, Flower, Leaf } from 'lucide-react';
+import { Home, ArrowLeft, Calculator } from 'lucide-react';
 
 const NotFound = () => {
   const messages = [
@@ -11,542 +11,542 @@ const NotFound = () => {
     {
       title: "Medical Tool Under Construction",
       subtitle: "This diagnostic calculator is undergoing rigorous clinical validation and quality assurance testing. We appreciate your patience as we ensure accuracy and reliability.",
-      icon: Stethoscope
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool in Development",
       subtitle: "Our clinical development team is finalizing the algorithms and validation studies for this medical calculator. Implementation will be available soon.",
-      icon: FileText
+      icon: Calculator
     },
     {
       title: "Clinical Decision Support Coming Soon",
       subtitle: "This evidence-based calculator is currently in the final stages of clinical review and validation. Please check back for availability.",
-      icon: Activity
+      icon: Calculator
     },
     {
       title: "Medical Calculator Under Review",
       subtitle: "Our clinical advisory board is conducting final validation of this diagnostic tool to ensure adherence to current medical guidelines and best practices.",
-      icon: Clipboard
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool in Beta Testing",
       subtitle: "This clinical calculator is undergoing comprehensive testing and validation by our medical experts. Launch will occur following successful completion of quality assurance protocols.",
-      icon: FlaskConical
+      icon: Calculator
     },
     {
       title: "Clinical Algorithm Under Development",
       subtitle: "Our medical informatics specialists are refining the clinical algorithms and ensuring compliance with current evidence-based medicine standards.",
-      icon: Database
+      icon: Calculator
     },
     {
       title: "Medical Scoring System in Progress",
       subtitle: "This clinical scoring tool is being developed with input from leading medical professionals and will be available following peer review and validation.",
-      icon: BarChart
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Pending",
       subtitle: "Our clinical team is conducting final literature reviews and algorithm validation for this medical decision support tool.",
-      icon: BookOpen
+      icon: Calculator
     },
     {
       title: "Clinical Tool Validation in Process",
       subtitle: "This medical calculator is undergoing rigorous validation studies to ensure accuracy and compliance with current clinical practice guidelines.",
-      icon: Shield
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Tool Coming Soon",
       subtitle: "Our development team is finalizing the clinical algorithms and user interface for this evidence-based diagnostic calculator.",
-      icon: Brain
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Under Construction",
       subtitle: "This clinical tool is being developed in collaboration with medical experts to ensure optimal accuracy and usability for healthcare professionals.",
-      icon: Microscope
+      icon: Calculator
     },
     {
       title: "Clinical Assessment Tool in Development",
       subtitle: "Our medical informatics team is conducting final testing and validation of this evidence-based clinical calculator.",
-      icon: Target
+      icon: Calculator
     },
     {
       title: "Medical Calculation Tool Pending Release",
       subtitle: "This diagnostic calculator is undergoing comprehensive clinical review and quality assurance testing prior to implementation.",
-      icon: TrendingUp
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Under Review",
       subtitle: "Our clinical advisory panel is conducting final validation studies for this medical decision support calculator.",
-      icon: Users
+      icon: Calculator
     },
     {
       title: "Clinical Algorithm Optimization in Progress",
       subtitle: "This medical calculator is being refined based on current literature and clinical expert recommendations to ensure optimal performance.",
-      icon: Settings
+      icon: Calculator
     },
     {
       title: "Medical Scoring Tool Development Ongoing",
       subtitle: "Our clinical development team is finalizing the validation studies and quality assurance protocols for this diagnostic calculator.",
-      icon: Award
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Quality Assurance in Process",
       subtitle: "This clinical calculator is undergoing comprehensive testing and validation to meet the highest standards of medical accuracy and reliability.",
-      icon: CheckCircle
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Validation Studies Ongoing",
       subtitle: "Our medical experts are conducting final validation studies and peer review for this evidence-based diagnostic tool.",
-      icon: Search
+      icon: Calculator
     },
     {
       title: "Medical Decision Support System in Development",
       subtitle: "This clinical calculator is being developed with rigorous attention to evidence-based medicine principles and current practice guidelines.",
-      icon: Layers
+      icon: Calculator
     },
     {
       title: "Clinical Tool Under Medical Review",
       subtitle: "Our clinical advisory board is conducting comprehensive review and validation of this medical decision support calculator.",
-      icon: Heart
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Beta Testing",
       subtitle: "This diagnostic tool is undergoing final testing phases with medical professionals to ensure optimal clinical utility and accuracy.",
-      icon: Monitor
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Development in Progress",
       subtitle: "Our clinical informatics team is refining the algorithms and conducting validation studies for this evidence-based calculator.",
-      icon: Cpu
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Clinical Validation",
       subtitle: "This medical tool is undergoing rigorous clinical validation and quality assurance testing by our expert medical panel.",
-      icon: Pill
+      icon: Calculator
     },
     {
       title: "Clinical Decision Tool Under Construction",
       subtitle: "Our development team is finalizing the clinical algorithms and user interface design for this evidence-based medical calculator.",
-      icon: Construction
+      icon: Calculator
     },
     {
       title: "Medical Scoring System Quality Review",
       subtitle: "This clinical calculator is undergoing comprehensive quality review and validation studies to ensure adherence to medical best practices.",
-      icon: Gauge
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Development Phase",
       subtitle: "Our medical informatics specialists are conducting final development and validation of this clinical decision support calculator.",
-      icon: Lightbulb
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Algorithm Refinement",
       subtitle: "This diagnostic tool is being refined based on current medical literature and expert clinical recommendations.",
-      icon: RefreshCw
+      icon: Calculator
     },
     {
       title: "Medical Tool Validation Protocol Active",
       subtitle: "Our clinical team is executing comprehensive validation protocols for this evidence-based medical calculator.",
-      icon: AlertTriangle
+      icon: Calculator
     },
     {
       title: "Diagnostic System Development Ongoing",
       subtitle: "This clinical decision support tool is being developed with input from leading medical professionals and evidence-based research.",
-      icon: Info
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Medical Review Phase",
       subtitle: "Our medical advisory panel is conducting thorough review and validation of this diagnostic calculator.",
-      icon: Eye
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Quality Assurance",
       subtitle: "This medical calculator is undergoing rigorous quality assurance testing and clinical validation studies.",
-      icon: Timer
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Under Development",
       subtitle: "Our clinical development team is finalizing the algorithms and conducting validation studies for this evidence-based tool.",
-      icon: Clock
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Clinical Testing",
       subtitle: "This medical tool is currently in clinical testing phase with healthcare professionals to ensure optimal accuracy and usability.",
-      icon: Thermometer
+      icon: Calculator
     },
     {
       title: "Clinical Tool Algorithm Validation",
       subtitle: "Our medical informatics team is conducting comprehensive algorithm validation and quality assurance for this diagnostic calculator.",
-      icon: Puzzle
+      icon: Calculator
     },
     {
       title: "Medical Scoring Tool Under Review",
       subtitle: "This clinical calculator is undergoing peer review and validation by our expert medical advisory board.",
-      icon: Star
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Development Active",
       subtitle: "Our clinical team is actively developing and validating this medical decision support tool based on current evidence and guidelines.",
-      icon: Zap
+      icon: Calculator
     },
     {
       title: "Clinical Decision Tool Beta Phase",
       subtitle: "This diagnostic calculator is in beta testing phase with medical professionals to ensure clinical accuracy and optimal user experience.",
-      icon: Radio
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Quality Control",
       subtitle: "Our development team is conducting final quality control measures and validation studies for this evidence-based clinical calculator.",
-      icon: Server
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Clinical Validation Phase",
       subtitle: "This medical calculator is undergoing comprehensive clinical validation and expert review to ensure adherence to best practices.",
-      icon: HardDrive
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Development Review",
       subtitle: "Our medical advisory panel is conducting thorough development review and validation of this evidence-based diagnostic tool.",
-      icon: Tablet
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Testing Phase",
       subtitle: "This clinical calculator is in active testing phase with healthcare professionals to validate accuracy and clinical utility.",
-      icon: Laptop
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Medical Validation",
       subtitle: "Our clinical experts are conducting comprehensive medical validation and quality assurance for this diagnostic calculator.",
-      icon: Laptop
+      icon: Calculator
     },
     {
       title: "Clinical Algorithm Expert Review",
       subtitle: "This medical calculator is undergoing expert clinical review and validation studies to ensure optimal diagnostic accuracy.",
-      icon: Smartphone
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Quality Assessment",
       subtitle: "Our medical team is conducting comprehensive quality assessment and validation protocols for this evidence-based tool.",
-      icon: Camera
+      icon: Calculator
     },
     {
       title: "Medical Tool Clinical Development",
       subtitle: "This diagnostic calculator is in active clinical development phase with rigorous testing and validation by medical experts.",
-      icon: Video
+      icon: Calculator
     },
     {
       title: "Clinical Decision Support Validation",
       subtitle: "Our development team is conducting final validation studies and quality assurance for this evidence-based medical calculator.",
-      icon: Headphones
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Expert Review",
       subtitle: "This clinical tool is undergoing comprehensive expert review and validation by our medical advisory board.",
-      icon: Headphones
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Development Phase",
       subtitle: "Our clinical informatics team is in active development phase, refining algorithms and conducting validation studies.",
-      icon: Speaker
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Medical Testing",
       subtitle: "This clinical calculator is undergoing rigorous medical testing and validation with healthcare professionals.",
-      icon: Mouse
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Validation Protocol",
       subtitle: "Our medical team is executing comprehensive validation protocols and quality assurance for this evidence-based tool.",
-      icon: Keyboard
+      icon: Calculator
     },
     {
       title: "Medical Decision Tool Under Construction",
       subtitle: "This diagnostic calculator is being constructed with input from medical experts and evidence-based research.",
-      icon: Building
+      icon: Calculator
     },
     {
       title: "Evidence-Based System Development",
       subtitle: "Our clinical development team is actively developing this medical decision support system based on current guidelines.",
-      icon: Wrench
+      icon: Calculator
     },
     {
       title: "Clinical Tool Algorithm Development",
       subtitle: "This medical calculator's algorithms are being developed and validated by our clinical informatics specialists.",
-      icon: Hammer
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Medical Review",
       subtitle: "Our medical advisory panel is conducting comprehensive review and validation of this clinical decision support tool.",
-      icon: Cog
+      icon: Calculator
     },
     {
       title: "Medical Scoring System Under Development",
       subtitle: "This clinical scoring tool is being developed with rigorous attention to evidence-based medicine and validation studies.",
-      icon: Sparkles
+      icon: Calculator
     },
     {
       title: "Clinical Decision Support Launch Preparation",
       subtitle: "Our development team is preparing for launch of this evidence-based medical calculator following completion of validation studies.",
-      icon: Rocket
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Clinical Testing",
       subtitle: "This diagnostic calculator is undergoing comprehensive clinical testing and validation with medical professionals.",
-      icon: Activity
+      icon: Calculator
     },
     {
       title: "Medical Calculator Expert Validation",
       subtitle: "Our clinical experts are conducting thorough validation and quality assurance for this evidence-based diagnostic tool.",
-      icon: Bone
+      icon: Calculator
     },
     {
       title: "Clinical Algorithm Medical Review",
       subtitle: "This medical calculator's algorithms are undergoing comprehensive medical review and validation by our expert panel.",
-      icon: Dna
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Development Protocol",
       subtitle: "Our clinical team is following rigorous development protocols and validation studies for this evidence-based calculator.",
-      icon: Bandage
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Under Testing",
       subtitle: "This clinical calculator is undergoing comprehensive testing and validation to ensure optimal accuracy and clinical utility.",
-      icon: Ear
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Quality Review",
       subtitle: "Our medical advisory board is conducting thorough quality review and validation of this diagnostic tool.",
-      icon: Syringe
+      icon: Calculator
     },
     {
       title: "Clinical Tool Validation Studies Active",
       subtitle: "This medical calculator is subject to active validation studies and quality assurance protocols by our clinical team.",
-      icon: TimerIcon
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Clinical Validation",
       subtitle: "Our clinical informatics team is conducting comprehensive validation of the algorithms for this evidence-based tool.",
-      icon: Hourglass
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Expert Development",
       subtitle: "This clinical tool is being developed by medical experts with rigorous attention to evidence-based medicine principles.",
-      icon: Sun
+      icon: Calculator
     },
     {
       title: "Clinical Decision Tool Quality Assurance",
       subtitle: "Our development team is conducting comprehensive quality assurance and validation for this medical calculator.",
-      icon: Moon
+      icon: Calculator
     },
     {
       title: "Evidence-Based System Medical Review",
       subtitle: "This diagnostic calculator is undergoing thorough medical review and validation by our clinical advisory panel.",
-      icon: CloudRain
+      icon: Calculator
     },
     {
       title: "Medical Tool Development Validation",
       subtitle: "Our clinical team is conducting comprehensive development validation and quality assurance for this evidence-based calculator.",
-      icon: CloudSnow
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Algorithm Testing",
       subtitle: "This medical tool's algorithms are undergoing rigorous testing and validation by our clinical informatics specialists.",
-      icon: Lightning
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Medical Development",
       subtitle: "Our medical development team is actively developing and validating this clinical decision support calculator.",
-      icon: Flame
+      icon: Calculator
     },
     {
-      title: "Evidence-Based Calculator Clinical Review",
+      title: Juno-Based Calculator Clinical Review",
       subtitle: "This diagnostic tool is undergoing comprehensive clinical review and validation studies by medical experts.",
-      icon: Snowflake
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Development",
       subtitle: "Our clinical team is in active development phase for this evidence-based medical calculator with rigorous validation protocols.",
-      icon: Droplet
+      icon: Calculator
     },
     {
       title: "Clinical Tool Expert Validation",
       subtitle: "This medical calculator is undergoing expert validation and quality assurance by our clinical advisory board.",
-      icon: Umbrella
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Medical Testing",
       subtitle: "Our medical team is conducting comprehensive testing and validation protocols for this evidence-based clinical tool.",
-      icon: Rainbow
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Development Review",
       subtitle: "This clinical calculator is undergoing thorough development review and validation by our medical experts.",
-      icon: Sunrise
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Quality Validation",
       subtitle: "Our clinical informatics team is conducting comprehensive quality validation and testing for this diagnostic calculator.",
-      icon: Sunset
+      icon: Calculator
     },
     {
       title: "Clinical Decision Tool Under Review",
       subtitle: "This medical calculator is under comprehensive review and validation by our clinical advisory panel.",
-      icon: Mountain
+      icon: Calculator
     },
     {
       title: "Diagnostic System Clinical Development",
       subtitle: "Our medical development team is actively developing this clinical decision support system with rigorous validation studies.",
-      icon: Home
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Medical Validation",
       subtitle: "This diagnostic tool is undergoing comprehensive medical validation and quality assurance by our clinical experts.",
-      icon: Flower
+      icon: Calculator
     },
     {
       title: "Medical Tool Algorithm Validation",
       subtitle: "Our clinical team is conducting thorough algorithm validation and quality testing for this evidence-based calculator.",
-      icon: Leaf
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Development Testing",
       subtitle: "This medical tool is in active development testing phase with comprehensive validation by healthcare professionals.",
-      icon: Home
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Quality Development",
       subtitle: "Our medical advisory board is overseeing quality development and validation protocols for this evidence-based calculator.",
-      icon: Home
+      icon: Calculator
     },
     {
       title: "Evidence-Based System Under Construction",
       subtitle: "This clinical decision support system is under construction with rigorous medical validation and quality assurance protocols.",
-      icon: Shuffle
+      icon: Calculator
     },
     {
       title: "Medical Calculator Clinical Validation",
       subtitle: "Our clinical team is conducting comprehensive validation studies and quality assurance for this diagnostic calculator.",
-      icon: Repeat
+      icon: Calculator
     },
     {
       title: "Clinical Decision Support Beta Testing",
       subtitle: "This evidence-based medical calculator is in beta testing phase with healthcare professionals for optimal validation.",
-      icon: SkipForward
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Medical Quality Review",
       subtitle: "Our medical experts are conducting thorough quality review and validation of this clinical calculator.",
-      icon: SkipBack
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Development",
       subtitle: "This medical tool is in active development with comprehensive validation studies and quality assurance protocols.",
-      icon: Play
+      icon: Calculator
     },
     {
       title: "Clinical Tool Medical Validation Phase",
       subtitle: "Our clinical advisory panel is conducting comprehensive medical validation for this evidence-based diagnostic calculator.",
-      icon: Pause
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Development Review",
       subtitle: "This clinical calculator's algorithms are undergoing development review and validation by our medical informatics team.",
-      icon: Stop
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Expert Testing",
       subtitle: "Our medical experts are conducting comprehensive testing and validation protocols for this evidence-based tool.",
-      icon: Volume2
+      icon: Calculator
     },
     {
       title: "Clinical Decision Tool Validation Review",
       subtitle: "This medical calculator is undergoing validation review and quality assurance by our clinical development team.",
-      icon: VolumeX
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Medical Development",
       subtitle: "Our clinical team is actively developing this diagnostic calculator with rigorous medical validation and testing protocols.",
-      icon: Mute
+      icon: Calculator
     },
     {
       title: "Medical Calculator Quality Testing",
       subtitle: "This clinical tool is undergoing comprehensive quality testing and validation by our medical advisory board.",
-      icon: FastForward
+      icon: Calculator
     },
     {
       title: "Clinical Algorithm Medical Validation",
       subtitle: "Our medical informatics specialists are conducting thorough validation and quality assurance for this evidence-based calculator.",
-      icon: Rewind
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Development Validation",
       subtitle: "This clinical calculator is in development validation phase with comprehensive testing by healthcare professionals.",
-      icon: Record
+      icon: Calculator
     },
     {
       title: "Evidence-Based System Quality Assurance",
       subtitle: "Our clinical team is conducting comprehensive quality assurance and validation studies for this medical decision support tool.",
-      icon: Download
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Under Validation",
       subtitle: "This diagnostic calculator is under comprehensive validation and quality review by our medical expert panel.",
-      icon: Upload
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Medical Testing Phase",
       subtitle: "Our clinical development team is conducting comprehensive medical testing and validation for this evidence-based tool.",
-      icon: Share
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Expert Development",
       subtitle: "This medical calculator is being developed by clinical experts with rigorous validation and quality assurance protocols.",
-      icon: Send
+      icon: Calculator
     },
     {
       title: "Evidence-Based Calculator Under Review",
       subtitle: "Our medical advisory board is conducting thorough review and validation of this clinical decision support calculator.",
-      icon: Mail
+      icon: Calculator
     },
     {
       title: "Medical Algorithm Clinical Testing",
       subtitle: "This diagnostic tool's algorithms are undergoing comprehensive clinical testing and validation by our medical team.",
-      icon: MessageCircle
+      icon: Calculator
     },
     {
       title: "Clinical Tool Quality Validation",
       subtitle: "Our clinical experts are conducting comprehensive quality validation and testing protocols for this evidence-based calculator.",
-      icon: Phone
+      icon: Calculator
     },
     {
       title: "Diagnostic Calculator Medical Review Phase",
       subtitle: "This medical tool is in comprehensive medical review phase with validation studies by our clinical advisory panel.",
-      icon: PhoneCall
+      icon: Calculator
     },
     {
       title: "Evidence-Based Tool Clinical Development",
       subtitle: "Our medical development team is actively developing this clinical calculator with rigorous validation and quality assurance.",
-      icon: VideoIcon
+      icon: Calculator
     },
     {
       title: "Medical Decision Support Validation Studies",
       subtitle: "This diagnostic calculator is subject to comprehensive validation studies and quality testing by our clinical experts.",
-      icon: Calendar
+      icon: Calculator
     },
     {
       title: "Clinical Calculator Algorithm Review",
       subtitle: "Our clinical informatics team is conducting thorough algorithm review and validation for this evidence-based medical tool.",
-      icon: Clock3
+      icon: Calculator
     },
     {
       title: "Diagnostic Tool Medical Validation Protocol",
       subtitle: "This clinical calculator is following comprehensive medical validation protocols and quality assurance standards.",
-      icon: AlarmClock
+      icon: Calculator
     },
     {
       title: "Evidence-Based System Development Phase",
       subtitle: "Our clinical team is in active development phase for this medical decision support system with rigorous validation studies.",
-      icon: Stopwatch
+      icon: Calculator
     }
   ];
 

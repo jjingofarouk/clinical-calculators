@@ -1,3 +1,4 @@
+// AnesthesiologyCalculators.jsx
 import React, { useState } from 'react';
 import {
   Box,
@@ -126,76 +127,76 @@ const calculators = [
   { label: 'Blood Loss Estimation Methods', component: <BloodLossEstimation /> },
   { label: 'Perioperative Fluid Management Calculators', component: <PerioperativeFluid /> },
   { label: 'Transfusion Trigger Guidelines', component: <TransfusionTrigger /> },
-  { label: ‘Thromboelastography Interpretation’, component: <TEGInterpretation /> },
-  { label: ‘Rotational Thromboelastometry (ROTEM) Interpretation’, component: <ROTEMInterpretation /> },
-  { label: ‘Nerve Block Volume Calculators’, component: <NerveBlockVolume /> },
-  { label: ‘Spinal Anesthesia Dosing Guidelines’, component: <SpinalAnesthesiaDosing /> },
-  { label: ‘Epidural Test Dose’, component: <EpiduralTestDose /> },
-  { label: ‘Oxygenation Assessment (PaO2/FiO2, etc.)’, component: <OxygenationAssessment /> },
-  { label: ‘Aldrete Score for Post-Anesthesia Recovery’, component: <AldreteScore /> },
-  { label: ‘Post-Anesthesia Care Unit (PACU) Discharge Criteria’, component: <PACUDischarge /> },
-  { label: ‘Malignant Hyperthermia Clinical Grading Scale’, component: <MalignantHyperthermia /> },
-  { label: ‘Intubation Difficulty Scale (IDS)’, component: <IntubationDifficulty /> },
-  { label: ‘Wilson Score for Difficult Intubation’, component: <WilsonScore /> },
-  { label: ‘El-Ganzouri Risk Index for Difficult Tracheal Intubation’, component: <ElGanzouriRisk /> },
-  { label: ‘Gupta Perioperative Risk Calculator’, component: <GuptaPerioperativeRisk /> },
-  { label: ‘ARISCAT Score for Postoperative Pulmonary Complications’, component: <ARISCATScore /> },
-  { label: ‘PRE-DELIRIC for Delirium Risk’, component: <PREDELIRIC /> },
-  { label: ‘Nutrition Risk Screening (NRS 2002)’, component: <NutritionRiskScreening /> },
-  { label: ‘Clinical Frailty Scale’, component: <ClinicalFrailtyScale /> },
-  { label: ‘Broselow Tape for Pediatric Dosing’, component: <BroselowTape /> },
-  { label: ‘End-Tidal CO2 Interpretation’, component: <EndTidalCO2 /> },
-  { label: ‘Alveolar Gas Equation’, component: <AlveolarGasEquation /> },
-  { label: ‘Anion Gap’, component: <AnionGap /> },
-  { label: ‘Osmolal Gap’, component: <OsmolalGap /> },
-  { label: ‘Creatinine Clearance (Cockcroft-Gault)’, component: <CreatinineClearance /> },
-  { label: ‘Glomerular Filtration Rate (eGFR)’, component: <EGFR /> },
-  { label: ‘Model for End-Stage Liver Disease (MELD) Score’, component: <MELDScore /> },
-  { label: ‘Child-Pugh Score’, component: <ChildPughScore /> },
-  { label: ‘Acute Physiology and Chronic Health Evaluation II (APACHE II)’, component: <APACHEII /> },
-  { label: ‘Sequential Organ Failure Assessment (SOFA) Score’, component: <SOFAScore /> },
-  { label: ‘quick Sequential Organ Failure Assessment (qSOFA)’, component: <QSOFA /> },
-  { label: ‘Simplified Acute Physiology Score (SAPS II)’, component: <SAPSII /> },
-  { label: ‘Cardiac Output Monitoring Techniques’, component: <CardiacOutputMonitoring /> },
-  { label: ‘Stroke Volume Variation’, component: <StrokeVolumeVariation /> },
-  { label: ‘Pulse Pressure Variation’, component: <PulsePressureVariation /> },
-  { label: ‘Central Venous Pressure Interpretation’, component: <CentralVenousPressure /> },
-  { label: ‘Pulmonary Artery Catheter Data Interpretation’, component: <PulmonaryArteryCatheter /> },
-  { label: ‘Transesophageal Echocardiography (TEE) for Hemodynamic Monitoring’, component: <TEEHemodynamic /> },
-  { label: ‘Neuromuscular Blockade Monitoring (Train-of-Four, etc.)’, component: <NeuromuscularBlockade /> },
-  { label: ‘Entropy Monitoring for Depth of Anesthesia’, component: <EntropyMonitoring /> },
-  { label: ‘Narcotrend Index’, component: <NarcotrendIndex /> },
-  { label: ‘Cerebral Oximetry (NIRS)’, component: <CerebralOximetry /> },
-  { label: ‘Lactate Levels’, component: <LactateLevels /> },
-  { label: ‘Base Deficit/Base Excess’, component: <BaseDeficitExcess /> },
-  { label: ‘Strong Ion Difference (SID)’, component: <StrongIonDifference /> },
-  { label: ‘Allergic Reaction Risk Assessment’, component: <AllergicReactionRisk /> },
-  { label: ‘Latex Allergy Risk’, component: <LatexAllergyRisk /> },
-  { label: ‘Malignant Hyperthermia Susceptibility Assessment’, component: <MalignantHyperthermiaSusceptibility /> },
-  { label: ‘Sickle Cell Disease Considerations’, component: <SickleCellConsiderations /> },
-  { label: ‘Obstructive Sleep Apnea Risk (Berlin Questionnaire)’, component: <BerlinQuestionnaire /> },
-  { label: ‘Gastroesophageal Reflux Disease (GERD) Risk for Aspiration’, component: <GERDRisk /> },
-  { label: ‘Aspiration Risk Assessment’, component: <AspirationRisk /> },
-  { label: ‘American Society of Anesthesiologists (ASA) Difficult Airway Algorithm’, component: <ASADifficultAirway /> },
-  { label: ‘Cannot Intubate, Cannot Oxygenate (CICO) Algorithm’, component: <CICOAlgorithm /> },
-  { label: ‘Rapid Sequence Intubation (RSI) Drug Dosing’, component: <RSIDrugDosing /> },
-  { label: ‘Preoxygenation Techniques’, component: <PreoxygenationTechniques /> },
-  { label: ‘Apneic Oxygenation’, component: <ApneicOxygenation /> },
-  { label: ‘High-Flow Nasal Oxygen (HFNO) for Preoxygenation’, component: <HFNO /> },
-  { label: ‘Non-Invasive Ventilation (NIV) Settings’, component: <NIVSettings /> },
-  { label: ‘Extracorporeal Membrane Oxygenation (ECMO) Basics’, component: <ECMOBasics /> },
-  { label: ‘Intra-Aortic Balloon Pump (IABP) for Cardiac Support’, component: <IABP /> },
-  { label: ‘Ventricular Assist Devices (VADs)’, component: <VADs /> },
-  { label: ‘Point-of-Care Ultrasound (POCUS) for Anesthesiologists’, component: <POCUS /> },
-  { label: ‘Lung Ultrasound’, component: <LungUltrasound /> },
-  { label: ‘Cardiac Ultrasound’, component: <CardiacUltrasound /> },
-  { label: ‘Abdominal Ultrasound’, component: <AbdominalUltrasound /> },
-  { label: ‘Nerve Identification for Regional Blocks’, component: <NerveIdentification /> },
-  { label: ‘Vascular Access Ultrasound’, component: <VascularAccessUltrasound /> },
-  { label: ‘Postoperative Cognitive Dysfunction (POCD) Risk Assessment’, component: <POCDRisk /> },
-  { label: ‘Enhanced Recovery After Surgery (ERAS) Protocols’, component: <ERASProtocols /> },
-  { label: ‘Perioperative Cardiac Arrest Risk’, component: <PerioperativeCardiacArrest /> },
-  { label: ‘Anesthesia for Patients with Implanted Devices’, component: <ImplantedDevices /> }
+  { label: 'Thromboelastography Interpretation', component: <TEGInterpretation /> },
+  { label: 'Rotational Thromboelastometry (ROTEM) Interpretation', component: <ROTEMInterpretation /> },
+  { label: 'Nerve Block Volume Calculators', component: <NerveBlockVolume /> },
+  { label: 'Spinal Anesthesia Dosing Guidelines', component: <SpinalAnesthesiaDosing /> },
+  { label: 'Epidural Test Dose', component: <EpiduralTestDose /> },
+  { label: 'Oxygenation Assessment (PaO2/FiO2, etc.)', component: <OxygenationAssessment /> },
+  { label: 'Aldrete Score for Post-Anesthesia Recovery', component: <AldreteScore /> },
+  { label: 'Post-Anesthesia Care Unit (PACU) Discharge Criteria', component: <PACUDischarge /> },
+  { label: 'Malignant Hyperthermia Clinical Grading Scale', component: <MalignantHyperthermia /> },
+  { label: 'Intubation Difficulty Scale (IDS)', component: <IntubationDifficulty /> },
+  { label: 'Wilson Score for Difficult Intubation', component: <WilsonScore /> },
+  { label: 'El-Ganzouri Risk Index for Difficult Tracheal Intubation', component: <ElGanzouriRisk /> },
+  { label: 'Gupta Perioperative Risk Calculator', component: <GuptaPerioperativeRisk /> },
+  { label: 'ARISCAT Score for Postoperative Pulmonary Complications', component: <ARISCATScore /> },
+  { label: 'PRE-DELIRIC for Delirium Risk', component: <PREDELIRIC /> },
+  { label: 'Nutrition Risk Screening (NRS 2002)', component: <NutritionRiskScreening /> },
+  { label: 'Clinical Frailty Scale', component: <ClinicalFrailtyScale /> },
+  { label: 'Broselow Tape for Pediatric Dosing', component: <BroselowTape /> },
+  { label: 'End-Tidal CO2 Interpretation', component: <EndTidalCO2 /> },
+  { label: 'Alveolar Gas Equation', component: <AlveolarGasEquation /> },
+  { label: 'Anion Gap', component: <AnionGap /> },
+  { label: 'Osmolal Gap', component: <OsmolalGap /> },
+  { label: 'Creatinine Clearance (Cockcroft-Gault)', component: <CreatinineClearance /> },
+  { label: 'Glomerular Filtration Rate (eGFR)', component: <EGFR /> },
+  { label: 'Model for End-Stage Liver Disease (MELD) Score', component: <MELDScore /> },
+  { label: 'Child-Pugh Score', component: <ChildPughScore /> },
+  { label: 'Acute Physiology and Chronic Health Evaluation II (APACHE II)', component: <APACHEII /> },
+  { label: 'Sequential Organ Failure Assessment (SOFA) Score', component: <SOFAScore /> },
+  { label: 'quick Sequential Organ Failure Assessment (qSOFA)', component: <QSOFA /> },
+  { label: 'Simplified Acute Physiology Score (SAPS II)', component: <SAPSII /> },
+  { label: 'Cardiac Output Monitoring Techniques', component: <CardiacOutputMonitoring /> },
+  { label: 'Stroke Volume Variation', component: <StrokeVolumeVariation /> },
+  { label: 'Pulse Pressure Variation', component: <PulsePressureVariation /> },
+  { label: 'Central Venous Pressure Interpretation', component: <CentralVenousPressure /> },
+  { label: 'Pulmonary Artery Catheter Data Interpretation', component: <PulmonaryArteryCatheter /> },
+  { label: 'Transesophageal Echocardiography (TEE) for Hemodynamic Monitoring', component: <TEEHemodynamic /> },
+  { label: 'Neuromuscular Blockade Monitoring (Train-of-Four, etc.)', component: <NeuromuscularBlockade /> },
+  { label: 'Entropy Monitoring for Depth of Anesthesia', component: <EntropyMonitoring /> },
+  { label: 'Narcotrend Index', component: <NarcotrendIndex /> },
+  { label: 'Cerebral Oximetry (NIRS)', component: <CerebralOximetry /> },
+  { label: 'Lactate Levels', component: <LactateLevels /> },
+  { label: 'Base Deficit/Base Excess', component: <BaseDeficitExcess /> },
+  { label: 'Strong Ion Difference (SID)', component: <StrongIonDifference /> },
+  { label: 'Allergic Reaction Risk Assessment', component: <AllergicReactionRisk /> },
+  { label: 'Latex Allergy Risk', component: <LatexAllergyRisk /> },
+  { label: 'Malignant Hyperthermia Susceptibility Assessment', component: <MalignantHyperthermiaSusceptibility /> },
+  { label: 'Sickle Cell Disease Considerations', component: <SickleCellConsiderations /> },
+  { label: 'Obstructive Sleep Apnea Risk (Berlin Questionnaire)', component: <BerlinQuestionnaire /> },
+  { label: 'Gastroesophageal Reflux Disease (GERD) Risk for Aspiration', component: <GERDRisk /> },
+  { label: 'Aspiration Risk Assessment', component: <AspirationRisk /> },
+  { label: 'American Society of Anesthesiologists (ASA) Difficult Airway Algorithm', component: <ASADifficultAirway /> },
+  { label: 'Cannot Intubate, Cannot Oxygenate (CICO) Algorithm', component: <CICOAlgorithm /> },
+  { label: 'Rapid Sequence Intubation (RSI) Drug Dosing', component: <RSIDrugDosing /> },
+  { label: 'Preoxygenation Techniques', component: <PreoxygenationTechniques /> },
+  { label: 'Apneic Oxygenation', component: <ApneicOxygenation /> },
+  { label: 'High-Flow Nasal Oxygen (HFNO) for Preoxygenation', component: <HFNO /> },
+  { label: 'Non-Invasive Ventilation (NIV) Settings', component: <NIVSettings /> },
+  { label: 'Extracorporeal Membrane Oxygenation (ECMO) Basics', component: <ECMOBasics /> },
+  { label: 'Intra-Aortic Balloon Pump (IABP) for Cardiac Support', component: <IABP /> },
+  { label: 'Ventricular Assist Devices (VADs)', component: <VADs /> },
+  { label: 'Point-of-Care Ultrasound (POCUS) for Anesthesiologists', component: <POCUS /> },
+  { label: 'Lung Ultrasound', component: <LungUltrasound /> },
+  { label: 'Cardiac Ultrasound', component: <CardiacUltrasound /> },
+  { label: 'Abdominal Ultrasound', component: <AbdominalUltrasound /> },
+  { label: 'Nerve Identification for Regional Blocks', component: <NerveIdentification /> },
+  { label: 'Vascular Access Ultrasound', component: <VascularAccessUltrasound /> },
+  { label: 'Postoperative Cognitive Dysfunction (POCD) Risk Assessment', component: <POCDRisk /> },
+  { label: 'Enhanced Recovery After Surgery (ERAS) Protocols', component: <ERASProtocols /> },
+  { label: 'Perioperative Cardiac Arrest Risk', component: <PerioperativeCardiacArrest /> },
+  { label: 'Anesthesia for Patients with Implanted Devices', component: <ImplantedDevices /> }
 ];
 
 const AnesthesiologyCalculators = () => {
@@ -213,8 +214,8 @@ const AnesthesiologyCalculators = () => {
   };
 
   return (
-    <Box className="h-full w-full max-w-full flex flex-col bg-white">
-      <Box className="p-4 border-b border-gray-200 bg-white w-full relative">
+    <Box sx={{ height: '100%', width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'white' }}>
+      <Box sx={{ p: 4, borderBottom: 1, borderColor: 'grey.200', bgcolor: 'white', width: '100%', position: 'relative' }}>
         <TextField
           fullWidth
           variant="outlined"
@@ -226,20 +227,20 @@ const AnesthesiologyCalculators = () => {
           }}
           InputProps={{
             startAdornment: (
-              <Search className="w-5 h-5 text-gray-400 mr-2" />
+              <Search size={20} color="grey.400" style={{ marginRight: 8 }} />
             )
           }}
           sx={{
-            backgroundColor: '#fff',
+            bgcolor: 'white',
             borderRadius: 2,
             '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#d1d5db' },
-              '&:hover fieldset': { borderColor: '#0d9488' },
-              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+              '& fieldset': { borderColor: 'grey.300' },
+              '&:hover fieldset': { borderColor: 'teal.600' },
+              '&.Mui-focused fieldset': { borderColor: 'teal.600' },
             },
-            input: {
+            '& input': {
               fontFamily: 'Inter, sans-serif',
-              color: '#1F2937'
+              color: 'grey.900'
             },
             width: '100%',
             maxWidth: '100%'
@@ -247,7 +248,7 @@ const AnesthesiologyCalculators = () => {
         />
       </Box>
 
-      <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'grey.200', px: 2, bgcolor: 'grey.50', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -261,12 +262,13 @@ const AnesthesiologyCalculators = () => {
             '& .MuiTab-root': {
               borderRadius: 3,
               m: 0.5,
-              bgcolor: '#fff',
-              border: '1px solid #E5E7EB',
+              bgcolor: 'white',
+              border: '1px solid',
+              borderColor: 'grey.200',
               fontFamily: 'Inter, sans-serif',
               fontSize: 14,
               textTransform: 'none',
-              color: '#1F2937',
+              color: 'grey.900',
               px: 2,
               py: 1,
               boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
@@ -274,26 +276,26 @@ const AnesthesiologyCalculators = () => {
               minWidth: 'auto'
             },
             '& .Mui-selected': {
-              bgcolor: '#0d9488',
-              color: '#fff',
+              bgcolor: 'teal.600',
+              color: 'white',
               fontWeight: 600,
               boxShadow: '0 2px 4px rgba(39,199,184,0.2)'
             },
             '& .MuiTabs-indicator': {
-              backgroundColor: '#0d9488'
+              bgcolor: 'teal.600'
             },
             '& .MuiTabs-scroller': {
-              overflowX: 'auto !important',
+              overflowX: 'auto',
               scrollbarWidth: 'thin',
-              scrollbarColor: '#d1d5db transparent',
+              scrollbarColor: 'grey.300 transparent',
               '&::-webkit-scrollbar': {
                 height: '8px'
               },
               '&::-webkit-scrollbar-track': {
-                background: 'transparent'
+                bgcolor: 'transparent'
               },
               '&::-webkit-scrollbar-thumb': {
-                background: '#d1d5db',
+                bgcolor: 'grey.300',
                 borderRadius: '4px'
               }
             }
@@ -311,7 +313,7 @@ const AnesthesiologyCalculators = () => {
         </Tabs>
       </Box>
 
-      <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
+      <Box sx={{ flex: 1, overflowY: 'auto', p: 4, bgcolor: 'white', width: '100%', maxWidth: '100%' }}>
         {filteredCalculators.length > 0 ? (
           <motion.div
             key={selectedTab}
@@ -322,7 +324,7 @@ const AnesthesiologyCalculators = () => {
             {filteredCalculators[selectedTab]?.component}
           </motion.div>
         ) : (
-          <Typography variant="body1" className="text-gray-500 text-center mt-8">
+          <Typography variant="body1" sx={{ color: 'grey.500', textAlign: 'center', mt: 8 }}>
             No calculators match your search.
           </Typography>
         )}

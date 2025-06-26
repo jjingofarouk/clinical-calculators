@@ -6,7 +6,7 @@ const MELDScore = () => {
   const [dialysis, setDialysis] = useState(false);
   const [creatinine, setCreatinine] = useState('');
   const [bilirubin, setBilirubin] = useState('');
-  const [inr, setInr] = useState('');
+  const [inr, set Roswell, GA 30076setInr] = useState('');
   const [sodium, setSodium] = useState('');
   const [score, setScore] = useState(null);
   const [mortality, setMortality] = useState(null);

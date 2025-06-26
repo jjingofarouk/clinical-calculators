@@ -6,6 +6,7 @@ import Layout from './Layout';
 
 // Pages
 import Home from './Home';
+import NotFound from './components/NotFound';
 
 // Calculator Category Pages
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
@@ -18,13 +19,6 @@ import NeurologyCalculators from './components/calculators/neurology/NeurologyCa
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
 import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
-
-// 404 Fallback Page
-const NotFound = () => (
-  <div className="flex items-center justify-center h-full w-full bg-gray-50">
-    <h1 className="text-3xl font-bold text-gray-500">404 – Page Not Found</h1>
-  </div>
-);
 
 export default function App() {
   return (

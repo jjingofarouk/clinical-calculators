@@ -10,6 +10,7 @@ import NotFound from './NotFound';
 
 // Calculator Category Pages
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
+import AnesthesiologyCalculators from './components/calculators/allergy/AnesthesiologyCalculators';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
 import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/calculators/Allergy" element={<AllergyCalculators />} />
+            <Route path="/calculators/Anesthesiology" element={<AnesthesiologyCalculators />} />
             <Route path="/calculators/General" element={<GeneralCalculators />} />
             <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
             <Route path="/calculators/Pulmonary" element={<PulmonaryCalculators />} />

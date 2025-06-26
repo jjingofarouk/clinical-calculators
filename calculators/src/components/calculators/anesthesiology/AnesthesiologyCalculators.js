@@ -96,7 +96,6 @@ import VADs from './VADs';
 import POCUS from './POCUS';
 import LungUltrasound from './LungUltrasound';
 import CardiacUltrasound from './CardiacUltrasound';
-import AbdominalUltrasound from './AbdominalUltrasound';
 import NerveIdentification from './NerveIdentification';
 import VascularAccessUltrasound from './VascularAccessUltrasound';
 import POCDRisk from './POCDRisk';
@@ -190,7 +189,6 @@ const calculators = [
   { label: 'Point-of-Care Ultrasound (POCUS) for Anesthesiologists', component: <POCUS /> },
   { label: 'Lung Ultrasound', component: <LungUltrasound /> },
   { label: 'Cardiac Ultrasound', component: <CardiacUltrasound /> },
-  { label: 'Abdominal Ultrasound', component: <AbdominalUltrasound /> },
   { label: 'Nerve Identification for Regional Blocks', component: <NerveIdentification /> },
   { label: 'Vascular Access Ultrasound', component: <VascularAccessUltrasound /> },
   { label: 'Postoperative Cognitive Dysfunction (POCD) Risk Assessment', component: <POCDRisk /> },

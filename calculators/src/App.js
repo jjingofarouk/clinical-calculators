@@ -10,7 +10,7 @@ import NotFound from './NotFound';
 
 // Calculator Category Pages
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
-import AnesthesiologyCalculators from './components/calculators/allergy/AnesthesiologyCalculators';
+import AnesthesiologyCalculators from './components/calculators/anesthesiology/AnesthesiologyCalculators';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
 import PulmonaryCalculators from './components/calculators/pulmonary/PulmonaryCalculators';

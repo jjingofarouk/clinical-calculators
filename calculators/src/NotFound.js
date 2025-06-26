@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Construction, Home, ArrowLeft, Wrench, Hammer, Building, Cog, Sparkles, Rocket, Stethoscope, FileText, Activity, Clipboard, Calculator, Database, FlaskConical, Microscope, Shield, Clock, BookOpen, TrendingUp, Target, Users, Settings, Zap, Star, Award, CheckCircle, RefreshCw, Search, BarChart, Layers, Brain, Heart, Pill, Syringe, Thermometer, Eye, Ear, Bone, Dna, Bandage, Monitor, Timer, AlertTriangle, Info, Lightbulb, Puzzle, Gauge, Radio, Wifi, Cloud, Server, HardDrive, Cpu, MemoryStick, Smartphone, Tablet, Laptop, Printer, Scanner, Camera, Video, Headphones, Speaker, Mouse, Keyboard, GameController, Joystick, Gamepad2, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Shuffle, Repeat, SkipForward, SkipBack, Play, Pause, Stop, Volume2, VolumeX, Mute, FastForward, Rewind, Record, Download, Upload, Share, Send, Mail, MessageCircle, Phone, PhoneCall, Video as VideoIcon, Calendar, Clock3, AlarmClock, Stopwatch, Timer as TimerIcon, Hourglass, Sun, Moon, CloudRain, CloudSnow, Zap as Lightning, Flame, Snowflake, Droplet, Umbrella, Rainbow, Sunrise, Sunset, Mountain, Flower, Leaf, Seedling, Sprout } from 'lucide-react';
+import { Construction, Home, ArrowLeft, Wrench, Hammer, Building, Cog, Sparkles, Rocket, Stethoscope, FileText, Activity, Clipboard, Calculator, Database, FlaskConical, Microscope, Shield, Clock, BookOpen, TrendingUp, Target, Users, Settings, Zap, Star, Award, CheckCircle, RefreshCw, Search, BarChart, Layers, Brain, Heart, Pill, Syringe, Thermometer, Eye, Ear, Bone, Dna, Bandage, Monitor, Timer, AlertTriangle, Info, Lightbulb, Puzzle, Gauge, Radio, Wifi, Cloud, Server, HardDrive, Cpu, MemoryStick, Smartphone, Tablet, Laptop, Printer, Scanner, Camera, Video, Headphones, Speaker, Mouse, Keyboard, GameController, Joystick, Gamepad2, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Shuffle, Repeat, SkipForward, SkipBack, Play, Pause, Stop, Volume2, VolumeX, Mute, FastForward, Rewind, Record, Download, Upload, Share, Send, Mail, MessageCircle, Phone, PhoneCall, Video as VideoIcon, Calendar, Clock3, AlarmClock, Stopwatch, Timer as TimerIcon, Hourglass, Sun, Moon, CloudRain, CloudSnow, Zap as Lightning, Flame, Snowflake, Droplet, Umbrella, Rainbow, Sunrise, Sunset, Mountain, Flower, Leaf } from 'lucide-react';
 
 const NotFound = () => {
   const messages = [
@@ -411,12 +411,12 @@ const NotFound = () => {
     {
       title: "Clinical Calculator Development Testing",
       subtitle: "This medical tool is in active development testing phase with comprehensive validation by healthcare professionals.",
-      icon: Seedling
+      icon: Home
     },
     {
       title: "Diagnostic Tool Quality Development",
       subtitle: "Our medical advisory board is overseeing quality development and validation protocols for this evidence-based calculator.",
-      icon: Sprout
+      icon: Home
     },
     {
       title: "Evidence-Based System Under Construction",

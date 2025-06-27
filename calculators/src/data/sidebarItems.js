@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 export const sidebarItems = [
-{ label: 'Allergy and Immunology', path: '/calculators/AllergyAndImmunology', icon: Calculator, calculators: ['SCORAD', 'EASI', 'IgE Level', 'RAST Score', 'DLQI', 'Asthma Control Test', 'FeNO', 'Allergic Rhinitis Score', 'Anaphylaxis Risk', 'Drug Allergy Probability', 'Food Allergy Score', 'Atopy Risk', 'Eczema Severity Index', 'Urticaria Activity Score', 'Angioedema Score', 'Mastocytosis Score', 'Hereditary Angioedema', 'Immunodeficiency Risk', 'Complement Deficiency', 'SLEDAI', 'Lupus Activity Index', 'BILAG', 'ASAS Criteria', 'Patch Test Score', 'Allergy Severity Score'] },
+{ label: 'Allergy and Immunology', path: '/calculators/Allergy', icon: Calculator, calculators: ['SCORAD', 'EASI', 'IgE Level', 'RAST Score', 'DLQI', 'Asthma Control Test', 'FeNO', 'Allergic Rhinitis Score', 'Anaphylaxis Risk', 'Drug Allergy Probability', 'Food Allergy Score', 'Atopy Risk', 'Eczema Severity Index', 'Urticaria Activity Score', 'Angioedema Score', 'Mastocytosis Score', 'Hereditary Angioedema', 'Immunodeficiency Risk', 'Complement Deficiency', 'SLEDAI', 'Lupus Activity Index', 'BILAG', 'ASAS Criteria', 'Patch Test Score', 'Allergy Severity Score'] },
 {
   label: 'Anesthesiology',
   path: '/calculators/Anesthesiology',

@@ -34,7 +34,6 @@ import LupusActivityIndex from './LupusActivityIndex';
 import BILAG from './BILAG';
 import ASASCriteria from './ASASCriteria';
 import PatchTestScore from './PatchTestScore';
-import AllergySeverityScore from './AllergySeverityScore';
 
 const calculators = [
   { label: 'SCORAD', component: <SCORAD /> },
@@ -60,8 +59,7 @@ const calculators = [
   { label: 'Lupus Activity Index', component: <LupusActivityIndex /> },
   { label: 'BILAG', component: <BILAG /> },
   { label: 'ASAS Criteria', component: <ASASCriteria /> },
-  { label: 'Patch Test Score', component: <PatchTestScore /> },
-  { label: 'Allergy Severity Score', component: <AllergySeverityScore /> }
+  { label: 'Patch Test Score', component: <PatchTestScore /> }
 ];
 
 const AllergyCalculators = () => {
@@ -85,6 +83,8 @@ const AllergyCalculators = () => {
       } else {
         setSelectedTab(0); // Fallback to first tab if calculator not found
       }
+    } else {
+      setSelectedTab(0); // Default to first tab if no calculator parameter
     }
   }, [calculator]);
 

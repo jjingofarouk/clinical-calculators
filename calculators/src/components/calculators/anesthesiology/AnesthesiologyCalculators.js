@@ -1,5 +1,5 @@
-// AnesthesiologyCalculators.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Tabs,
@@ -9,8 +9,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-import { Search } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -198,6 +197,7 @@ const calculators = [
 ];
 
 const AnesthesiologyCalculators = () => {
+  const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const theme = useTheme();
@@ -207,13 +207,23 @@ const AnesthesiologyCalculators = () => {
     c.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  useEffect(() => {
+    if (calculator) {
+      const calcName = calculator.replace(/-/g, ' ');
+      const index = filteredCalculators.findIndex(c => c.label === calcName);
+      if (index !== -1) {
+        setSelectedTab(index);
+      }
+    }
+  }, [calculator, filteredCalculators]);
+
   const handleTabChange = (_, newIndex) => {
     setSelectedTab(newIndex);
   };
 
   return (
-    <Box sx={{ height: '100%', width: '100%', maxWidth: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'white' }}>
-      <Box sx={{ p: 4, borderBottom: 1, borderColor: 'grey.200', bgcolor: 'white', width: '100%', position: 'relative' }}>
+    <Box className="h-full w-full max-w-full flex flex-col bg-white">
+      <Box className="p-4 border-b border-gray-200 bg-white w-full">
         <TextField
           fullWidth
           variant="outlined"
@@ -223,22 +233,17 @@ const AnesthesiologyCalculators = () => {
             setSearchQuery(e.target.value);
             setSelectedTab(0);
           }}
-          InputProps={{
-            startAdornment: (
-              <Search size={20} color="grey.400" style={{ marginRight: 8 }} />
-            )
-          }}
           sx={{
-            bgcolor: 'white',
+            backgroundColor: '#fff',
             borderRadius: 2,
             '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: 'grey.300' },
-              '&:hover fieldset': { borderColor: 'teal.600' },
-              '&.Mui-focused fieldset': { borderColor: 'teal.600' },
+              '& fieldset': { borderColor: '#d1d5db' },
+              '&:hover fieldset': { borderColor: '#0d9488' },
+              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
             },
-            '& input': {
+            input: {
               fontFamily: 'Inter, sans-serif',
-              color: 'grey.900'
+              color: '#1F2937'
             },
             width: '100%',
             maxWidth: '100%'
@@ -246,7 +251,7 @@ const AnesthesiologyCalculators = () => {
         />
       </Box>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'grey.200', px: 2, bgcolor: 'grey.50', overflowX: 'auto' }}>
+      <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -260,13 +265,12 @@ const AnesthesiologyCalculators = () => {
             '& .MuiTab-root': {
               borderRadius: 3,
               m: 0.5,
-              bgcolor: 'white',
-              border: '1px solid',
-              borderColor: 'grey.200',
+              bgcolor: '#fff',
+              border: '1px solid #E5E7EB',
               fontFamily: 'Inter, sans-serif',
               fontSize: 14,
               textTransform: 'none',
-              color: 'grey.900',
+              color: '#1F2937',
               px: 2,
               py: 1,
               boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
@@ -274,55 +278,42 @@ const AnesthesiologyCalculators = () => {
               minWidth: 'auto'
             },
             '& .Mui-selected': {
-              bgcolor: 'teal.600',
-              color: 'white',
+              bgcolor: '#0d9488',
+              color: '#fff',
               fontWeight: 600,
               boxShadow: '0 2px 4px rgba(39,199,184,0.2)'
             },
             '& .MuiTabs-indicator': {
-              bgcolor: 'teal.600'
+              backgroundColor: '#0d9488'
             },
             '& .MuiTabs-scroller': {
-              overflowX: 'auto',
+              overflowX: 'auto !important',
               scrollbarWidth: 'thin',
-              scrollbarColor: 'grey.300 transparent',
+              scrollbarColor: '#d1d5db transparent',
               '&::-webkit-scrollbar': {
                 height: '8px'
               },
               '&::-webkit-scrollbar-track': {
-                bgcolor: 'transparent'
+                background: 'transparent'
               },
               '&::-webkit-scrollbar-thumb': {
-                bgcolor: 'grey.300',
+                background: '#d1d5db',
                 borderRadius: '4px'
               }
             }
           }}
         >
-          {filteredCalculators.map((calc, index) => (
-            <Tab
-              key={calc.label}
-              label={calc.label}
-              component={motion.div}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            />
+          {filteredCalculators.map((calc) => (
+            <Tab key={calc.label} label={calc.label} />
           ))}
         </Tabs>
       </Box>
 
-      <Box sx={{ flex: 1, overflowY: 'auto', p: 4, bgcolor: 'white', width: '100%', maxWidth: '100%' }}>
+      <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
         {filteredCalculators.length > 0 ? (
-          <motion.div
-            key={selectedTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {filteredCalculators[selectedTab]?.component}
-          </motion.div>
+          filteredCalculators[selectedTab]?.component
         ) : (
-          <Typography variant="body1" sx={{ color: 'grey.500', textAlign: 'center', mt: 8 }}>
+          <Typography variant="body1" className="text-gray-500 text-center mt-8">
             No calculators match your search.
           </Typography>
         )}

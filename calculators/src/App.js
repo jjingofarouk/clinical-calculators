@@ -30,16 +30,27 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/calculators/Allergy" element={<AllergyCalculators />} />
+            <Route path="/calculators/Allergy/:calculator" element={<AllergyCalculators />} />
             <Route path="/calculators/Anesthesiology" element={<AnesthesiologyCalculators />} />
+            <Route path="/calculators/Anesthesiology/:calculator" element={<AnesthesiologyCalculators />} />
             <Route path="/calculators/General" element={<GeneralCalculators />} />
+            <Route path="/calculators/General/:calculator" element={<GeneralCalculators />} />
             <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />
+            <Route path="/calculators/Cardiovascular/:calculator" element={<CardiovascularCalculators />} />
             <Route path="/calculators/Pulmonary" element={<PulmonaryCalculators />} />
+            <Route path="/calculators/Pulmonary/:calculator" element={<PulmonaryCalculators />} />
             <Route path="/calculators/Gastroenterology" element={<GastroenterologyCalculators />} />
+            <Route path="/calculators/Gastroenterology/:calculator" element={<GastroenterologyCalculators />} />
             <Route path="/calculators/Obstetrics" element={<ObstetricsCalculators />} />
+            <Route path="/calculators/Obstetrics/:calculator" element={<ObstetricsCalculators />} />
             <Route path="/calculators/Neurology" element={<NeurologyCalculators />} />
+            <Route path="/calculators/Neurology/:calculator" element={<NeurologyCalculators />} />
             <Route path="/calculators/Nephrology" element={<NephrologyCalculators />} />
+            <Route path="/calculators/Nephrology/:calculator" element={<NephrologyCalculators />} />
             <Route path="/calculators/Orthopedics" element={<OrthopedicsCalculators />} />
+            <Route path="/calculators/Orthopedics/:calculator" element={<OrthopedicsCalculators />} />
             <Route path="/calculators/ICU" element={<ICUCalculators />} />
+            <Route path="/calculators/ICU/:calculator" element={<ICUCalculators />} />
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Route>

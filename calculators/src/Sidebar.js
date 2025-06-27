@@ -156,7 +156,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                       {item.calculators.map((calc) => (
                         <li key={calc}>
                           <Link
-                            to={item.path}
+                            to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
                             onClick={toggleMobile}
                             className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
                           >

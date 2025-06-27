@@ -106,7 +106,11 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                   <Link
                     to={path}
                     onClick={toggleMobile}
-                    className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
+                    className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
+                      location.pathname === path
+                        ? 'text-teal-600 bg-teal-50'
+                        : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
+                    } rounded-lg`}
                   >
                     {calc} <span className="text-xs text-gray-500">({specialty})</span>
                   </Link>
@@ -161,7 +165,11 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                           <Link
                             to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
                             onClick={toggleMobile}
-                            className="block py-2.5 px-3 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-all duration-200 font-medium"
+                            className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
+                              location.pathname === `${item.path}/${calc.replace(/\s+/g, '-')}`
+                                ? 'text-teal-600 bg-teal-50'
+                                : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
+                            } rounded-lg`}
                           >
                             {calc}
                           </Link>
@@ -177,7 +185,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       </nav>
 
       <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50">
-        <div class="text-center">
+        <div className="text-center">
           <p className="text-xs text-gray-500 font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available
           </p>

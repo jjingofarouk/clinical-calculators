@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Tabs,
@@ -62,6 +63,7 @@ const calculators = [
 ];
 
 const AllergyCalculators = () => {
+  const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const theme = useTheme();
@@ -70,6 +72,16 @@ const AllergyCalculators = () => {
   const filteredCalculators = calculators.filter(c =>
     c.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  useEffect(() => {
+    if (calculator) {
+      const calcName = calculator.replace(/-/g, ' ');
+      const index = filteredCalculators.findIndex(c => c.label === calcName);
+      if (index !== -1) {
+        setSelectedTab(index);
+      }
+    }
+  }, [calculator, filteredCalculators]);
 
   const handleTabChange = (_, newIndex) => {
     setSelectedTab(newIndex);
@@ -157,7 +169,7 @@ const AllergyCalculators = () => {
             }
           }}
         >
-          {filteredCalculators.map((calc, index) => (
+          {filteredCalculators.map((calc) => (
             <Tab key={calc.label} label={calc.label} />
           ))}
         </Tabs>

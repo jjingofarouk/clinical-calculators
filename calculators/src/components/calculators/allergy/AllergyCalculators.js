@@ -34,6 +34,7 @@ import LupusActivityIndex from './LupusActivityIndex';
 import BILAG from './BILAG';
 import ASASCriteria from './ASASCriteria';
 import PatchTestScore from './PatchTestScore';
+import AllergySeverityScore from './AllergySeverityScore';
 
 const calculators = [
   { label: 'SCORAD', component: <SCORAD /> },
@@ -59,7 +60,8 @@ const calculators = [
   { label: 'Lupus Activity Index', component: <LupusActivityIndex /> },
   { label: 'BILAG', component: <BILAG /> },
   { label: 'ASAS Criteria', component: <ASASCriteria /> },
-  { label: 'Patch Test Score', component: <PatchTestScore /> }
+  { label: 'Patch Test Score', component: <PatchTestScore /> },
+  { label: 'Allergy Severity Score', component: <AllergySeverityScore /> }
 ];
 
 const AllergyCalculators = () => {
@@ -76,12 +78,15 @@ const AllergyCalculators = () => {
   useEffect(() => {
     if (calculator) {
       const calcName = calculator.replace(/-/g, ' ');
-      const index = filteredCalculators.findIndex(c => c.label === calcName);
+      const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
+        setSearchQuery(''); // Reset search to show all calculators
         setSelectedTab(index);
+      } else {
+        setSelectedTab(0); // Fallback to first tab if calculator not found
       }
     }
-  }, [calculator, filteredCalculators]);
+  }, [calculator]);
 
   const handleTabChange = (_, newIndex) => {
     setSelectedTab(newIndex);

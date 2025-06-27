@@ -10,7 +10,6 @@ import {
   ChevronRight,
   Droplets,
   Menu,
-  Monitor,
   Search,
   Stethoscope,
   Wind,
@@ -119,21 +118,22 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           </ul>
         ) : (
           sidebarItems.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.startsWith(item.path);
             const isOpen = expanded === item.label;
             const Icon = item.icon;
 
             return (
               <div key={item.label} className="group">
-                <button
-                  onClick={() => toggleExpand(item.label)}
-                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm ${
-                    isActive 
-                      ? 'bg-teal-50 text-teal-700 border border-teal-100 shadow-sm' 
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm">
+                  <Link
+                    to={item.path}
+                    onClick={toggleMobile}
+                    className={`flex items-center space-x-3 flex-grow ${
+                      isActive 
+                        ? 'text-teal-700' 
+                        : 'text-gray-700 hover:text-gray-900'
+                    }`}
+                  >
                     <div className={`p-2 rounded-lg transition-colors duration-200 ${
                       isActive 
                         ? 'bg-teal-100 text-teal-600' 
@@ -142,13 +142,16 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                       <Icon size={18} />
                     </div>
                     <span className="text-sm font-semibold">{item.label}</span>
-                  </div>
-                  <div className={`transition-transform duration-200 ${
-                    isActive ? 'text-teal-600' : 'text-gray-400'
-                  }`}>
+                  </Link>
+                  <button
+                    onClick={() => toggleExpand(item.label)}
+                    className={`p-2 rounded-lg transition-colors duration-200 ${
+                      isActive ? 'text-teal-600' : 'text-gray-400'
+                    } hover:bg-gray-200`}
+                  >
                     {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                  </div>
-                </button>
+                  </button>
+                </div>
                 
                 {isOpen && (
                   <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-100">
@@ -174,7 +177,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       </nav>
 
       <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50">
-        <div className="text-center">
+        <div class="text-center">
           <p className="text-xs text-gray-500 font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available
           </p>

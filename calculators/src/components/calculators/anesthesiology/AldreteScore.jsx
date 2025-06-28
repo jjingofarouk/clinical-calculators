@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Button, Divider, Paper } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Stethoscope, Activity, Droplet, Heart, Lungs, Info } from 'lucide-react';
+import { Stethoscope, Activity, Droplet, Heart, Info } from 'lucide-react';
 
 const AldreteScore = () => {
   const [scores, setScores] = useState({
@@ -55,7 +55,7 @@ const AldreteScore = () => {
     },
     {
       name: 'respiration',
-      icon: Lungs,
+      icon: Stethoscope,
       label: 'Respiration',
       options: [
         { value: '2', label: 'Able to breathe deeply and cough freely' },

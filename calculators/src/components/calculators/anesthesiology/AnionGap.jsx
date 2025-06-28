@@ -196,7 +196,7 @@ const AnionGap = () => {
           <ul>
             <li><strong>Elevated AG (>12 mmol/L)</strong>: Suggests anion gap metabolic acidosis, potentially due to lactic acidosis (e.g., sepsis, shock), ketoacidosis (e.g., diabetic, alcoholic), or toxic ingestions (e.g., methanol, ethylene glycol).</li>
             <li><strong>Normal AG (8-12 mmol/L)</strong>: May indicate non-anion gap metabolic acidosis (e.g., hyperchloremic acidosis from diarrhea or renal tubular acidosis).</li>
-            <li><strong>Low AG (<8 mmol/L)</strong>: Rare, often due to hypoalbuminemia, lithium intoxication, or laboratory error.</li>
+            <li><strong>Low AG (&lt;8 mmol/L)</strong>: Rare, often due to hypoalbuminemia, lithium intoxication, or laboratory error.</li>
             <li><strong>Albumin Correction</strong>: Adjust AG for hypoalbuminemia to avoid underestimating acid-base disturbances.</li>
           </ul>
           Always interpret the AG in conjunction with clinical history, physical exam, and other laboratory findings (e.g., arterial blood gas, lactate levels). Further diagnostic workup may include evaluating for MUDPILES (Methanol, Uremia, Diabetic ketoacidosis, Paraldehyde, Iron/Isoniazid, Lactic acidosis, Ethylene glycol, Salicylates) for high AG acidosis. Consult institutional protocols for management of acid-base disorders.

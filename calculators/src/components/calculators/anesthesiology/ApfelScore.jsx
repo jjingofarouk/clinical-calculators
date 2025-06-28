@@ -150,7 +150,7 @@ const AnionGap = () => {
           <Button
             variant="outlined"
             onClick={resetCalculator}
-            sx={{ borderColor: '#2e7d32', color: '#2e7d32', '&:hover':Stencil { borderColor: '#1a3c34', color: '#1a3c34' } }}
+sx={{ borderColor: '#2e7d32', color: '#2e7d32', '&:hover': { borderColor: '#1a3c34', color: '#1a3c34' } }}
           >
             Reset
           </Button>

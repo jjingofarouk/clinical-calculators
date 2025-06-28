@@ -21,8 +21,8 @@ import {
   Button
 } from '@mui/material';
 import { 
-  QuestionMark, 
-  Sleep, 
+  Help, 
+  Hotel, 
   Warning, 
   CheckCircle, 
   Info,
@@ -256,7 +256,7 @@ const BerlinQuestionnaire = () => {
       <Card elevation={2} sx={{ borderLeft: '4px solid #ed6c02' }}>
         <CardContent>
           <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', color: 'warning.main' }}>
-            <QuestionMark sx={{ mr: 1 }} />
+            <Help sx={{ mr: 1 }} />
             Category 2: Daytime Sleepiness
           </Typography>
           
@@ -418,7 +418,7 @@ const BerlinQuestionnaire = () => {
         <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
           <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Sleep sx={{ mr: 2, color: 'primary.main', fontSize: 32 }} />
+              <Hotel sx={{ mr: 2, color: 'primary.main', fontSize: 32 }} />
               <Typography variant="h4" component="h1" fontWeight="bold">
                 Berlin Questionnaire
               </Typography>

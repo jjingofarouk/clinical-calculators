@@ -16,7 +16,7 @@ import {
   Paper,
   InputAdornment
 } from '@mui/material';
-import { Calculator, Lungs, AccessTime, Warning } from '@mui/icons-material';
+import { Calculate, Air, AccessTime, Warning } from '@mui/icons-material';
 
 const ApneicOxygenation = () => {
   const [inputs, setInputs] = useState({
@@ -131,7 +131,7 @@ const ApneicOxygenation = () => {
       <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
         <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Calculator sx={{ mr: 2, color: 'primary.main' }} />
+            <Calculate sx={{ mr: 2, color: 'primary.main' }} />
             <Typography variant="h4" component="h1" fontWeight="bold">
               Apneic Oxygenation Calculator
             </Typography>
@@ -146,7 +146,7 @@ const ApneicOxygenation = () => {
               <Card elevation={1}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Lungs sx={{ mr: 1 }} />
+                    <Air sx={{ mr: 1 }} />
                     Patient Parameters
                   </Typography>
                   

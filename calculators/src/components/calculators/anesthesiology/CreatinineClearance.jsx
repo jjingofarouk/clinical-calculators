@@ -1,3 +1,4 @@
+// CreatinineClearance.jsx
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -48,9 +49,11 @@ const CreatinineClearance = () => {
         'Standard anesthetic dosing and protocols applicable',
         'No significant renal adjustment needed for renally cleared drugs',
         'Monitor for age-related comorbidities affecting renal perfusion',
-        'Use Alexandra-Webber, Alexander (2003). The Cockcroft-Gault formula for estimation of creatinine clearance. Clin Nephrol 18: 1142–1148, 2003.
+        'Use short-acting agents (e.g., propofol, remifentanil) for rapid recovery',
+        'Routine intraoperative fluid management sufficient',
+        'Standard postoperative monitoring for renal function',
       ],
-      icon: <CheckCircleianas-Webber, Alexander (2003). The Cockcroft-Gault formula for estimation of creatinine density clearance. Clin Nephrol 18: 1142–1148, 2003.
+      icon: <CheckCircle size={20} color="#22c55e" />,
     },
     Mild: {
       range: '60-89',
@@ -163,7 +166,7 @@ const CreatinineClearance = () => {
     setShowAnesthesiaGuide(false);
   };
 
-  const getClassification = (crclValue) => {
+  const getClassification = (crclValue: number): string => {
     if (crclValue >= 90) return 'Normal';
     if (crclValue >= 60) return 'Mild';
     if (crclValue >= 30) return 'Moderate';
@@ -181,14 +184,13 @@ const CreatinineClearance = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      style={{ width: '100%', minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+      style={{ width: '100vw', minHeight: '100vh', backgroundColor: '#f5f5f5' }}
     >
       <Box sx={{ p: 4, maxWidth: '1200px', mx: 'auto' }}>
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-         -pink
           style={{ textAlign: 'center', marginBottom: 24 }}
         >
           <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
@@ -337,6 +339,7 @@ const CreatinineClearance = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
+              style={{ marginTop: 24 }}
             >
               <Card>
                 <CardContent>
@@ -379,7 +382,7 @@ const CreatinineClearance = () => {
                         </Typography>
                       </Box>
                       <List>
-                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item, index) => (
+                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item: string, index: number) => (
                           <ListItem key={index}>
                             <ListItemIcon>
                               <Syringe size={16} color="#0d9488" />
@@ -393,64 +396,65 @@ const CreatinineClearance = () => {
                 </CardContent>
               </Card>
             </motion.div>
-          </AnimatePresence>
+          )}
+        </AnimatePresence>
 
-          <Modal
-            open={showAnesthesiaGuide}
-            onClose={() => setShowAnesthesiaGuide(false)}
-            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        <Modal
+          open={showAnesthesiaGuide}
+          onClose={() => setShowAnesthesiaGuide(false)}
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              padding: 24,
+              width: '100%',
+              maxWidth: 500,
+              maxHeight: '80vh',
+              overflowY: 'auto',
+            }}
           >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: 12,
-                padding: 24,
-                width: '100%',
-                maxWidth: 500,
-                maxHeight: '80vh',
-                overflowY: 'auto',
-              }}
-            >
-              {crcl !== null && getAnesthesiaGuidance() && (
-                <>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                    Anesthesia Considerations - {getClassification(crcl)}
+            {crcl !== null && getAnesthesiaGuidance() && (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  Anesthesia Considerations - {getClassification(crcl)}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  {getAnesthesiaGuidance().icon}
+                  <Typography sx={{ ml: 1, fontWeight: '600' }}>
+                    Risk Level: {getAnesthesiaGuidance().risk}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    {getAnesthesiaGuidance().icon}
-                    <Typography sx={{ ml: 1, fontWeight: '600' }}>
-                      Risk Level: {getAnesthesiaGuidance().risk}
-                    </Typography>
-                  </Box>
-                  <List>
-                    {getAnesthesiaGuidance().considerations.map((item, index) => (
-                      <ListItem key={index}>
-                        <ListItemIcon>
-                          <Syringe size={16} color="#0d9488" />
-                        </ListItemIcon>
-                        <ListItemText primary={item} />
-                      </ListItem>
-                    ))}
-                  </List>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setShowAnesthesiaGuide(false)}
-                    fullWidth
-                    sx={{ mt: 4 }}
-                  >
-                    Close
-                  </Button>
-                </>
-              )}
-            </motion.div>
-          </Modal>
-        </Box>
-      </motion.div>
-    );
-  };
+                </Box>
+                <List>
+                  {getAnesthesiaGuidance().considerations.map((item: string, index: number) => (
+                    <ListItem key={index}>
+                      <ListItemIcon>
+                        <Syringe size={16} color="#0d9488" />
+                      </ListItemIcon>
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  ))}
+                </List>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => setShowAnesthesiaGuide(false)}
+                  fullWidth
+                  sx={{ mt: 4 }}
+                >
+                  Close
+                </Button>
+              </>
+            )}
+          </motion.div>
+        </Modal>
+      </Box>
+    </motion.div>
+  );
+};
 
 export default CreatinineClearance;

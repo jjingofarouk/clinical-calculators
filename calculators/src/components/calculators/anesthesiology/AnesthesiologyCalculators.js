@@ -1,14 +1,8 @@
+```jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {
-  Box,
-  Tabs,
-  Tab,
-  TextField,
-  Typography,
-  useTheme,
-  useMediaQuery
-} from '@mui/material';
+import { Box, Tabs, Tab, Typography, useTheme, useMediaQuery } from '@mui/material';
+import { motion } from 'framer-motion';
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -198,20 +192,14 @@ const calculators = [
 const AnesthesiologyCalculators = () => {
   const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const filteredCalculators = calculators.filter(c =>
-    c.label.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   useEffect(() => {
     if (calculator) {
       const calcName = calculator.replace(/-/g, ' ');
       const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
-        setSearchQuery('');
         setSelectedTab(index);
       } else {
         setSelectedTab(0);
@@ -226,35 +214,12 @@ const AnesthesiologyCalculators = () => {
   };
 
   return (
-    <Box className="h-full w-full max-w-full flex flex-col bg-white">
-      <Box className="p-4 border-b border-gray-200 bg-white w-full">
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search calculators..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setSelectedTab(0);
-          }}
-          sx={{
-            backgroundColor: '#fff',
-            borderRadius: 2,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': { borderColor: '#d1d5db' },
-              '&:hover fieldset': { borderColor: '#0d9488' },
-              '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-            },
-            input: {
-              fontFamily: 'Inter, sans-serif',
-              color: '#1F2937'
-            },
-            width: '100%',
-            maxWidth: '100%'
-          }}
-        />
-      </Box>
-
+    <motion.div
+      className="h-full w-full max-w-full flex flex-col bg-white"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
@@ -307,22 +272,20 @@ const AnesthesiologyCalculators = () => {
             }
           }}
         >
-          {filteredCalculators.map((calc) => (
+          {calculators.map((calc) => (
             <Tab key={calc.label} label={calc.label} />
           ))}
         </Tabs>
       </Box>
 
       <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
-        {filteredCalculators.length > 0 ? (
-          filteredCalculators[selectedTab]?.component
-        ) : (
+        {calculators[selectedTab]?.component || (
           <Typography variant="body1" className="text-gray-500 text-center mt-8">
-            No calculators match your search.
+            No calculator selected.
           </Typography>
         )}
       </Box>
-    </Box>
+    </motion.div>
   );
 };
 

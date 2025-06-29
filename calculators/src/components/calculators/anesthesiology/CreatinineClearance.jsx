@@ -30,6 +30,7 @@ import {
   Syringe,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import './index.css'; // Ensure Tailwind CSS is imported
 
 const CreatinineClearance = () => {
   const [age, setAge] = useState('');
@@ -124,19 +125,6 @@ const CreatinineClearance = () => {
       return;
     }
 
-    if (ageValue < 18 || ageValue > 120) {
-      setError('Age must be between 18 and 120 years');
-      return;
-    }
-    if (weightValue < 30 || weightValue > 200) {
-      setError('Weight must be between 30 and 200 kg');
-      return;
-    }
-    if (creatinineValue <= 0 || creatinineValue > 10) {
-      setError('Serum creatinine must be between 0.1 and 10 mg/dL');
-      return;
-    }
-
     // Cockcroft-Gault formula
     let crclValue = ((140 - ageValue) * weightValue) / (72 * creatinineValue);
     if (sex === 'female') {
@@ -166,7 +154,7 @@ const CreatinineClearance = () => {
     setShowAnesthesiaGuide(false);
   };
 
-  const getClassification = (crclValue: number): string => {
+  const getClassification = (crclValue) => {
     if (crclValue >= 90) return 'Normal';
     if (crclValue >= 60) return 'Mild';
     if (crclValue >= 30) return 'Moderate';
@@ -184,44 +172,44 @@ const CreatinineClearance = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      style={{ width: '100vw', minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+      className="min-h-screen w-screen bg-gray-50 overflow-y-auto overflow-x-hidden"
     >
-      <Box sx={{ p: 4, maxWidth: '1200px', mx: 'auto' }}>
+      <main className="w-full max-w-full p-4">
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          style={{ textAlign: 'center', marginBottom: 24 }}
+          className="text-center mb-6"
         >
-          <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-            <Stethoscope size={24} style={{ display: 'inline', marginRight: 8 }} />
+          <Typography className="header !text-2xl flex items-center justify-center">
+            <Stethoscope size={24} className="mr-2" />
             Creatinine Clearance Calculator
           </Typography>
-          <Typography variant="subtitle1" sx={{ color: '#666' }}>
+          <Typography className="text-gray-600">
             Anesthesiology-Optimized Renal Function Assessment
           </Typography>
         </motion.div>
 
         <Collapse in={!!error}>
-          <Alert severity="error" sx={{ mb: 4, maxWidth: '100%' }}>
+          <Alert severity="error" className="mb-4 max-w-full">
             {error}
           </Alert>
         </Collapse>
 
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4 }}>
+        <div className="custom-grid">
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Card>
+            <Card className="card">
               <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                  <Activity size={20} style={{ display: 'inline', marginRight: 8 }} />
+                <Typography className="header flex items-center">
+                  <Activity size={20} className="mr-2" />
                   Patient Parameters
                 </Typography>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, mt: 2 }}>
-                  <Box>
+                <div className="flex flex-col gap-4 mt-2">
+                  <div>
                     <TextField
                       label="Age (years)"
                       type="number"
@@ -231,12 +219,13 @@ const CreatinineClearance = () => {
                       placeholder="Enter age"
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ step: '1' }}
+                      className="bg-white"
                     />
-                    <Typography variant="caption" sx={{ color: '#666' }}>
+                    <Typography className="text-gray-600 text-sm">
                       Range: 18-120 years
                     </Typography>
-                  </Box>
-                  <Box>
+                  </div>
+                  <div>
                     <TextField
                       label="Weight (kg)"
                       type="number"
@@ -246,12 +235,13 @@ const CreatinineClearance = () => {
                       placeholder="Enter weight"
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ step: '0.1' }}
+                      className="bg-white"
                     />
-                    <Typography variant="caption" sx={{ color: '#666' }}>
+                    <Typography className="text-gray-600 text-sm">
                       Range: 30-200 kg
                     </Typography>
-                  </Box>
-                  <Box>
+                  </div>
+                  <div>
                     <TextField
                       label="Serum Creatinine (mg/dL)"
                       type="number"
@@ -261,12 +251,13 @@ const CreatinineClearance = () => {
                       placeholder="Enter creatinine"
                       InputLabelProps={{ shrink: true }}
                       inputProps={{ step: '0.1' }}
+                      className="bg-white"
                     />
-                    <Typography variant="caption" sx={{ color: '#666' }}>
+                    <Typography className="text-gray-600 text-sm">
                       Normal: 0.6-1.2 mg/dL | Impacts drug clearance
                     </Typography>
-                  </Box>
-                </Box>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -276,57 +267,52 @@ const CreatinineClearance = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <Card>
+            <Card className="card">
               <CardContent>
-                <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                  <HeartPulse size={20} style={{ display: 'inline', marginRight: 8 }} />
+                <Typography className="header flex items-center">
+                  <HeartPulse size={20} className="mr-2" />
                   Sex
                 </Typography>
-                <Box sx={{ mt: 2 }}>
+                <div className="mt-2">
                   <ToggleButtonGroup
                     value={sex}
                     exclusive
                     onChange={(e, value) => value && setSex(value)}
-                    fullWidth
-                    sx={{ display: 'flex', gap: 1 }}
+                    className="flex gap-1"
                   >
-                    <ToggleButton value="male" sx={{ flex: 1 }}>
+                    <ToggleButton value="male" className="flex-1">
                       Male
                     </ToggleButton>
-                    <ToggleButton value="female" sx={{ flex: 1 }}>
+                    <ToggleButton value="female" className="flex-1">
                       Female
                     </ToggleButton>
                   </ToggleButtonGroup>
-                  <Typography variant="caption" sx={{ color: '#666' }}>
+                  <Typography className="text-gray-600 text-sm">
                     Affects clearance calculation (Cockcroft-Gault formula)
                   </Typography>
-                </Box>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
-        </Box>
+        </div>
 
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
-          style={{ marginTop: 24, display: 'flex', justifyContent: 'center', gap: 16 }}
+          className="mt-6 flex justify-center gap-4"
         >
           <Button
-            variant="contained"
-            color="primary"
+            className="btn-primary"
             onClick={calculateCrCl}
             startIcon={<BarChart2 size={20} />}
-            sx={{ minWidth: 150 }}
           >
             Calculate CrCl
           </Button>
           <Button
-            variant="outlined"
-            color="primary"
+            className="border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition px-4 py-2"
             onClick={resetForm}
             startIcon={<XCircle size={20} />}
-            sx={{ minWidth: 150 }}
           >
             Reset
           </Button>
@@ -339,50 +325,50 @@ const CreatinineClearance = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              style={{ marginTop: 24 }}
+              className="mt-6"
             >
-              <Card>
+              <Card className="card">
                 <CardContent>
-                  <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
-                    <BarChart2 size={20} style={{ display: 'inline', marginRight: 8 }} />
+                  <Typography className="header flex items-center">
+                    <BarChart2 size={20} className="mr-2" />
                     Results
                   </Typography>
-                  <Box sx={{ textAlign: 'center', mb: 4 }}>
-                    <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#00897b' }}>
+                  <div className="text-center mb-4">
+                    <Typography className="text-4xl font-bold text-teal-600">
                       {crcl.toFixed(1)} mL/min
                     </Typography>
-                    <Typography variant="h5" sx={{ fontWeight: '600', color: '#333' }}>
+                    <Typography className="text-2xl font-semibold text-gray-900">
                       {getClassification(crcl)}
                     </Typography>
-                  </Box>
-                  <Card sx={{ backgroundColor: '#fafafa' }}>
+                  </div>
+                  <Card className="card bg-gray-50">
                     <CardContent>
-                      <Typography sx={{ fontWeight: '600', mb: 2 }}>
+                      <Typography className="font-semibold mb-2">
                         Renal Function:
                       </Typography>
-                      <Typography sx={{ color: '#444' }}>
+                      <Typography className="text-gray-700">
                         Creatinine Clearance: {crcl.toFixed(1)} mL/min (Normal: ≥90 mL/min)
                       </Typography>
                     </CardContent>
                   </Card>
-                  <Card sx={{ backgroundColor: '#fafafa', mt: 4 }}>
+                  <Card className="card bg-gray-50 mt-4">
                     <CardContent>
-                      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Typography sx={{ fontWeight: '600' }}>
+                      <div className="flex items-center mb-2">
+                        <Typography className="font-semibold">
                           Anesthesia Considerations
                         </Typography>
                         <IconButton onClick={() => setShowAnesthesiaGuide(true)}>
                           <Info size={20} />
                         </IconButton>
-                      </Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      </div>
+                      <div className="flex items-center">
                         {anesthesiaGuidance[getClassification(crcl)].icon}
-                        <Typography sx={{ ml: 1, fontWeight: '600' }}>
+                        <Typography className="ml-1 font-semibold">
                           Risk Level: {anesthesiaGuidance[getClassification(crcl)].risk}
                         </Typography>
-                      </Box>
+                      </div>
                       <List>
-                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item: string, index: number) => (
+                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item, index) => (
                           <ListItem key={index}>
                             <ListItemIcon>
                               <Syringe size={16} color="#0d9488" />
@@ -402,35 +388,27 @@ const CreatinineClearance = () => {
         <Modal
           open={showAnesthesiaGuide}
           onClose={() => setShowAnesthesiaGuide(false)}
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          className="flex items-center justify-center"
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 12,
-              padding: 24,
-              width: '100%',
-              maxWidth: 500,
-              maxHeight: '80vh',
-              overflowY: 'auto',
-            }}
+            className="card max-w-md max-h-[80vh] overflow-y-auto"
           >
             {crcl !== null && getAnesthesiaGuidance() && (
               <>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                <Typography className="header text-center">
                   Anesthesia Considerations - {getClassification(crcl)}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                <div className="flex items-center mb-2">
                   {getAnesthesiaGuidance().icon}
-                  <Typography sx={{ ml: 1, fontWeight: '600' }}>
+                  <Typography className="ml-1 font-semibold">
                     Risk Level: {getAnesthesiaGuidance().risk}
                   </Typography>
-                </Box>
+                </div>
                 <List>
-                  {getAnesthesiaGuidance().considerations.map((item: string, index: number) => (
+                  {getAnesthesiaGuidance().considerations.map((item, index) => (
                     <ListItem key={index}>
                       <ListItemIcon>
                         <Syringe size={16} color="#0d9488" />
@@ -440,11 +418,8 @@ const CreatinineClearance = () => {
                   ))}
                 </List>
                 <Button
-                  variant="contained"
-                  color="primary"
+                  className="btn-primary mt-4 w-full"
                   onClick={() => setShowAnesthesiaGuide(false)}
-                  fullWidth
-                  sx={{ mt: 4 }}
                 >
                   Close
                 </Button>
@@ -452,7 +427,7 @@ const CreatinineClearance = () => {
             )}
           </motion.div>
         </Modal>
-      </Box>
+      </main>
     </motion.div>
   );
 };

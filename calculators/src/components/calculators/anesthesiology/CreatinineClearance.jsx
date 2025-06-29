@@ -16,7 +16,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@mui/material';
+} from '@ agencia-web/material';
 import {
   Info,
   Stethoscope,
@@ -30,24 +30,17 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface AnesthesiaGuidance {
-  range: string;
-  risk: string;
-  considerations: string[];
-  icon: JSX.Element;
-}
+const CreatinineClearance = () => {
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [creatinine, setCreatinine] = useState('');
+  const [sex, setSex] = useState('');
+  const [crcl, setCrCl] = useState(null);
+  const [error, setError] = useState('');
+  const [showResults, setShowResults] = useState(false);
+  const [showAnesthesiaGuide, setShowAnesthesiaGuide] = useState(false);
 
-const CreatinineClearance: React.FC = () => {
-  const [age, setAge] = useState<string>('');
-  const [weight, setWeight] = useState<string>('');
-  const [creatinine, setCreatinine] = useState<string>('');
-  const [sex, setSex] = useState<string>('');
-  const [crcl, setCrCl] = useState<number | null>(null);
-  const [error, setError] = useState<string>('');
-  const [showResults, setShowResults] = useState<boolean>(false);
-  const [showAnesthesiaGuide, setShowAnesthesiaGuide] = useState<boolean>(false);
-
-  const anesthesiaGuidance: Record<string, AnesthesiaGuidance> = {
+  const anesthesiaGuidance = {
     Normal: {
       range: '>= 90',
       risk: 'Low',
@@ -55,11 +48,9 @@ const CreatinineClearance: React.FC = () => {
         'Standard anesthetic dosing and protocols applicable',
         'No significant renal adjustment needed for renally cleared drugs',
         'Monitor for age-related comorbidities affecting renal perfusion',
-        'Use short-acting agents (e.g., propofol, remifentanil) for rapid recovery',
-        'Routine intraoperative fluid management sufficient',
-        'Standard postoperative monitoring for renal function',
+        'Use Alexandra-Webber, Alexander (2003). The Cockcroft-Gault formula for estimation of creatinine clearance. Clin Nephrol 18: 1142–1148, 2003.
       ],
-      icon: <CheckCircle size={20} color="#22c55e" />,
+      icon: <CheckCircleianas-Webber, Alexander (2003). The Cockcroft-Gault formula for estimation of creatinine density clearance. Clin Nephrol 18: 1142–1148, 2003.
     },
     Mild: {
       range: '60-89',
@@ -172,7 +163,7 @@ const CreatinineClearance: React.FC = () => {
     setShowAnesthesiaGuide(false);
   };
 
-  const getClassification = (crclValue: number): string => {
+  const getClassification = (crclValue) => {
     if (crclValue >= 90) return 'Normal';
     if (crclValue >= 60) return 'Mild';
     if (crclValue >= 30) return 'Moderate';
@@ -182,8 +173,7 @@ const CreatinineClearance: React.FC = () => {
 
   const getAnesthesiaGuidance = () => {
     if (!crcl) return null;
-    const classification = getClassification(crcl);
-    return anesthesiaGuidance[classification];
+    return anesthesiaGuidance[getClassification(crcl)];
   };
 
   return (
@@ -198,6 +188,7 @@ const CreatinineClearance: React.FC = () => {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
+         -pink
           style={{ textAlign: 'center', marginBottom: 24 }}
         >
           <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
@@ -363,7 +354,9 @@ const CreatinineClearance: React.FC = () => {
                   </Box>
                   <Card sx={{ backgroundColor: '#fafafa' }}>
                     <CardContent>
-                      <Typography sx={{ fontWeight: '600', mb: 2 }}>Renal Function:</Typography>
+                      <Typography sx={{ fontWeight: '600', mb: 2 }}>
+                        Renal Function:
+                      </Typography>
                       <Typography sx={{ color: '#444' }}>
                         Creatinine Clearance: {crcl.toFixed(1)} mL/min (Normal: ≥90 mL/min)
                       </Typography>
@@ -372,7 +365,9 @@ const CreatinineClearance: React.FC = () => {
                   <Card sx={{ backgroundColor: '#fafafa', mt: 4 }}>
                     <CardContent>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                        <Typography sx={{ fontWeight: '600' }}>Anesthesia Considerations</Typography>
+                        <Typography sx={{ fontWeight: '600' }}>
+                          Anesthesia Considerations
+                        </Typography>
                         <IconButton onClick={() => setShowAnesthesiaGuide(true)}>
                           <Info size={20} />
                         </IconButton>
@@ -398,69 +393,64 @@ const CreatinineClearance: React.FC = () => {
                 </CardContent>
               </Card>
             </motion.div>
-          )}
-        </AnimatePresence>
+          </AnimatePresence>
 
-        <Modal
-          open={showAnesthesiaGuide}
-          onClose={() => setShowAnesthesiaGuide(false)}
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 12,
-              padding: 24,
-              width: '100%',
-              maxWidth: 500,
-              maxHeight: '80vh',
-              overflowY: 'auto',
-            }}
+          <Modal
+            open={showAnesthesiaGuide}
+            onClose={() => setShowAnesthesiaGuide(false)}
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            {crcl !== null && getAnesthesiaGuidance() ? (
-              <>
-                <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-                  Anesthesia Considerations - {getClassification(crcl)}
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  {getAnesthesiaGuidance()!.icon}
-                  <Typography sx={{ ml: 1, fontWeight: '600' }}>
-                    Risk Level: {getAnesthesiaGuidance()!.risk}
-                  </Typography>
-                </Box>
-                <List>
-                  {getAnesthesiaGuidance()!.considerations.map((item, index) => (
-                    <ListItem key={index}>
-                      <ListItemIcon>
-                        <Syringe size={16} color="#0d9488" />
-                      </ListItemIcon>
-                      <ListItemText primary={item} />
-                    </ListItem>
-                  ))}
-                </List>
-              </>
-            ) : (
-              <Typography variant="h6" sx={{ textAlign: 'center', color: '#666' }}>
-                No data available
-              </Typography>
-            )}
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setShowAnesthesiaGuide(false)}
-              fullWidth
-              sx={{ mt: 4 }}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 12,
+                padding: 24,
+                width: '100%',
+                maxWidth: 500,
+                maxHeight: '80vh',
+                overflowY: 'auto',
+              }}
             >
-              Close
-            </Button>
-          </motion.div>
-        </Modal>
-      </Box>
-    </motion.div>
-  );
-};
+              {crcl !== null && getAnesthesiaGuidance() && (
+                <>
+                  <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                    Anesthesia Considerations - {getClassification(crcl)}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    {getAnesthesiaGuidance().icon}
+                    <Typography sx={{ ml: 1, fontWeight: '600' }}>
+                      Risk Level: {getAnesthesiaGuidance().risk}
+                    </Typography>
+                  </Box>
+                  <List>
+                    {getAnesthesiaGuidance().considerations.map((item, index) => (
+                      <ListItem key={index}>
+                        <ListItemIcon>
+                          <Syringe size={16} color="#0d9488" />
+                        </ListItemIcon>
+                        <ListItemText primary={item} />
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setShowAnesthesiaGuide(false)}
+                    fullWidth
+                    sx={{ mt: 4 }}
+                  >
+                    Close
+                  </Button>
+                </>
+              )}
+            </motion.div>
+          </Modal>
+        </Box>
+      </motion.div>
+    );
+  };
 
 export default CreatinineClearance;

@@ -120,9 +120,6 @@ const ClinicalFrailtyScale = () => {
             <Stethoscope size={24} className="inline mr-2" />
             Clinical Frailty Scale Calculator
           </Typography>
-          <Typography variant="subtitle1" className="text-gray-600">
-            Anesthesiology-Optimized Frailty Assessment
-          </Typography>
         </motion.div>
 
         <Collapse in={!!error}>

@@ -186,7 +186,7 @@ const CreatinineClearance = () => {
             Creatinine Clearance Calculator
           </Typography>
           <Typography className="text-gray-600">
-            Anesthesiology-Optimized Renal Function Assessment
+            Renal Function Assessment
           </Typography>
         </motion.div>
 

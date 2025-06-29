@@ -177,10 +177,6 @@ const ChildPughScore = () => {
           <Typography className="header">
             <Stethoscope size={24} className="inline mr-2" />
             Child-Pugh Score Calculator
-          </Typography>
-          <Typography variant="subtitle1" className="text-gray-600">
-            Anesthesiology-Optimized Cirrhosis Assessment
-          </Typography>
         </motion.div>
 
         <Collapse in={!!error}>

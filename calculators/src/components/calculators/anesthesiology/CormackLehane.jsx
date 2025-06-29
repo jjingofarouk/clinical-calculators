@@ -67,7 +67,7 @@ const CormackLehane = () => {
         'Prepare airway adjuncts (bougie, stylet, LMA as backup)',
         'Extended preoxygenation (3-5 min) to prevent desaturation',
         'Use rapid sequence induction (RSI) if aspiration risk present',
-porn: 'Plan for potential difficult airway cart availability'
+        'Plan for potential difficult airway cart availability'
       ],
       icon: <AlertTriangle size={20} className="text-yellow-500" />
     },
@@ -217,14 +217,14 @@ porn: 'Plan for potential difficult airway cart availability'
                       Grade {grade}
                     </Typography>
                     <Typography variant="h5" className="font-semibold text-gray-800">
-                      {cormackLehaneGrades.find(level => level.grade === grade)?.description}
+                      {cormackLehaneGrades.find((level: { grade: string }) => level.grade === grade)?.description}
                     </Typography>
                   </Box>
                   <Card className="bg-gray-50">
                     <CardContent>
                       <Typography className="font-semibold mb-2">Description:</Typography>
                       <Typography className="text-gray-700">
-                        {cormackLehaneGrades.find(level => level.grade === grade)?.description}
+                        {cormackLehaneGrades.find((level: { grade: string }) => level.grade === grade)?.description}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -243,7 +243,7 @@ porn: 'Plan for potential difficult airway cart availability'
                         </Typography>
                       </Box>
                       <List>
-                        {anesthesiaGuidance[grade === '1' || grade === '2a' ? '1-2a' : grade === '2b' || grade === '3a' ? '2b-3a' : '3b-4'].considerations.map((item, index) => (
+                        {anesthesiaGuidance[grade === '1' || grade === '2a' ? '1-2a' : grade === '2b' || grade === '3a' ? '2b-3a' : '3b-4'].considerations.map((item: string, index: number) => (
                           <ListItem key={index}>
                             <ListItemIcon>
                               <Syringe size={16} className="text-teal-600" />
@@ -274,7 +274,7 @@ porn: 'Plan for potential difficult airway cart availability'
             <Typography className="header text-center">
               Cormack-Lehane Grades Guide
             </Typography>
-            {cormackLehaneGrades.map((item) => (
+            {cormackLehaneGrades.map((item: { grade: string, description: string }) => (
               <Box key={item.grade} className="mb-4">
                 <Typography className="font-semibold">Grade {item.grade}</Typography>
                 <Typography className="text-gray-700">{item.description}</Typography>
@@ -310,7 +310,7 @@ porn: 'Plan for potential difficult airway cart availability'
               </Typography>
             </Box>
             <List>
-              {anesthesiaGuidance[grade === '1' || grade === '2a' ? '1-2a' : grade === '2b' || grade === '3a' ? '2b-3a' : '3b-4'].considerations.map((item, index) => (
+              {anesthesiaGuidance[grade === '1' || grade === '2a' ? '1-2a' : grade === '2b' || grade === '3a' ? '2b-3a' : '3b-4'].considerations.map((item: string, index: number) => (
                 <ListItem key={index}>
                   <ListItemIcon>
                     <Syringe size={16} className="text-teal-600" />

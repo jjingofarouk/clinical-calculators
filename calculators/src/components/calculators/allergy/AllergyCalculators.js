@@ -1,8 +1,19 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Tabs, Tab, Typography, useTheme, useMediaQuery } from '@mui/material';
-import { motion } from 'framer-motion';
+import {
+  Box,
+  Tabs,
+  Tab,
+  TextField,
+  Typography,
+  Fab,
+  Collapse,
+  IconButton,
+  useTheme,
+  useMediaQuery
+} from '@mui/material';
+import { Search, Close } from '@mui/icons-material';
+
 import SCORAD from './SCORAD';
 import EASI from './EASI';
 import IgELevel from './IgELevel';
@@ -58,14 +69,21 @@ const calculators = [
 const AllergyCalculators = () => {
   const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const filteredCalculators = calculators.filter(c =>
+    c.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (calculator) {
       const calcName = calculator.replace(/-/g, ' ');
       const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
+        setSearchQuery(''); // Reset search to show all calculators
         setSelectedTab(index);
       } else {
         setSelectedTab(0); // Fallback to first tab if calculator not found
@@ -79,13 +97,82 @@ const AllergyCalculators = () => {
     setSelectedTab(newIndex);
   };
 
+  const handleSearchToggle = () => {
+    setSearchOpen(!searchOpen);
+    if (searchOpen) {
+      setSearchQuery('');
+      setSelectedTab(0);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setSelectedTab(0);
+  };
+
   return (
-    <motion.div
-      className="h-full w-full max-w-full flex flex-col bg-white"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <Box className="h-full w-full max-w-full flex flex-col bg-white relative">
+      {/* Floating Search Button */}
+      <Fab
+        color="primary"
+        aria-label="search"
+        onClick={handleSearchToggle}
+        sx={{
+          position: 'fixed',
+          top: 16,
+          right: 16,
+          bgcolor: '#0d9488',
+          '&:hover': {
+            bgcolor: '#0f766e',
+          },
+          zIndex: 1000,
+          width: 48,
+          height: 48,
+        }}
+      >
+        {searchOpen ? <Close /> : <Search />}
+      </Fab>
+
+      {/* Collapsible Search Bar */}
+      <Collapse in={searchOpen}>
+        <Box className="p-4 border-b border-gray-200 bg-white w-full shadow-sm">
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Search calculators..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            autoFocus
+            sx={{
+              backgroundColor: '#fff',
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: '#d1d5db' },
+                '&:hover fieldset': { borderColor: '#0d9488' },
+                '&.Mui-focused fieldset': { borderColor: '#0d9488' },
+              },
+              input: {
+                fontFamily: 'Inter, sans-serif',
+                color: '#1F2937'
+              },
+              width: '100%',
+              maxWidth: '100%'
+            }}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  size="small"
+                  onClick={() => setSearchQuery('')}
+                  sx={{ visibility: searchQuery ? 'visible' : 'hidden' }}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              )
+            }}
+          />
+        </Box>
+      </Collapse>
+
       <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
@@ -138,20 +225,22 @@ const AllergyCalculators = () => {
             }
           }}
         >
-          {calculators.map((calc) => (
+          {filteredCalculators.map((calc) => (
             <Tab key={calc.label} label={calc.label} />
           ))}
         </Tabs>
       </Box>
 
       <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
-        {calculators[selectedTab]?.component || (
+        {filteredCalculators.length > 0 ? (
+          filteredCalculators[selectedTab]?.component
+        ) : (
           <Typography variant="body1" className="text-gray-500 text-center mt-8">
-            No calculator selected.
+            No calculators match your search.
           </Typography>
         )}
       </Box>
-    </motion.div>
+    </Box>
   );
 };
 

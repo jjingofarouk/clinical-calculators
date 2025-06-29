@@ -97,7 +97,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search calculators..."
+            placeholder="Search calculators!"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full p-2 pl-10 bg-white text-gray-900 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"

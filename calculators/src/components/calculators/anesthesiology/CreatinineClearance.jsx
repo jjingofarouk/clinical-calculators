@@ -1,4 +1,3 @@
-// CreatinineClearance.jsx
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -16,7 +15,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  ListItemText
+  ListItemText,
 } from '@mui/material';
 import {
   Info,
@@ -27,22 +26,29 @@ import {
   XCircle,
   BarChart2,
   HeartPulse,
-  Syringe
+  Syringe,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const CreatinineClearance = () => {
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [creatinine, setCreatinine] = useState('');
-  const [sex, setSex] = useState('');
-  const [crcl, setCrCl] = useState(null);
-  const [error, setError] = useState('');
-  const [showResults, setShowResults] = useState(false);
-  const [showAnesthesiaGuide, setShowAnesthesiaGuide] = useState(false);
+interface AnesthesiaGuidance {
+  range: string;
+  risk: string;
+  considerations: string[];
+  icon: JSX.Element;
+}
 
-  const anesthesiaGuidance = {
-    'Normal': {
+const CreatinineClearance: React.FC = () => {
+  const [age, setAge] = useState<string>('');
+  const [weight, setWeight] = useState<string>('');
+  const [creatinine, setCreatinine] = useState<string>('');
+  const [sex, setSex] = useState<string>('');
+  const [crcl, setCrCl] = useState<number | null>(null);
+  const [error, setError] = useState<string>('');
+  const [showResults, setShowResults] = useState<boolean>(false);
+  const [showAnesthesiaGuide, setShowAnesthesiaGuide] = useState<boolean>(false);
+
+  const anesthesiaGuidance: Record<string, AnesthesiaGuidance> = {
+    Normal: {
       range: '>= 90',
       risk: 'Low',
       considerations: [
@@ -51,11 +57,11 @@ const CreatinineClearance = () => {
         'Monitor for age-related comorbidities affecting renal perfusion',
         'Use short-acting agents (e.g., propofol, remifentanil) for rapid recovery',
         'Routine intraoperative fluid management sufficient',
-        'Standard postoperative monitoring for renal function'
+        'Standard postoperative monitoring for renal function',
       ],
-      icon: <CheckCircle size={20} className="text-green-500" />
+      icon: <CheckCircle size={20} color="#22c55e" />,
     },
-    'Mild': {
+    Mild: {
       range: '60-89',
       risk: 'Mild',
       considerations: [
@@ -64,11 +70,11 @@ const CreatinineClearance = () => {
         'Avoid nephrotoxic agents (e.g., NSAIDs, high-dose aminoglycosides)',
         'Consider regional anesthesia to minimize systemic drug load',
         'Use balanced crystalloids for fluid management',
-        'Postoperative monitoring of urine output and serum creatinine'
+        'Postoperative monitoring of urine output and serum creatinine',
       ],
-      icon: <CheckCircle size={20} className="text-green-500" />
+      icon: <CheckCircle size={20} color="#22c55e" />,
     },
-    'Moderate': {
+    Moderate: {
       range: '30-59',
       risk: 'Moderate',
       considerations: [
@@ -77,11 +83,11 @@ const CreatinineClearance = () => {
         'Avoid prolonged use of nephrotoxic anesthetics (e.g., sevoflurane in prolonged cases)',
         'Preoperative optimization of volume status and electrolytes',
         'Consider intraoperative urine output monitoring with Foley catheter',
-        'Extended postoperative monitoring in PACU or step-down unit'
+        'Extended postoperative monitoring in PACU or step-down unit',
       ],
-      icon: <AlertTriangle size={20} className="text-yellow-500" />
+      icon: <AlertTriangle size={20} color="#eab308" />,
     },
-    'Severe': {
+    Severe: {
       range: '15-29',
       risk: 'High',
       considerations: [
@@ -90,9 +96,9 @@ const CreatinineClearance = () => {
         'Mandatory invasive monitoring (arterial, CVP, urine output)',
         'Preoperative consultation with nephrology for dialysis planning if indicated',
         'Use minimal sedation techniques (e.g., dexmedetomidine, low-dose propofol)',
-        'Postoperative ICU monitoring with frequent electrolyte and creatinine checks'
+        'Postoperative ICU monitoring with frequent electrolyte and creatinine checks',
       ],
-      icon: <XCircle size={20} className="text-red-500" />
+      icon: <XCircle size={20} color="#ef4444" />,
     },
     'Kidney Failure': {
       range: '<15',
@@ -103,10 +109,10 @@ const CreatinineClearance = () => {
         'Mandatory preoperative dialysis if patient is dialysis-dependent',
         'Intraoperative CRRT may be required for fluid and electrolyte management',
         'Multidisciplinary team (anesthesia, nephrology, ICU) for emergency procedures',
-        'Prolonged ICU stay with continuous renal function monitoring'
+        'Prolonged ICU stay with continuous renal function monitoring',
       ],
-      icon: <XCircle size={20} className="text-red-500" />
-    }
+      icon: <XCircle size={20} color="#ef4444" />,
+    },
   };
 
   const calculateCrCl = () => {
@@ -143,7 +149,7 @@ const CreatinineClearance = () => {
       crclValue *= 0.85;
     }
 
-    setCrCl(crclValue.toFixed(1));
+    setCrCl(crclValue);
     setError('');
     setShowResults(true);
   };
@@ -163,6 +169,7 @@ const CreatinineClearance = () => {
     setCrCl(null);
     setError('');
     setShowResults(false);
+    setShowAnesthesiaGuide(false);
   };
 
   const getClassification = (crclValue: number): string => {
@@ -173,14 +180,20 @@ const CreatinineClearance = () => {
     return 'Kidney Failure';
   };
 
+  const getAnesthesiaGuidance = () => {
+    if (!crcl) return null;
+    const classification = getClassification(crcl);
+    return anesthesiaGuidance[classification];
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      style={{ width: '100vw', minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+      style={{ width: '100%', minHeight: '100vh', backgroundColor: '#f5f5f5' }}
     >
-      <Box sx={{ p: 4, maxWidth: '100%', mx: 'auto' }}>
+      <Box sx={{ p: 4, maxWidth: '1200px', mx: 'auto' }}>
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -202,13 +215,13 @@ const CreatinineClearance = () => {
           </Alert>
         </Collapse>
 
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4, maxWidth: '100%' }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4 }}>
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <Card sx={{ width: '100%' }}>
+            <Card>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                   <Activity size={20} style={{ display: 'inline', marginRight: 8 }} />
@@ -224,7 +237,7 @@ const CreatinineClearance = () => {
                       fullWidth
                       placeholder="Enter age"
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ step: "1" }}
+                      inputProps={{ step: '1' }}
                     />
                     <Typography variant="caption" sx={{ color: '#666' }}>
                       Range: 18-120 years
@@ -239,7 +252,7 @@ const CreatinineClearance = () => {
                       fullWidth
                       placeholder="Enter weight"
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ step: "0.1" }}
+                      inputProps={{ step: '0.1' }}
                     />
                     <Typography variant="caption" sx={{ color: '#666' }}>
                       Range: 30-200 kg
@@ -254,7 +267,7 @@ const CreatinineClearance = () => {
                       fullWidth
                       placeholder="Enter creatinine"
                       InputLabelProps={{ shrink: true }}
-                      inputProps={{ step: "0.1" }}
+                      inputProps={{ step: '0.1' }}
                     />
                     <Typography variant="caption" sx={{ color: '#666' }}>
                       Normal: 0.6-1.2 mg/dL | Impacts drug clearance
@@ -270,7 +283,7 @@ const CreatinineClearance = () => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <Card sx={{ width: '100%' }}>
+            <Card>
               <CardContent>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                   <HeartPulse size={20} style={{ display: 'inline', marginRight: 8 }} />
@@ -284,8 +297,12 @@ const CreatinineClearance = () => {
                     fullWidth
                     sx={{ display: 'flex', gap: 1 }}
                   >
-                    <ToggleButton value="male" sx={{ flex: 1 }}>Male</ToggleButton>
-                    <ToggleButton value="female" sx={{ flex: 1 }}>Female</ToggleButton>
+                    <ToggleButton value="male" sx={{ flex: 1 }}>
+                      Male
+                    </ToggleButton>
+                    <ToggleButton value="female" sx={{ flex: 1 }}>
+                      Female
+                    </ToggleButton>
                   </ToggleButtonGroup>
                   <Typography variant="caption" sx={{ color: '#666' }}>
                     Affects clearance calculation (Cockcroft-Gault formula)
@@ -323,15 +340,14 @@ const CreatinineClearance = () => {
         </motion.div>
 
         <AnimatePresence>
-          {showResults && crcl && (
+          {showResults && crcl !== null && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              style={{ marginTop: 24, maxWidth: '100%' }}
             >
-              <Card sx={{ width: '100%' }}>
+              <Card>
                 <CardContent>
                   <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                     <BarChart2 size={20} style={{ display: 'inline', marginRight: 8 }} />
@@ -339,17 +355,17 @@ const CreatinineClearance = () => {
                   </Typography>
                   <Box sx={{ textAlign: 'center', mb: 4 }}>
                     <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#00897b' }}>
-                      {crcl} mL/min
+                      {crcl.toFixed(1)} mL/min
                     </Typography>
                     <Typography variant="h5" sx={{ fontWeight: '600', color: '#333' }}>
-                      {getClassification(parseFloat(crcl))}
+                      {getClassification(crcl)}
                     </Typography>
                   </Box>
                   <Card sx={{ backgroundColor: '#fafafa' }}>
                     <CardContent>
                       <Typography sx={{ fontWeight: '600', mb: 2 }}>Renal Function:</Typography>
                       <Typography sx={{ color: '#444' }}>
-                        Creatinine Clearance: {crcl} mL/min (Normal: ≥90 mL/min)
+                        Creatinine Clearance: {crcl.toFixed(1)} mL/min (Normal: ≥90 mL/min)
                       </Typography>
                     </CardContent>
                   </Card>
@@ -362,16 +378,16 @@ const CreatinineClearance = () => {
                         </IconButton>
                       </Box>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {anesthesiaGuidance[getClassification(parseFloat(crcl))].icon}
+                        {anesthesiaGuidance[getClassification(crcl)].icon}
                         <Typography sx={{ ml: 1, fontWeight: '600' }}>
-                          Risk Level: {anesthesiaGuidance[getClassification(parseFloat(crcl))].risk}
+                          Risk Level: {anesthesiaGuidance[getClassification(crcl)].risk}
                         </Typography>
                       </Box>
                       <List>
-                        {anesthesiaGuidance[getClassification(parseFloat(crcl))].considerations.map((item: string, index: number) => (
+                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item, index) => (
                           <ListItem key={index}>
                             <ListItemIcon>
-                              <Syringe size={16} className="text-teal-600" />
+                              <Syringe size={16} color="#0d9488" />
                             </ListItemIcon>
                             <ListItemText primary={item} />
                           </ListItem>
@@ -394,27 +410,43 @@ const CreatinineClearance = () => {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
-            style={{ backgroundColor: '#fff', borderRadius: 12, padding: 24, width: '100%', maxWidth: 500, maxHeight: '80vh', overflowY: 'auto' }}
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 12,
+              padding: 24,
+              width: '100%',
+              maxWidth: 500,
+              maxHeight: '80vh',
+              overflowY: 'auto',
+            }}
           >
-            <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
-              Anesthesia Considerations - {crcl && getClassification(parseFloat(crcl))}
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              {anesthesiaGuidance[crcl && getClassification(parseFloat(crcl))].icon}
-              <Typography sx={{ ml: 1, fontWeight: '600' }}>
-                Risk Level: {anesthesiaGuidance[crcl && getClassification(parseFloat(crcl))].risk}
+            {crcl !== null && getAnesthesiaGuidance() ? (
+              <>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
+                  Anesthesia Considerations - {getClassification(crcl)}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  {getAnesthesiaGuidance()!.icon}
+                  <Typography sx={{ ml: 1, fontWeight: '600' }}>
+                    Risk Level: {getAnesthesiaGuidance()!.risk}
+                  </Typography>
+                </Box>
+                <List>
+                  {getAnesthesiaGuidance()!.considerations.map((item, index) => (
+                    <ListItem key={index}>
+                      <ListItemIcon>
+                        <Syringe size={16} color="#0d9488" />
+                      </ListItemIcon>
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            ) : (
+              <Typography variant="h6" sx={{ textAlign: 'center', color: '#666' }}>
+                No data available
               </Typography>
-            </Box>
-            <List>
-              {anesthesiaGuidance[crcl && getClassification(parseFloat(crcl))].considerations.map((item: string, index: number) => (
-                <ListItem key={index}>
-                  <ListItemIcon>
-                    <Syringe size={16} className="text-teal-600" />
-                  </ListItemIcon>
-                  <ListItemText primary={item} />
-                </ListItem>
-              ))}
-            </List>
+            )}
             <Button
               variant="contained"
               color="primary"

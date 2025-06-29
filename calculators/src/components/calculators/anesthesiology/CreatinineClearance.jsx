@@ -16,7 +16,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from '@ agencia-web/material';
+} from '@mui/material';
 import {
   Info,
   Stethoscope,

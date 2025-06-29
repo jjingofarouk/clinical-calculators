@@ -9,7 +9,6 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
-
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -210,12 +209,17 @@ const AnesthesiologyCalculators = () => {
   useEffect(() => {
     if (calculator) {
       const calcName = calculator.replace(/-/g, ' ');
-      const index = filteredCalculators.findIndex(c => c.label === calcName);
+      const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
+        setSearchQuery('');
         setSelectedTab(index);
+      } else {
+        setSelectedTab(0);
       }
+    } else {
+      setSelectedTab(0);
     }
-  }, [calculator, filteredCalculators]);
+  }, [calculator]);
 
   const handleTabChange = (_, newIndex) => {
     setSelectedTab(newIndex);

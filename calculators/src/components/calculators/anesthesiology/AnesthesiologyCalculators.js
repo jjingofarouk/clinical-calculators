@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Tabs, Tab, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
+import FloatingSearch from './FloatingSearch'; // Import the new component
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -192,14 +192,20 @@ const calculators = [
 const AnesthesiologyCalculators = () => {
   const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const filteredCalculators = calculators.filter(c =>
+    c.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     if (calculator) {
       const calcName = calculator.replace(/-/g, ' ');
       const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
+        setSearchQuery(''); // Reset search to show all calculators
         setSelectedTab(index);
       } else {
         setSelectedTab(0);
@@ -213,13 +219,25 @@ const AnesthesiologyCalculators = () => {
     setSelectedTab(newIndex);
   };
 
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+    setSelectedTab(0);
+  };
+
   return (
     <motion.div
-      className="h-full w-full max-w-full flex flex-col bg-white"
+      className="h-full w-full max-w-full flex flex-col bg-white relative"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Floating Search Component */}
+      <FloatingSearch
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        placeholder="Search anesthesiology calculators..."
+      />
+
       <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
         <Tabs
           value={selectedTab}
@@ -272,16 +290,18 @@ const AnesthesiologyCalculators = () => {
             }
           }}
         >
-          {calculators.map((calc) => (
+          {filteredCalculators.map((calc) => (
             <Tab key={calc.label} label={calc.label} />
           ))}
         </Tabs>
       </Box>
 
       <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
-        {calculators[selectedTab]?.component || (
+        {filteredCalculators.length > 0 ? (
+          filteredCalculators[selectedTab]?.component
+        ) : (
           <Typography variant="body1" className="text-gray-500 text-center mt-8">
-            No calculator selected.
+            No calculators match your search.
           </Typography>
         )}
       </Box>

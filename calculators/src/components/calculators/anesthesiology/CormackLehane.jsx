@@ -118,7 +118,7 @@ const CormackLehane = () => {
             Cormack-Lehane Classification
           </Typography>
           <Typography variant="subtitle1" className="text-gray-600">
-            Anesthesiology-Optimized Airway Assessment
+             Airway Assessment
           </Typography>
         </motion.div>
 

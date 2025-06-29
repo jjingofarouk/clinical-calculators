@@ -6,13 +6,13 @@ import {
   Bone,
   Brain,
   Calculator,
-  ChevronDown,
-  ChevronRight,
   Droplets,
   Menu,
   Search,
   Stethoscope,
   Wind,
+  ChevronDown,
+  ChevronRight,
 } from 'lucide-react';
 import { sidebarItems } from './data/sidebarItems';
 
@@ -32,7 +32,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         toggleMobile();
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -50,6 +49,16 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
   );
 
+  // Determine active section based on current path
+  useEffect(() => {
+    const currentItem = sidebarItems.find(item => location.pathname.startsWith(item.path));
+    if (currentItem) {
+      setExpanded(currentItem.label);
+    } else {
+      setExpanded('');
+    }
+  }, [location.pathname]);
+
   return (
     <aside
       ref={sidebarRef}
@@ -64,7 +73,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           </div>
           <h2 className="text-xl font-bold text-gray-900">Calculators</h2>
         </div>
-        <button 
+        <button
           onClick={toggleMobile}
           className="p-2 rounded-lg hover:bg-gray-200 transition-colors duration-200"
         >
@@ -133,16 +142,18 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     to={item.path}
                     onClick={toggleMobile}
                     className={`flex items-center space-x-3 flex-grow ${
-                      isActive 
-                        ? 'text-teal-700' 
+                      isActive
+                        ? 'text-teal-700'
                         : 'text-gray-700 hover:text-gray-900'
                     }`}
                   >
-                    <div className={`p-2 rounded-lg transition-colors duration-200 ${
-                      isActive 
-                        ? 'bg-teal-100 text-teal-600' 
-                        : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-600'
-                    }`}>
+                    <div
+                      className={`p-2 rounded-lg transition-colors duration-200 ${
+                        isActive
+                          ? 'bg-teal-100 text-teal-600'
+                          : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-600'
+                      }`}
+                    >
                       <Icon size={18} />
                     </div>
                     <span className="text-sm font-semibold">{item.label}</span>
@@ -156,25 +167,28 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                   </button>
                 </div>
-                
+
                 {isOpen && (
                   <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-100">
                     <ul className="space-y-1">
-                      {item.calculators.map((calc) => (
-                        <li key={calc}>
-                          <Link
-                            to={`${item.path}/${calc.replace(/\s+/g, '-')}`}
-                            onClick={toggleMobile}
-                            className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
-                              location.pathname === `${item.path}/${calc.replace(/\s+/g, '-')}`
-                                ? 'text-teal-600 bg-teal-50'
-                                : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
-                            } rounded-lg`}
-                          >
-                            {calc}
-                          </Link>
-                        </li>
-                      ))}
+                      {item.calculators.map((calc) => {
+                        const calcPath = `${item.path}/${calc.replace(/\s+/g, '-')}`;
+                        return (
+                          <li key={calc}>
+                            <Link
+                              to={calcPath}
+                              onClick={toggleMobile}
+                              className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
+                                location.pathname === calcPath
+                                  ? 'text-teal-600 bg-teal-50'
+                                  : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
+                              } rounded-lg`}
+                            >
+                              {calc}
+                            </Link>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 )}

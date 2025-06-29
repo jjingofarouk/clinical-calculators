@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Tabs, Tab, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
-import FloatingSearch from './FloatingSearch'; // Import the new component
+import FloatingSearch from '../FloatingSearch'; // Import the new component
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';

@@ -56,7 +56,7 @@ const SearchCalculators = ({ allCalculators }) => {
         <TextField
           fullWidth
           variant="standard"
-          placeholder="Search calculators..."
+          placeholder="Search calculators!"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           InputProps={{ disableUnderline: true }}

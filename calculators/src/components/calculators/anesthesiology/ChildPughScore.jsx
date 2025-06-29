@@ -165,7 +165,7 @@ const ChildPughScore = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="w-screen min-h-screen container"
+      className="w-screen min-h-screen container bg-gray-50"
     >
       <Box className="p-4">
         <motion.div
@@ -184,12 +184,12 @@ const ChildPughScore = () => {
         </motion.div>
 
         <Collapse in={!!error}>
-          <Alert severity="error" className="mb-4">
+          <Alert severity="error" className="mb-4 max-w-4xl mx-auto">
             {error}
           </Alert>
         </Collapse>
 
-        <div className="custom-grid">
+        <div className="custom-grid max-w-4xl mx-auto">
           <motion.div
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -211,6 +211,7 @@ const ChildPughScore = () => {
                       className="w-full"
                       placeholder="Enter bilirubin"
                       InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: "0.1" }}
                     />
                     <Typography variant="caption" className="text-gray-500">
                       Normal: 0.3-1.2 mg/dL | Impacts anesthetic metabolism
@@ -225,6 +226,7 @@ const ChildPughScore = () => {
                       className="w-full"
                       placeholder="Enter albumin"
                       InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: "0.1" }}
                     />
                     <Typography variant="caption" className="text-gray-500">
                       Normal: 3.5-5.5 g/dL | Affects drug binding
@@ -239,6 +241,7 @@ const ChildPughScore = () => {
                       className="w-full"
                       placeholder="Enter INR"
                       InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: "0.1" }}
                     />
                     <Typography variant="caption" className="text-gray-500">
                       Normal: 0.8-1.1 | Guides coagulation management
@@ -266,10 +269,10 @@ const ChildPughScore = () => {
                     <ToggleButtonGroup
                       value={ascites}
                       exclusive
-                      onChange={(e, value) => setAscites(value)}
+                      onChange={(e, value) => value && setAscites(value)}
                       className="w-full"
                     >
-                      <ToggleButton value="1" className="flex-1">None</ToggleButton>
+                      <ToggleButton value="1" className="flex-1">Null</ToggleButton>
                       <ToggleButton value="2" className="flex-1">Mild</ToggleButton>
                       <ToggleButton value="3" className="flex-1">Moderate-Severe</ToggleButton>
                     </ToggleButtonGroup>
@@ -287,7 +290,7 @@ const ChildPughScore = () => {
                     <ToggleButtonGroup
                       value={encephalopathy}
                       exclusive
-                      onChange={(e, value) => setEncephalopathy(value)}
+                      onChange={(e, value) => value && setEncephalopathy(value)}
                       className="w-full"
                     >
                       <ToggleButton value="1" className="flex-1">None</ToggleButton>
@@ -300,7 +303,7 @@ const ChildPughScore = () => {
                   </Box>
                 </Box>
               </CardContent>
-            </Card>
+            </Card> 
           </motion.div>
         </div>
 
@@ -333,7 +336,7 @@ const ChildPughScore = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="mt-6"
+              className="mt-6 max-w-4xl mx-auto"
             >
               <Card className="card">
                 <CardContent>

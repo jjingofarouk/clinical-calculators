@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import { Outlet, useNavigate } from 'react-router-dom';
@@ -17,7 +16,7 @@ const Layout = () => {
 
   const toggleMobile = () => setMobileOpen(!mobileOpen);
 
-  // Filter calculators based on search query
+  // Filter calculators based on search query with exact matching
   useEffect(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) {
@@ -26,15 +25,34 @@ const Layout = () => {
       return;
     }
 
+    const queryWords = query.split(/\s+/).filter(word => word.length > 0);
+
     const filtered = sidebarItems.flatMap(item =>
       item.calculators
-        .filter(calc => calc.toLowerCase().includes(query))
+        .filter(calc => {
+          const calcLower = calc.toLowerCase();
+          // For single-word or letter queries, check if the calculator name contains the query
+          if (queryWords.length === 1) {
+            return calcLower.includes(query);
+          }
+          // For multi-word queries, ensure all words appear in order
+          let lastIndex = -1;
+          return queryWords.every(word => {
+            const index = calcLower.indexOf(word, lastIndex + 1);
+            if (index > lastIndex) {
+              lastIndex = index;
+              return true;
+            }
+            return false;
+          });
+        })
         .map(calc => ({
           calc,
           path: `${item.path}/${calc.replace(/\s+/g, '-')}`,
           specialty: item.label
         }))
     );
+
     setSearchResults(filtered);
     setIsSearchOpen(true);
   }, [searchQuery]);

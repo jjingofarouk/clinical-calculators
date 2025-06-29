@@ -1,4 +1,4 @@
-```jsx
+
 import React, { useState } from 'react';
 import { Box, Checkbox, FormControlLabel, Typography, Paper, Divider, Chip, Tooltip, Button, Collapse, IconButton } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';

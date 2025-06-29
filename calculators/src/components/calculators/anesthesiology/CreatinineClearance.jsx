@@ -30,7 +30,7 @@ import {
   Syringe,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './index.css'; // Ensure Tailwind CSS is imported
+import '../../index.css'; // Ensure Tailwind CSS is imported
 
 const CreatinineClearance = () => {
   const [age, setAge] = useState('');

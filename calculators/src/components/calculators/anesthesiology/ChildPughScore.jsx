@@ -1,14 +1,15 @@
+// ChildPughScore.jsx
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Typography, 
-  TextField, 
-  Button, 
-  Card, 
-  CardContent, 
-  ToggleButton, 
-  ToggleButtonGroup, 
-  Modal, 
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  ToggleButton,
+  ToggleButtonGroup,
+  Modal,
   IconButton,
   Alert,
   Collapse,
@@ -17,10 +18,10 @@ import {
   ListItemIcon,
   ListItemText
 } from '@mui/material';
-import { 
-  Info, 
-  Stethoscope, 
-  Activity, 
+import {
+  Info,
+  Stethoscope,
+  Activity,
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -60,18 +61,22 @@ const ChildPughScore = () => {
         'Regional anesthesia preferred when feasible to reduce hepatic load',
         'Maintain normovolemia to prevent renal stress',
         'Use short-acting anesthetics (e.g., propofol, remifentanil)',
-        'Postoperative LFT monitoring recommended'
+        'Postoperative LFT monitoring recommended',
+        'Consider pre-anesthetic albumin supplementation if <3.5 g/dL',
+        'Assess for potential drug interactions with reduced hepatic clearance'
       ],
       icon: <CheckCircle size={20} className="text-green-500" />
     },
     'Class B': {
       risk: 'Moderate',
       considerations: [
-        'Increased risk of perioperative complications, including bleeding',
-        'Preoperative optimization: correct coagulopathy (vitamin K, FFP)',
-        'Avoid hepatotoxic drugs (e.g., halothane, acetaminophen)',
-        'Consider invasive monitoring (arterial line, CVP) for major surgery',
-        'Use low-dose regional or TIVA to minimize hepatic metabolism',
+        'Increased risk of perioperative complications, including bleeding and encephalopathy',
+        'Preoperative optimization: correct coagulopathy (vitamin K, FFP, cryoprecipitate)',
+        'Avoid hepatotoxic drugs (e.g., halothane, acetaminophen, isoflurane)',
+        'Use invasive monitoring (arterial line, CVP) for major surgery',
+        'Prefer total intravenous anesthesia (TIVA) with propofol/remifentanil',
+        'Monitor for postoperative delirium and hepatic encephalopathy',
+        'Consider preoperative TIPS for portal hypertension if ascites severe',
         'Postoperative ICU monitoring for high-risk procedures'
       ],
       icon: <AlertTriangle size={20} className="text-yellow-500" />
@@ -79,12 +84,14 @@ const ChildPughScore = () => {
     'Class C': {
       risk: 'High',
       considerations: [
-        'High risk of hepatic decompensation and multi-organ failure',
-        'Avoid elective surgery; emergency procedures only',
-        'Use minimal sedation (e.g., low-dose propofol or dexmedetomidine)',
-        'Mandatory invasive monitoring (arterial, CVP, TEE if indicated)',
-        'Correct coagulopathy aggressively pre/intraoperatively',
-        'Prolonged ICU stay with frequent LFT and ammonia monitoring'
+        'High risk of hepatic decompensation, multi-organ failure, and mortality',
+        'Avoid elective surgery; emergency procedures only with multidisciplinary consult',
+        'Use minimal sedation (low-dose propofol, dexmedetomidine, avoid benzodiazepines)',
+        'Mandatory invasive monitoring (arterial, CVP, TEE, ScvO2 if indicated)',
+        'Aggressive preoperative correction of coagulopathy and thrombocytopenia',
+        'Prolonged ICU stay with frequent LFT, ammonia, and lactate monitoring',
+        'Consider intraoperative CRRT for renal dysfunction risk',
+        'High risk of postoperative ventilator dependence; plan extubation cautiously'
       ],
       icon: <XCircle size={20} className="text-red-500" />
     }
@@ -207,145 +214,6 @@ const ChildPughScore = () => {
                     />
                     <Typography variant="caption" className="text-gray-500">
                       Normal: 0.3-1.2 mg/dL | Impacts anesthetic metabolism
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <TextField
-                      label="Serum Albumin (g/dL)"
-                      type="number"
-                      value={albumin}
-                      onChange={(e) => setAlbumin(e.target.value)}
-                      className="w-full"
-                      placeholder="Enter albumin"
-                      InputLabelProps={{ shrink: true }}
-                    />
-                    <Typography variant="caption" className="text-gray-500">
-                      Normal: 3.5-5.5 g/dL | Affects drug binding
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <TextField
-                      label="INR"
-                      type="number"
-                      value={inr}
-                      onChange={(e) => setInr(e.target.value)}
-                      className="w-full"
-                      placeholder="Enter INR"
-                      InputLabelProps={{ shrink: true }}
-                    />
-                    <Typography variant="caption" className="text-gray-500">
-                      Normal: 0.8-1.1 | Guides coagulation management
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Card className="card">
-              <CardContent>
-                <Typography className="header">
-                  <HeartPulse size={20} className="inline mr-2" />
-                  Clinical Assessment
-                </Typography>
-                <Box className="space-y-4">
-                  <Box>
-                    <Typography className="mb-2">Ascites</Typography>
-                    <ToggleButtonGroup
-                      value={ascites}
-                      exclusive
-                      onChange={(e, value) => setAscites(value)}
-                      className="w-full"
-                    >
-                      <ToggleButton value="1" className="flex-1">None</ToggleButton>
-                      <ToggleButton value="2" className="flex-1">Mild</ToggleButton>
-                      <ToggleButton value="3" className="flex-1">Moderate-Severe</ToggleButton>
-                    </ToggleButtonGroup>
-                    <Typography variant="caption" className="text-gray-500">
-                      Impacts intraoperative fluid management
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Box className="flex items-center mb-2">
-                      <Typography>Encephalopathy</Typography>
-                      <IconButton onClick={() => setShowEncephalopathyGuide(true)}>
-                        <Info size={20} />
-                      </IconButton>
-                    </Box>
-                    <ToggleButtonGroup
-                      value={encephalopathy}
-                      exclusive
-                      onChange={(e, value) => setEncephalopathy(value)}
-                      className="w-full"
-                    >
-                      <ToggleButton value="1" className="flex-1">None</ToggleButton>
-                      <ToggleButton value="2" className="flex-1">Grade I-II</ToggleButton>
-                      <ToggleButton value="3" className="flex-1">Grade III-IV</ToggleButton>
-                    </ToggleButtonGroup>
-                    <Typography variant="caption" className="text-gray-500">
-                      Influences sedation choice and dosing
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 flex justify-center space-x-4"
-        >
-          <Button
-            className="btn-primary"
-            onClick={calculateScore}
-            startIcon={<BarChart2 size={20} />}
-          >
-            Calculate Score
-          </Button>
-          <Button
-            className="btn-primary"
-            onClick={resetForm}
-            startIcon={<XCircle size={20} />}
-          >
-            Reset
-          </Button>
-        </motion.div>
-
-        <AnimatePresence>
-          {showResults && score && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="mt-6"
-            >
-              <Card className="card">
-                <CardContent>
-                  <Typography className="header">
-                    <BarChart2 size={20} className="inline mr-2" />
-                    Results
-                  </Typography>
-                  <Box className="text-center mb-4">
-                    <Typography variant="h3" className="font-bold text-teal-600">
-                      {score}
-                    </Typography>
-                    <Typography variant="h5" className="font-semibold text-gray-800">
-                      {classification}
-                    </Typography>
-                  </Box>
-                  <Card className="bg-gray-50">
-                    <CardContent>
-                      <Typography className="font-semibold mb-2">Prognosis:</Typography>
-                      microspheres: 0.3-1.2 mg/dL | Impacts anesthetic metabolism
                     </Typography>
                   </Box>
                   <Box>

@@ -206,14 +206,14 @@ const CICOAlgorithm = () => {
             <Info size={20} className="text-teal-600" />
             <Typography variant="subtitle1" className="text-teal-600">Clinical Context</Typography>
           </Box>
-          <Typography variant="body2" className="text-gray-700">
-            <ul className="list-disc pl-5">
-              <li><strong>Call for Help:</ venitEarly:</strong> In a CICO scenario, immediate action by the airway team is critical. Additional help (e.g., ENT surgeon, second anesthesiologist) should be summoned.</li>
-              <li><strong>Scalpel-Bougie Technique:</strong> Preferred for emergency cricothyroidotomy due to higher success rate in adults (ANZCA, 2017).</li>
-              <li><strong>Pediatric Consideration:</strong> Needle cricothyroidotomy may be preferred in children due to anatomical differences (RCH CICO Guideline).</li>
-              <li><strong>Training:</strong> Regular CICO drills improve team performance and reduce procedure time (BJA, 2017).</li>
-            </ul>
-          </Typography>
+ <Typography variant="body2" className="text-gray-700">
+  <ul className="list-disc pl-5">
+    <li><strong>Call for Help:</strong> In a CICO scenario, immediate action by the airway team is critical. Additional help (e.g., ENT surgeon, second anesthesiologist) should be summoned.</li>
+    <li><strong>Scalpel-Bougie Technique:</strong> Preferred for emergency cricothyroidotomy due to higher success rate in adults (ANZCA, 2017).</li>
+    <li><strong>Pediatric Consideration:</strong> Needle cricothyroidotomy may be preferred in children due to anatomical differences (RCH CICO Guideline).</li>
+    <li><strong>Training:</strong> Regular CICO drills improve team performance and reduce procedure time (BJA, 2017).</li>
+  </ul>
+</Typography>
         </Paper>
         <Typography variant="caption" component="div" className="text-gray-500">
           <strong>Sources:</strong><br />

@@ -1,309 +1,434 @@
-import React, { useState } from 'react';
-import { Button, Card, TextField, Typography, Box, List, ListItem, ListItemText, Chip, Alert } from '@mui/material';
-import { motion } from 'framer-motion';
-import Select from 'react-select';
-import { AlertTriangle } from 'lucide-react';
-
-// Clinical reference ranges and guidelines
-const REFERENCE_RANGES = {
-  creatinine: {
-    male: { min: 0.7, max: 1.3 },
-    female: { min: 0.6, max: 1.1 }
-  },
-  bmi: {
-    underweight: 18.5,
-    normal: 24.9,
-    overweight: 29.9,
-    obese: 30
-  }
-};
-
-const CKD_STAGES = {
-  1: { range: '≥90', description: 'Normal or High', color: '#4CAF50' },
-  2: { range: '60-89', description: 'Mildly Decreased', color: '#8BC34A' },
-  3: { range: '30-59', description: 'Moderately Decreased', color: '#FFC107' },
-  4: { range: '15-29', description: 'Severely Decreased', color: '#FF5722' },
-  5: { range: '<15', description: 'Kidney Failure', color: '#F44336' }
-};
+// CreatinineClearance.jsx
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  ToggleButton,
+  ToggleButtonGroup,
+  Modal,
+  IconButton,
+  Alert,
+  Collapse,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import {
+  Info,
+  Stethoscope,
+  Activity,
+  CheckCircle,
+  AlertTriangle,
+  XCircle,
+  BarChart2,
+  HeartPulse,
+  Syringe,
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import '../../../index.css'; // Ensure Tailwind CSS is imported
 
 const CreatinineClearanceCalculator = () => {
-  const [inputs, setInputs] = useState({
-    creatinine: '',
-    age: '',
-    weight: '',
-    height: '',
-    gender: null,
-  });
-  const [results, setResults] = useState(null);
-  const [error, setError] = useState(null);
+  const [age, setAge] = useState('');
+  const [weight, setWeight] = useState('');
+  const [creatinine, setCreatinine] = useState('');
+  const [sex, setSex] = useState('');
+  const [crcl, setCrCl] = useState(null);
+  const [error, setError] = useState('');
+  const [showResults, setShowResults] = useState(false);
+  const [showAnesthesiaGuide, setShowAnesthesiaGuide] = useState(false);
 
-  const genderOptions = [
-    { value: 'female', label: 'Female' },
-    { value: 'male', label: 'Male' }
-  ];
-
-  const calculateBMI = (weight, height) => {
-    const heightInMeters = height / 100;
-    return weight / (heightInMeters * heightInMeters);
+  const anesthesiaGuidance = {
+    Normal: {
+      range: '>= 90',
+      risk: 'Low',
+      considerations: [
+        'Standard anesthetic dosing and protocols applicable',
+        'No significant renal adjustment needed for renally cleared drugs',
+        'Monitor for age-related comorbidities affecting renal perfusion',
+        'Use short-acting agents (e.g., propofol, remifentanil) for rapid recovery',
+        'Routine intraoperative fluid management sufficient',
+        'Standard postoperative monitoring for renal function',
+      ],
+      icon: <CheckCircle size={20} color="#22c55e" />,
+    },
+    Mild: {
+      range: '60-89',
+      risk: 'Mild',
+      considerations: [
+        'Mild dose adjustments for renally cleared drugs (e.g., neuromuscular blockers)',
+        'Monitor for potential intraoperative oliguria; maintain adequate hydration',
+        'Avoid nephrotoxic agents (e.g., NSAIDs, high-dose aminoglycosides)',
+        'Consider regional anesthesia to minimize systemic drug load',
+        'Use balanced crystalloids for fluid management',
+        'Postoperative monitoring of urine output and serum creatinine',
+      ],
+      icon: <CheckCircle size={20} color="#22c55e" />,
+    },
+    Moderate: {
+      range: '30-59',
+      risk: 'Moderate',
+      considerations: [
+        'Significant dose reductions for renally cleared drugs (e.g., rocuronium, morphine)',
+        'Use invasive monitoring (arterial line, CVP) for major surgery to guide fluid therapy',
+        'Avoid prolonged use of nephrotoxic anesthetics (e.g., sevoflurane in prolonged cases)',
+        'Preoperative optimization of volume status and electrolytes',
+        'Consider intraoperative urine output monitoring with Foley catheter',
+        'Extended postoperative monitoring in PACU or step-down unit',
+      ],
+      icon: <AlertTriangle size={20} color="#eab308" />,
+    },
+    Severe: {
+      range: '15-29',
+      risk: 'High',
+      considerations: [
+        'High risk of perioperative renal failure and fluid overload',
+        'Significant dose reductions or avoidance of renally cleared drugs',
+        'Mandatory invasive monitoring (arterial, CVP, urine output)',
+        'Preoperative consultation with nephrology for dialysis planning if indicated',
+        'Use minimal sedation techniques (e.g., dexmedetomidine, low-dose propofol)',
+        'Postoperative ICU monitoring with frequent electrolyte and creatinine checks',
+      ],
+      icon: <XCircle size={20} color="#ef4444" />,
+    },
+    'Kidney Failure': {
+      range: '<15',
+      risk: 'Very High',
+      considerations: [
+        'Extremely high risk of perioperative morbidity; avoid elective surgery',
+        'Avoid renally cleared drugs; use agents with hepatic clearance (e.g., cisatracurium)',
+        'Mandatory preoperative dialysis if patient is dialysis-dependent',
+        'Intraoperative CRRT may be required for fluid and electrolyte management',
+        'Multidisciplinary team (anesthesia, nephrology, ICU) for emergency procedures',
+        'Prolonged ICU stay with continuous renal function monitoring',
+      ],
+      icon: <XCircle size={20} color="#ef4444" />,
+    },
   };
 
-  const calculateClearance = () => {
-    // Validate inputs
-    if (!inputs.creatinine || !inputs.age || !inputs.weight || !inputs.height || !inputs.gender) {
-      setError('Please fill in all required fields');
+  const calculateCrCl = () => {
+    if (!age || !weight || !creatinine || !sex) {
+      setError('Please fill in all fields');
       return;
     }
 
-    const age = parseFloat(inputs.age);
-    const weight = parseFloat(inputs.weight);
-    const height = parseFloat(inputs.height);
-    const creatinine = parseFloat(inputs.creatinine);
-    const bmi = calculateBMI(weight, height);
+    const ageValue = parseFloat(age);
+    const weightValue = parseFloat(weight);
+    const creatinineValue = parseFloat(creatinine);
 
-    // Cockcroft-Gault equation
-    let clearance = ((140 - age) * weight) / (72 * creatinine);
-    if (inputs.gender === 'female') {
-      clearance *= 0.85;
+    if (isNaN(ageValue) || isNaN(weightValue) || isNaN(creatinineValue)) {
+      setError('Please enter valid numerical values');
+      return;
     }
 
-    // Adjust for body surface area if BMI is outside normal range
-    let adjustedClearance = clearance;
-    if (bmi > REFERENCE_RANGES.bmi.normal) {
-      const idealWeight = (REFERENCE_RANGES.bmi.normal * (height/100) * (height/100));
-      adjustedClearance = ((140 - age) * idealWeight) / (72 * creatinine);
-      if (inputs.gender === 'female') {
-        adjustedClearance *= 0.85;
-      }
+    // Cockcroft-Gault formula
+    let crclValue = ((140 - ageValue) * weightValue) / (72 * creatinineValue);
+    if (sex === 'female') {
+      crclValue *= 0.85;
     }
 
-    setResults({
-      clearance: Math.round(clearance * 10) / 10,
-      adjustedClearance: Math.round(adjustedClearance * 10) / 10,
-      bmi: Math.round(bmi * 10) / 10,
-      stage: getCKDStage(clearance)
-    });
-    setError(null);
+    setCrCl(crclValue);
+    setError('');
+    setShowResults(true);
   };
 
-  const getCKDStage = (clearance) => {
-    if (clearance >= 90) return CKD_STAGES[1];
-    if (clearance >= 60) return CKD_STAGES[2];
-    if (clearance >= 30) return CKD_STAGES[3];
-    if (clearance >= 15) return CKD_STAGES[4];
-    return CKD_STAGES[5];
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const resetForm = () => {
+    setAge('');
+    setWeight('');
+    setCreatinine('');
+    setSex('');
+    setCrCl(null);
+    setError('');
+    setShowResults(false);
+    setShowAnesthesiaGuide(false);
+  };
+
+  const getClassification = (crclValue) => {
+    if (crclValue >= 90) return 'Normal';
+    if (crclValue >= 60) return 'Mild';
+    if (crclValue >= 30) return 'Moderate';
+    if (crclValue >= 15) return 'Severe';
+    return 'Kidney Failure';
+  };
+
+  const getAnesthesiaGuidance = () => {
+    if (!crcl) return null;
+    return anesthesiaGuidance[getClassification(crcl)];
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 flex justify-center">
-      <motion.div 
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="w-full max-w-md"
-      >
-        <Card className="p-6">
-          <Typography variant="h4" className="text-center font-bold mb-2">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen w-screen bg-gray-50 overflow-y-auto overflow-x-hidden"
+    >
+      <main className="w-full max-w-full p-4">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-center mb-6"
+        >
+          <Typography className="header !text-2xl flex items-center justify-center">
+            <Stethoscope size={24} className="mr-2" />
             Creatinine Clearance Calculator
           </Typography>
-          <Typography variant="subtitle2" className="text-center text-gray-500 mb-6">
-            Cockcroft-Gault Equation
+          <Typography className="text-gray-600">
+            Renal Function Assessment
           </Typography>
+        </motion.div>
 
-          <Box className="space-y-4">
-            <Box>
-              <Typography variant="subtitle2" className="mb-1">Sex at Birth*</Typography>
-              <Select
-                options={genderOptions}
-                value={genderOptions.find(opt => opt.value === inputs.gender)}
-                onChange={(selected) => setInputs({...inputs, gender: selected.value})}
-                className="text-sm"
-              />
-            </Box>
+        <Collapse in={!!error}>
+          <Alert severity="error" className="mb-4 max-w-full">
+            {error}
+          </Alert>
+        </Collapse>
 
-            <Box>
-              <Typography variant="subtitle2" className="mb-1">Serum Creatinine*</Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="mg/dL"
-                value={inputs.creatinine}
-                onChange={(e) => setInputs({...inputs, creatinine: e.target.value})}
-                type="number"
-                size="small"
-              />
-              <Typography variant="caption" className="text-gray-500 mt-1">
-                Reference Range: {inputs.gender === 'male' ? '0.7-1.3' : inputs.gender === 'female' ? '0.6-1.1' : 'Select gender'} mg/dL
-              </Typography>
-            </Box>
+        <div className="custom-grid">
+          <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="card">
+              <CardContent>
+                <Typography className="header flex items-center">
+                  <Activity size={20} className="mr-2" />
+                  Patient Parameters
+                </Typography>
+                <div className="flex flex-col gap-4 mt-2">
+                  <div>
+                    <TextField
+                      label="Age (years)"
+                      type="number"
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                      fullWidth
+                      placeholder="Enter age"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: '1' }}
+                      className="bg-white"
+                    />
+                    <Typography className="text-gray-600 text-sm">
+                      Range: 18-120 years
+                    </Typography>
+                  </div>
+                  <div>
+                    <TextField
+                      label="Weight (kg)"
+                      type="number"
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      fullWidth
+                      placeholder="Enter weight"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: '0.1' }}
+                      className="bg-white"
+                    />
+                    <Typography className="text-gray-600 text-sm">
+                      Range: 30-200 kg
+                    </Typography>
+                  </div>
+                  <div>
+                    <TextField
+                      label="Serum Creatinine (mg/dL)"
+                      type="number"
+                      value={creatinine}
+                      onChange={(e) => setCreatinine(e.target.value)}
+                      fullWidth
+                      placeholder="Enter creatinine"
+                      InputLabelProps={{ shrink: true }}
+                      inputProps={{ step: '0.1' }}
+                      className="bg-white"
+                    />
+                    <Typography className="text-gray-600 text-sm">
+                      Normal: 0.6-1.2 mg/dL | Impacts drug clearance
+                    </Typography>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
 
-            <Box>
-              <Typography variant="subtitle2" className="mb-1">Age*</Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="Years"
-                value={inputs.age}
-                onChange={(e) => setInputs({...inputs, age: e.target.value})}
-                type="number"
-                size="small"
-              />
-            </Box>
+          <motion.div
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Card className="card">
+              <CardContent>
+                <Typography className="header flex items-center">
+                  <HeartPulse size={20} className="mr-2" />
+                  Sex
+                </Typography>
+                <div className="mt-2">
+                  <ToggleButtonGroup
+                    value={sex}
+                    exclusive
+                    onChange={(e, value) => value && setSex(value)}
+                    className="flex gap-1"
+                  >
+                    <ToggleButton value="male" className="flex-1">
+                      Male
+                    </ToggleButton>
+                    <ToggleButton value="female" className="flex-1">
+                      Female
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                  <Typography className="text-gray-600 text-sm">
+                    Affects clearance calculation (Cockcroft-Gault formula)
+                  </Typography>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
 
-            <Box>
-              <Typography variant="subtitle2" className="mb-1">Weight*</Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="kg"
-                value={inputs.weight}
-                onChange={(e) => setInputs({...inputs, weight: e.target.value})}
-                type="number"
-                size="small"
-              />
-            </Box>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 flex justify-center gap-4"
+        >
+          <Button
+            className="btn-primary"
+            onClick={calculateCrCl}
+            startIcon={<BarChart2 size={20} />}
+          >
+            Calculate CrCl
+          </Button>
+          <Button
+            className="border border-teal-600 text-teal-600 rounded hover:bg-teal-50 transition px-4 py-2"
+            onClick={resetForm}
+            startIcon={<XCircle size={20} />}
+          >
+            Reset
+          </Button>
+        </motion.div>
 
-            <Box>
-              <Typography variant="subtitle2" className="mb-1">Height*</Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                placeholder="cm"
-                value={inputs.height}
-                onChange={(e) => setInputs({...inputs, height: e.target.value})}
-                type="number"
-                size="small"
-              />
-            </Box>
-
-            {error && (
-              <Alert severity="error" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
+        <AnimatePresence>
+          {showResults && crcl !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
               className="mt-6"
-              onClick={calculateClearance}
             >
-              Calculate
-            </Button>
-          </Box>
-
-          {results && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
-              <Card className="p-6 border-2" sx={{ borderColor: results.stage.color }}>
-                <Typography variant="h6" className="font-bold mb-4 text-center">
-                  Creatinine Clearance
-                </Typography>
-                
-                <Typography variant="h3" className="text-center font-bold mb-2">
-                  {results.clearance}
-                </Typography>
-                <Typography variant="body2" className="text-center text-gray-500 mb-4">
-                  mL/min
-                </Typography>
-
-                {results.adjustedClearance !== results.clearance && (
-                  <Box className="text-center mb-4">
-                    <Typography variant="caption" className="text-gray-700">
-                      Adjusted for Ideal Body Weight:
+              <Card className="card">
+                <CardContent>
+                  <Typography className="header flex items-center">
+                    <BarChart2 size={20} className="mr-2" />
+                    Results
+                  </Typography>
+                  <div className="text-center mb-4">
+                    <Typography className="text-4xl font-bold text-teal-600">
+                      {crcl.toFixed(1)} mL/min
                     </Typography>
-                    <Typography variant="body1" className="font-semibold">
-                      {results.adjustedClearance} mL/min
+                    <Typography className="text-2xl font-semibold text-gray-900">
+                      {getClassification(crcl)}
                     </Typography>
-                  </Box>
-                )}
-
-                <Chip
-                  label={`CKD Stage - ${results.stage.description}`}
-                  style={{ 
-                    backgroundColor: results.stage.color,
-                    color: 'white',
-                    width: '100%',
-                    padding: 8
-                  }}
-                  className="mb-4"
-                />
-
-                <Box className="flex justify-center gap-2">
-                  <Typography variant="body2" className="text-gray-700">
-                    BMI:
-                  </Typography>
-                  <Typography variant="body2" className="font-semibold">
-                    {results.bmi} kg/m²
-                  </Typography>
-                </Box>
-              </Card>
-
-              <Card className="p-6 mt-4">
-                <Typography variant="h6" className="font-bold mb-4">
-                  Clinical Guidance
-                </Typography>
-
-                <Box className="mb-4">
-                  <Typography variant="subtitle1" className="font-semibold mb-2">
-                    Medication Adjustments
-                  </Typography>
-                  <List>
-                    {[
-                      'Review medication dosing for renal adjustment',
-                      'Consider anticoagulation modifications if CrCl < 30',
-                      'Adjust antibiotics based on CrCl'
-                    ].map((item, index) => (
-                      <ListItem key={index} className="py-0">
-                        <ListItemText primary={`•${item}`} className="text-gray-700" />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-
-                <Box className="mb-4">
-                  <Typography variant="subtitle1" className="font-semibold mb-2">
-                    Monitoring
-                  </Typography>
-                  <List>
-                    {[
-                      'Regular monitoring of renal function',
-                      'Assessment of fluid status',
-                      'Electrolyte monitoring'
-                    ].map((item, index) => (
-                      <ListItem key={index} className="py-0">
-                        <ListItemText primary={`• ${item}`} className="text-gray-700" />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-
-                {results.clearance < 60 && (
-                  <Box className="bg-red-50 p-4 rounded-lg">
-                    <Box className="flex items-center mb-2">
-                      <AlertTriangle className="h-5 w-5 text-red-700 mr-2" />
-                      <Typography variant="subtitle1" className="font-semibold text-red-700">
-                        Critical Considerations
+                  </div>
+                  <Card className="card bg-gray-50">
+                    <CardContent>
+                      <Typography className="font-semibold mb-2">
+                        Renal Function:
                       </Typography>
-                    </Box>
-                    <List>
-                      {[
-                        'Nephrology referral recommended',
-                        'Monitor for anemia',
-                        'Assess bone mineral metabolism',
-                        'Evaluate cardiovascular risk'
-                      ].map((item, index) => (
-                        <ListItem key={index} className="py-0">
-                          <ListItemText primary={`• ${item}`} className="text-red-700" />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Box>
-                )}
+                      <Typography className="text-gray-700">
+                        Creatinine Clearance: {crcl.toFixed(1)} mL/min (Normal: ≥90 mL/min)
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                  <Card className="card bg-gray-50 mt-4">
+                    <CardContent>
+                      <div className="flex items-center mb-2">
+                        <Typography className="font-semibold">
+                          Anesthesia Considerations
+                        </Typography>
+                        <IconButton onClick={() => setShowAnesthesiaGuide(true)}>
+                          <Info size={20} />
+                        </IconButton>
+                      </div>
+                      <div className="flex items-center">
+                        {anesthesiaGuidance[getClassification(crcl)].icon}
+                        <Typography className="ml-1 font-semibold">
+                          Risk Level: {anesthesiaGuidance[getClassification(crcl)].risk}
+                        </Typography>
+                      </div>
+                      <List>
+                        {anesthesiaGuidance[getClassification(crcl)].considerations.map((item, index) => (
+                          <ListItem key={index}>
+                            <ListItemIcon>
+                              <Syringe size={16} color="#0d9488" />
+                            </ListItemIcon>
+                            <ListItemText primary={item} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </CardContent>
+                  </Card>
+                </CardContent>
               </Card>
             </motion.div>
           )}
-        </Card>
-      </motion.div>
-    </div>
+        </AnimatePresence>
+
+        <Modal
+          open={showAnesthesiaGuide}
+          onClose={() => setShowAnesthesiaGuide(false)}
+          className="flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="card max-w-md max-h-[80vh] overflow-y-auto"
+          >
+            {crcl !== null && getAnesthesiaGuidance() && (
+              <>
+                <Typography className="header text-center">
+                  Anesthesia Considerations - {getClassification(crcl)}
+                </Typography>
+                <div className="flex items-center mb-2">
+                  {getAnesthesiaGuidance().icon}
+                  <Typography className="ml-1 font-semibold">
+                    Risk Level: {getAnesthesiaGuidance().risk}
+                  </Typography>
+                </div>
+                <List>
+                  {getAnesthesiaGuidance().considerations.map((item, index) => (
+                    <ListItem key={index}>
+                      <ListItemIcon>
+                        <Syringe size={16} color="#0d9488" />
+                      </ListItemIcon>
+                      <ListItemText primary={item} />
+                    </ListItem>
+                  ))}
+                </List>
+                <Button
+                  className="btn-primary mt-4 w-full"
+                  onClick={() => setShowAnesthesiaGuide(false)}
+                >
+                  Close
+                </Button>
+              </>
+            )}
+          </motion.div>
+        </Modal>
+      </main>
+    </motion.div>
   );
 };
 

@@ -44,7 +44,7 @@ const FloatingSearch = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="fixed top-28 right-4 p-3 bg-card border border-border rounded-radius shadow-sm w-full max-w-sm"
+            className="fixed top-28 right-4 p-3 bg-card border border-border rounded-radius shadow-sm w-full max-w-sm z-[60]"
           >
             <div className="relative">
               <input

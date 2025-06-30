@@ -2,207 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Base Layer: Define CSS variables for themes ===== */
 @layer base {
-    :root {
-        --background: 0 0% 98%;
-        --foreground: 220 13% 13%;
-        --card: 0 0% 100%;
-        --card-foreground: 220 13% 13%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 220 13% 13%;
-        --primary: 186 61% 35%;
-        --primary-foreground: 0 0% 100%;
-        --secondary: 210 16% 82%;
-        --secondary-foreground: 220 13% 13%;
-        --muted: 210 16% 82%;
-        --muted-foreground: 220 13% 46%;
-        --accent: 186 61% 45%;
-        --accent-foreground: 0 0% 100%;
-        --destructive: 0 84% 60%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 210 16% 82%;
-        --input: 210 16% 82%;
-        --ring: 186 61% 35%;
-        --radius: 0.5rem;
-        --sidebar-background: 0 0% 100%;
-        --sidebar-foreground: 220 13% 13%;
-        --sidebar-primary: 186 61% 35%;
-        --sidebar-primary-foreground: 0 0% 100%;
-        --sidebar-accent: 210 16% 82%;
-        --sidebar-accent-foreground: 220 13% 13%;
-        --sidebar-border: 210 16% 82%;
-        --sidebar-ring: 186 61% 35%;
-        --chart-1: 186 61% 35%;
-        --chart-2: 186 61% 45%;
-        --chart-3: 186 61% 55%;
-        --chart-4: 186 61% 65%;
-        --chart-5: 186 61% 75%;
-    }
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 220 13% 13%;
 
-    .dark {
-        --background: 220 13% 13%;
-        --foreground: 0 0% 98%;
-        --card: 220 13% 18%;
-        --card-foreground: 0 0% 98%;
-        --popover: 220 13% 18%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 186 61% 45%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 220 13% 28%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 220 13% 28%;
-        --muted-foreground: 220 13% 60%;
-        --accent: 186 61% 55%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 62% 30%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 220 13% 28%;
-        --input: 220 13% 28%;
-        --ring: 186 61% 45%;
-        --sidebar-background: 220 13% 18%;
-        --sidebar-foreground: 0 0% 98%;
-        --sidebar-primary: 186 61% 45%;
-        --sidebar-primary-foreground: 0 0% 98%;
-        --sidebar-accent: 220 13% 28%;
-        --sidebar-accent-foreground: 0 0% 98%;
-        --sidebar-border: 220 13% 28%;
-        --sidebar-ring: 186 61% 45%;
-        --chart-1: 186 61% 55%;
-        --chart-2: 186 61% 65%;
-        --chart-3: 186 61% 75%;
-        --chart-4: 186 61% 85%;
-        --chart-5: 186 61% 95%;
-    }
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 13%;
 
-    * {
-        border-color: hsl(var(--border));
-    }
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 13%;
 
-    html,
-    body,
-    #root {
-        @apply min-h-screen w-screen bg-background overflow-y-auto overflow-x-hidden;
-        margin: 0;
-        padding: 0;
-        font-family: theme('fontFamily.sans');
-        color: hsl(var(--foreground));
-    }
+    --primary: 186 61% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 220 13% 13%;
+
+    --muted: 210 20% 95%;
+    --muted-foreground: 220 8% 45%;
+
+    --accent: 186 100% 94%;
+    --accent-foreground: 186 61% 35%;
+
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 186 61% 35%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 13% 13%;
+    --foreground: 0 0% 98%;
+
+    --card: 222 12% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 222 12% 10%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 186 61% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 14.3% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 210 16% 20%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 186 61% 35%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 186 61% 35%;
+  }
 }
 
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
-}
-
+/* ===== Component Layer: Create utility classes using variables ===== */
 @layer components {
-    .card {
-        @apply rounded-[--radius] shadow-md bg-card text-card-foreground border p-4;
-    }
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+  .text-foreground {
+    color: hsl(var(--foreground));
+  }
 
-    .header {
-        @apply text-primary font-semibold text-xl mb-2;
-    }
+  .bg-card {
+    background-color: hsl(var(--card));
+  }
+  .text-card-foreground {
+    color: hsl(var(--card-foreground));
+  }
 
-    .btn-primary {
-        @apply bg-primary text-primary-foreground rounded-[--radius] hover:bg-primary/90 transition px-4 py-2;
-    }
+  .bg-popover {
+    background-color: hsl(var(--popover));
+  }
+  .text-popover-foreground {
+    color: hsl(var(--popover-foreground));
+  }
 
-    .sidebar {
-        @apply w-64 lg:w-72 max-w-full bg-sidebar-background text-sidebar-foreground h-full border-r border-[hsl(var(--sidebar-border))];
-    }
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground));
+  }
 
-    .main {
-        @apply w-full max-w-full h-full overflow-y-auto overflow-x-hidden bg-background;
-    }
+  .bg-secondary {
+    background-color: hsl(var(--secondary));
+  }
+  .text-secondary-foreground {
+    color: hsl(var(--secondary-foreground));
+  }
 
-    .calculator-tabs {
-        @apply flex flex-row overflow-x-auto whitespace-nowrap bg-card;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-        scrollbar-color: hsl(var(--muted)) transparent;
-    }
+  .bg-muted {
+    background-color: hsl(var(--muted));
+  }
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
 
-    .calculator-tabs::-webkit-scrollbar {
-        @apply h-2;
-    }
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+  .text-accent-foreground {
+    color: hsl(var(--accent-foreground));
+  }
 
-    .calculator-tabs::-webkit-scrollbar-track {
-        @apply bg-transparent;
-    }
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+  .text-destructive-foreground {
+    color: hsl(var(--destructive-foreground));
+  }
 
-    .calculator-tabs::-webkit-scrollbar-thumb {
-        @apply bg-muted rounded-full;
-    }
+  .border-border {
+    border-color: hsl(var(--border));
+  }
 
-    .calculator-tabs > * {
-        @apply flex-shrink-0 mx-1;
-    }
+  .ring-ring {
+    --tw-ring-color: hsl(var(--ring));
+  }
 
-    .custom-grid {
-        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full;
-    }
-
-    .container, .wrapper {
-        @apply w-full max-w-full m-0 p-0;
-    }
-}
-
-.skeleton {
-    * {
-        pointer-events: none !important;
-    }
-
-    *[class^="text-"] {
-        color: transparent;
-        @apply rounded-md bg-foreground/20 select-none animate-pulse;
-    }
-
-    .skeleton-bg {
-        @apply bg-foreground/10;
-    }
-
-    .skeleton-div {
-        @apply bg-foreground/20 animate-pulse;
-    }
-}
-
-.ProseMirror {
-    outline: none;
-}
-
-.cm-editor,
-.cm-gutters {
-    @apply bg-background dark:bg-muted outline-none selection:bg-accent !important;
-}
-
-.ͼo.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground,
-.ͼo.cm-selectionBackground,
-.ͼo.cm-content::selection {
-    @apply bg-accent dark:bg-accent/50 !important;
-}
-
-.cm-activeLine,
-.cm-activeLineGutter {
-    @apply bg-transparent !important;
-}
-
-.cm-activeLine {
-    @apply rounded-r-sm !important;
-}
-
-.cm-lineNumbers {
-    @apply min-w-7;
-}
-
-.cm-foldGutter {
-    @apply min-w-3;
-}
-
-.cm-lineNumbers .cm-activeLineGutter {
-    @apply rounded-l-sm !important;
-}
-
-.suggestion-highlight {
-    @apply bg-accent hover:bg-accent/80 dark:hover:bg-accent/60 dark:text-accent-foreground dark:bg-accent/40;
+  .rounded-radius {
+    border-radius: var(--radius);
+  }
 }

@@ -81,10 +81,11 @@
     html,
     body,
     #root {
-        @apply min-h-screen w-screen bg-background text-foreground overflow-y-auto overflow-x-hidden;
+        @apply min-h-screen w-screen bg-background overflow-y-auto overflow-x-hidden;
         margin: 0;
         padding: 0;
         font-family: theme('fontFamily.sans');
+        color: hsl(var(--foreground));
     }
 }
 

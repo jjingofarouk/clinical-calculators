@@ -1,26 +1,19 @@
-// FloatingSearch.jsx
 import React, { useState } from 'react';
-import {
-  Box,
-  TextField,
-  Fab,
-  Collapse,
-  IconButton,
-} from '@mui/material';
-import { Search, Close } from '@mui/icons-material';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, X } from 'lucide-react';
 
-const FloatingSearch = ({ 
-  searchQuery, 
-  onSearchChange, 
-  placeholder = "Search calculators...",
-  position = { top: 16, right: 16 }
+const FloatingSearch = ({
+  searchQuery,
+  onSearchChange,
+  placeholder = 'Search calculators...',
+  className = 'w-full max-w-2xl mx-auto',
 }) => {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const handleSearchToggle = () => {
     setSearchOpen(!searchOpen);
     if (searchOpen && searchQuery) {
-      onSearchChange(''); // Clear search when closing if there's a query
+      onSearchChange('');
     }
   };
 
@@ -33,68 +26,48 @@ const FloatingSearch = ({
   };
 
   return (
-    <>
+    <div className={`relative ${className}`}>
       {/* Floating Search Button */}
-      <Fab
-        color="primary"
-        aria-label="search"
+      <button
         onClick={handleSearchToggle}
-        sx={{
-          position: 'fixed',
-          top: position.top,
-          right: position.right,
-          bgcolor: '#0d9488',
-          '&:hover': {
-            bgcolor: '#0f766e',
-          },
-          zIndex: 1000,
-          width: 48,
-          height: 48,
-        }}
+        className="fixed top-4 right-4 bg-primary text-primary-foreground p-3 rounded-full shadow-md hover:bg-accent hover:text-accent-foreground transition-all duration-200 z-50"
+        aria-label="search"
       >
-        {searchOpen ? <Close /> : <Search />}
-      </Fab>
+        {searchOpen ? <X size={24} /> : <Search size={24} />}
+      </button>
 
       {/* Collapsible Search Bar */}
-      <Collapse in={searchOpen}>
-        <Box className="p-4 border-b border-gray-200 bg-white w-full shadow-sm">
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder={placeholder}
-            value={searchQuery}
-            onChange={handleSearchChange}
-            autoFocus
-            sx={{
-              backgroundColor: '#fff',
-              borderRadius: 2,
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: '#d1d5db' },
-                '&:hover fieldset': { borderColor: '#0d9488' },
-                '&.Mui-focused fieldset': { borderColor: '#0d9488' },
-              },
-              input: {
-                fontFamily: 'Inter, sans-serif',
-                color: '#1F2937'
-              },
-              width: '100%',
-              maxWidth: '100%'
-            }}
-            InputProps={{
-              endAdornment: (
-                <IconButton
-                  size="small"
+      <AnimatePresence>
+        {searchOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="p-4 bg-card border-b border-border shadow-sm"
+          >
+            <div className="relative">
+              <input
+                type="text"
+                placeholder={placeholder}
+                value={searchQuery}
+                onChange={handleSearchChange}
+                autoFocus
+                className="w-full bg-card text-card-foreground border border-border rounded-radius py-2 px-4 focus:outline-none focus:border-primary focus:ring-1 focus:ring-ring font-sans text-sm"
+              />
+              {searchQuery && (
+                <button
                   onClick={handleClearSearch}
-                  sx={{ visibility: searchQuery ? 'visible' : 'hidden' }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-primary"
                 >
-                  <Close fontSize="small" />
-                </IconButton>
-              )
-            }}
-          />
-        </Box>
-      </Collapse>
-    </>
+                  <X size={18} />
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

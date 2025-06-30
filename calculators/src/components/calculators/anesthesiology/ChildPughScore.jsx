@@ -177,6 +177,7 @@ const ChildPughScore = () => {
           <Typography className="header">
             <Stethoscope size={24} className="inline mr-2" />
             Child-Pugh Score Calculator
+                </Typography>
         </motion.div>
 
         <Collapse in={!!error}>

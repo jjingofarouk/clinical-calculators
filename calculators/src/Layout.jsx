@@ -28,12 +28,8 @@ const Layout = () => {
 
   return (
     <div className="flex min-h-screen w-full bg-background text-foreground m-0 p-0">
-      {/* Sidebar (Responsive) */}
       <Sidebar mobileOpen={mobileOpen} toggleMobile={toggleMobile} />
-
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col w-full max-w-full m-0 p-0">
-        {/* Mobile Top Navbar */}
         <div className="lg:hidden flex items-center justify-between border-b border-sidebar-border shadow-sm m-0 p-4 bg-sidebar-background">
           <button onClick={toggleMobile}>
             <Menu className="text-sidebar-foreground" />
@@ -47,8 +43,6 @@ const Layout = () => {
             )}
           </button>
         </div>
-
-        {/* Desktop Theme Toggle */}
         <div className="hidden lg:flex justify-end p-4 border-b border-sidebar-border bg-sidebar-background">
           <button
             onClick={toggleTheme}
@@ -61,8 +55,6 @@ const Layout = () => {
             )}
           </button>
         </div>
-
-        {/* Page Content */}
         <main className="main">
           <Outlet />
         </main>

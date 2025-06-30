@@ -1,7 +1,8 @@
+// AnesthesiologyCalculators.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import FloatingSearch from '../FloatingSearch';
+import SearchBar from '../SearchBar'; // Updated to use SearchBar
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -75,7 +76,7 @@ const calculators = [
   { label: 'Blood Loss Estimation Methods', component: <BloodLossEstimation /> },
   { label: 'Perioperative Fluid Management Calculators', component: <PerioperativeFluid /> },
   { label: 'Transfusion Trigger Guidelines', component: <TransfusionTrigger /> },
-  { label: 'Thromboelastography Interpretation', component: <TEGInterpretation /> },
+  { label: 'Thromboelastography (TEG) Interpretation', component: <TEGInterpretation /> },
   { label: 'Rotational Thromboelastometry (ROTEM) Interpretation', component: <ROTEMInterpretation /> },
   { label: 'Nerve Block Volume Calculators', component: <NerveBlockVolume /> },
   { label: 'Spinal Anesthesia Dosing Guidelines', component: <SpinalAnesthesiaDosing /> },
@@ -148,15 +149,14 @@ const AnesthesiologyCalculators = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="sticky top-0 z-10 p-4 bg-background">
-        <FloatingSearch
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          placeholder="Search anesthesiology calculators..."
-          className="w-full max-w-2xl mx-auto"
-        />
-      </div>
+      {/* Search Bar */}
+      <SearchBar
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        placeholder="Search anesthesiology calculators..."
+      />
 
+      {/* Tabs */}
       <div className="px-4 py-2 border-b border-border bg-secondary overflow-x-auto">
         <div className="flex space-x-2 max-w-full overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
           {filteredCalculators.map((calc, index) => (
@@ -174,6 +174,7 @@ const AnesthesiologyCalculators = () => {
         </div>
       </div>
 
+      {/* Content */}
       <div className="flex-1 p-6 bg-background">
         {filteredCalculators.length > 0 ? (
           <div className="max-w-4xl mx-auto">

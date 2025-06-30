@@ -6,12 +6,12 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: 'hsl(186, 61%, 35%)', // teal-600
-          light: 'hsl(174, 78%, 41%)',   // teal-500
-          dark: 'hsl(186, 61%, 25%)',    // darker teal
+          DEFAULT: 'hsl(186, 61%, 35%)',
+          light: 'hsl(174, 78%, 41%)',
+          dark: 'hsl(186, 61%, 25%)',
         },
         background: {
-          DEFAULT: 'hsl(0, 0%, 98%)',    // gray-50
+          DEFAULT: 'hsl(0, 0%, 98%)',
         },
       },
       fontFamily: {

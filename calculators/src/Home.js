@@ -128,7 +128,6 @@ export default function Home() {
       <p className="text-muted-foreground mb-6">
         Quickly access a range of evidence-based medical calculators by category.
       </p>
-
       <div className="custom-grid">
         {categories.map((cat) => (
           <div

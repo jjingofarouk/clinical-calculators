@@ -47,7 +47,6 @@ import EndTidalCO2 from './EndTidalCO2';
 import AlveolarGasEquation from './AlveolarGasEquation';
 import AnionGap from './AnionGap';
 import OsmolalGap from './OsmolalGap';
-import CreatinineClearance from './CreatinineClearance';
 import EGFR from './EGFR';
 import MELDScore from './MELDScore';
 import ChildPughScore from './ChildPughScore';
@@ -140,7 +139,6 @@ const calculators = [
   { label: 'Alveolar Gas Equation', component: <AlveolarGasEquation /> },
   { label: 'Anion Gap', component: <AnionGap /> },
   { label: 'Osmolal Gap', component: <OsmolalGap /> },
-  { label: 'Creatinine Clearance (Cockcroft-Gault)', component: <CreatinineClearance /> },
   { label: 'Glomerular Filtration Rate (eGFR)', component: <EGFR /> },
   { label: 'Model for End-Stage Liver Disease (MELD) Score', component: <MELDScore /> },
   { label: 'Child-Pugh Score', component: <ChildPughScore /> },

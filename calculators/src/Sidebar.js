@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -50,7 +49,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       .map(calc => ({ calc, path: `${item.path}/${calc.replace(/\s+/g, '-')}`, specialty: item.label }))
   );
 
-  // Determine active section based on current path
   useEffect(() => {
     const currentItem = sidebarItems.find(item => location.pathname.startsWith(item.path));
     if (currentItem) {
@@ -63,33 +61,33 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
   return (
     <aside
       ref={sidebarRef}
-      className={`bg-white border-r border-gray-100 h-full fixed inset-y-0 left-0 transform ${
+      className={`sidebar fixed inset-y-0 left-0 transform ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-72 lg:w-80 max-w-full z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
     >
-      <div className="flex items-center justify-between lg:hidden border-b border-gray-100 p-6 bg-gray-50">
+      <div className="flex items-center justify-between lg:hidden border-b border-sidebar-border p-6 bg-sidebar-background">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-            <Calculator className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
+            <Calculator className="w-5 h-5 text-sidebar-primary-foreground" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900">Calculators</h2>
+          <h2 className="text-xl font-bold text-sidebar-foreground">Calculators</h2>
         </div>
         <button
           onClick={toggleMobile}
-          className="p-2 rounded-lg hover:bg-gray-200 transition-colors duration-200"
+          className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-200"
         >
-          <Menu className="w-6 h-6 text-gray-600" />
+          <Menu className="w-6 h-6 text-sidebar-foreground" />
         </button>
       </div>
 
-      <div className="hidden lg:block p-6 border-b border-gray-100 bg-gray-50">
+      <div className="hidden lg:block p-6 border-b border-sidebar-border bg-sidebar-background">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-            <Calculator className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 bg-sidebar-primary rounded-xl flex items-center justify-center shadow-lg">
+            <Calculator className="w-6 h-6 text-sidebar-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Medical Calculators</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Clinical decision tools</p>
+            <h2 className="text-xl font-bold text-sidebar-foreground">Medical Calculators</h2>
+            <p className="text-sm text-sidebar-foreground mt-0.5">Clinical decision tools</p>
           </div>
         </div>
       </div>
@@ -101,9 +99,9 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
             placeholder="Search calculators!"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-2 pl-10 bg-white text-gray-900 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+            className="w-full p-2 pl-10 bg-card text-foreground border rounded-lg focus:outline-none focus:ring-2 focus:ring-sidebar-ring"
           />
-          <Search className="w-5 h-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <Search className="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
         </div>
       </div>
 
@@ -118,16 +116,16 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     onClick={toggleMobile}
                     className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
                       location.pathname === path
-                        ? 'text-teal-600 bg-teal-50'
-                        : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
+                        ? 'text-sidebar-primary bg-sidebar-accent'
+                        : 'text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent'
                     } rounded-lg`}
                   >
-                    {calc} <span className="text-xs text-gray-500">({specialty})</span>
+                    {calc} <span className="text-xs text-muted-foreground">({specialty})</span>
                   </Link>
                 </li>
               ))
             ) : (
-              <li className="py-2.5 px-3 text-sm text-gray-500">No matches found</li>
+              <li className="py-2.5 px-3 text-sm text-muted-foreground">No matches found</li>
             )}
           </ul>
         ) : (
@@ -144,15 +142,15 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     onClick={toggleMobile}
                     className={`flex items-center space-x-3 flex-grow ${
                       isActive
-                        ? 'text-teal-700'
-                        : 'text-gray-700 hover:text-gray-900'
+                        ? 'text-sidebar-primary'
+                        : 'text-sidebar-foreground hover:text-sidebar-foreground'
                     }`}
                   >
                     <div
                       className={`p-2 rounded-lg transition-colors duration-200 ${
                         isActive
-                          ? 'bg-teal-100 text-teal-600'
-                          : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-600'
+                          ? 'bg-sidebar-accent text-sidebar-primary'
+                          : 'bg-muted text-muted-foreground group-hover:bg-sidebar-accent group-hover:text-sidebar-foreground'
                       }`}
                     >
                       <Icon size={18} />
@@ -162,15 +160,15 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                   <button
                     onClick={() => toggleExpand(item.label)}
                     className={`p-2 rounded-lg transition-colors duration-200 ${
-                      isActive ? 'text-teal-600' : 'text-gray-400'
-                    } hover:bg-gray-200`}
+                      isActive ? 'text-sidebar-primary' : 'text-sidebar-foreground'
+                    } hover:bg-sidebar-accent`}
                   >
                     {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                   </button>
                 </div>
 
                 {isOpen && (
-                  <div className="mt-2 ml-4 pl-6 border-l-2 border-gray-100">
+                  <div className="mt-2 ml-4 pl-6 border-l-2 border-sidebar-border">
                     <ul className="space-y-1">
                       {item.calculators.map((calc) => {
                         const calcPath = `${item.path}/${calc.replace(/\s+/g, '-')}`;
@@ -181,8 +179,8 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                               onClick={toggleMobile}
                               className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
                                 location.pathname === calcPath
-                                  ? 'text-teal-600 bg-teal-50'
-                                  : 'text-gray-600 hover:text-teal-600 hover:bg-teal-50'
+                                  ? 'text-sidebar-primary bg-sidebar-accent'
+                                  : 'text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent'
                               } rounded-lg`}
                             >
                               {calc}
@@ -199,14 +197,14 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         )}
       </nav>
 
-      <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50">
+      <div className="mt-auto p-6 border-t border-sidebar-border bg-sidebar-background">
         <div className="text-center">
-          <p className="text-xs text-gray-500 font-medium">
+          <p className="text-xs text-sidebar-foreground font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available
           </p>
           <div className="mt-2 flex justify-center space-x-1">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-gray-300 rounded-full"></div>
+              <div key={i} className="w-1.5 h-1.5 bg-muted rounded-full"></div>
             ))}
           </div>
         </div>

@@ -79,7 +79,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           <Menu className="w-6 h-6 text-sidebar-foreground" />
         </button>
       </div>
-
       <div className="hidden lg:block p-6 border-b border-sidebar-border bg-sidebar-background">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-sidebar-primary rounded-xl flex items-center justify-center shadow-lg">
@@ -91,7 +90,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           </div>
         </div>
       </div>
-
       <div className="p-4">
         <div className="relative">
           <input
@@ -104,7 +102,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           <Search className="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
         </div>
       </div>
-
       <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
         {searchQuery ? (
           <ul className="space-y-1">
@@ -166,7 +163,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                   </button>
                 </div>
-
                 {isOpen && (
                   <div className="mt-2 ml-4 pl-6 border-l-2 border-sidebar-border">
                     <ul className="space-y-1">
@@ -196,7 +192,6 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           })
         )}
       </nav>
-
       <div className="mt-auto p-6 border-t border-sidebar-border bg-sidebar-background">
         <div className="text-center">
           <p className="text-xs text-sidebar-foreground font-medium">

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Tabs, Tab, Typography, useTheme, useMediaQuery } from '@mui/material';
 import { motion } from 'framer-motion';
-import FloatingSearch from '../FloatingSearch'; // Import the new component
+import FloatingSearch from '../FloatingSearch';
 import ASAPhysicalStatus from './ASAPhysicalStatus';
 import MallampatiScore from './MallampatiScore';
 import CormackLehane from './CormackLehane';
@@ -13,8 +12,6 @@ import LaryngealMaskSize from './LaryngealMaskSize';
 import EpiduralDosing from './EpiduralDosing';
 import LocalAnestheticMaxDose from './LocalAnestheticMaxDose';
 import PainAssessmentScales from './PainAssessmentScales';
-import BispectralIndex from './BispectralIndex';
-import MACValues from './MACValues';
 import OpioidConversion from './OpioidConversion';
 import PCADosing from './PCADosing';
 import SedationScales from './SedationScales';
@@ -53,41 +50,9 @@ import APACHEII from './APACHEII';
 import SOFAScore from './SOFAScore';
 import QSOFA from './QSOFA';
 import SAPSII from './SAPSII';
-import CardiacOutputMonitoring from './CardiacOutputMonitoring';
 import StrokeVolumeVariation from './StrokeVolumeVariation';
 import PulsePressureVariation from './PulsePressureVariation';
-import CentralVenousPressure from './CentralVenousPressure';
-import PulmonaryArteryCatheter from './PulmonaryArteryCatheter';
-import TEEHemodynamic from './TEEHemodynamic';
-import NeuromuscularBlockade from './NeuromuscularBlockade';
-import EntropyMonitoring from './EntropyMonitoring';
-import NarcotrendIndex from './NarcotrendIndex';
-import CerebralOximetry from './CerebralOximetry';
-import LactateLevels from './LactateLevels';
-import BaseDeficitExcess from './BaseDeficitExcess';
-import StrongIonDifference from './StrongIonDifference';
-import AllergicReactionRisk from './AllergicReactionRisk';
-import LatexAllergyRisk from './LatexAllergyRisk';
-import MalignantHyperthermiaSusceptibility from './MalignantHyperthermiaSusceptibility';
-import SickleCellConsiderations from './SickleCellConsiderations';
-import BerlinQuestionnaire from './BerlinQuestionnaire';
-import GERDRisk from './GERDRisk';
-import AspirationRisk from './AspirationRisk';
-import ASADifficultAirway from './ASADifficultAirway';
-import CICOAlgorithm from './CICOAlgorithm';
 import RSIDrugDosing from './RSIDrugDosing';
-import PreoxygenationTechniques from './PreoxygenationTechniques';
-import ApneicOxygenation from './ApneicOxygenation';
-import HFNO from './HFNO';
-import NIVSettings from './NIVSettings';
-import ECMOBasics from './ECMOBasics';
-import IABP from './IABP';
-import VADs from './VADs';
-import NerveIdentification from './NerveIdentification';
-import POCDRisk from './POCDRisk';
-import ERASProtocols from './ERASProtocols';
-import PerioperativeCardiacArrest from './PerioperativeCardiacArrest';
-import ImplantedDevices from './ImplantedDevices';
 
 const calculators = [
   { label: 'ASA Physical Status Classification', component: <ASAPhysicalStatus /> },
@@ -100,8 +65,6 @@ const calculators = [
   { label: 'Epidural Dosing Calculators', component: <EpiduralDosing /> },
   { label: 'Local Anesthetic Maximum Dose Calculators', component: <LocalAnestheticMaxDose /> },
   { label: 'Pain Assessment Scales (VAS, NRS, etc.)', component: <PainAssessmentScales /> },
-  { label: 'Bispectral Index (BIS) for Depth of Anesthesia', component: <BispectralIndex /> },
-  { label: 'Minimum Alveolar Concentration (MAC) Values', component: <MACValues /> },
   { label: 'Opioid Conversion Calculators', component: <OpioidConversion /> },
   { label: 'Patient-Controlled Analgesia (PCA) Dosing Guidelines', component: <PCADosing /> },
   { label: 'Sedation Scales (Ramsay, RASS, etc.)', component: <SedationScales /> },
@@ -140,49 +103,15 @@ const calculators = [
   { label: 'Sequential Organ Failure Assessment (SOFA) Score', component: <SOFAScore /> },
   { label: 'quick Sequential Organ Failure Assessment (qSOFA)', component: <QSOFA /> },
   { label: 'Simplified Acute Physiology Score (SAPS II)', component: <SAPSII /> },
-  { label: 'Cardiac Output Monitoring Techniques', component: <CardiacOutputMonitoring /> },
   { label: 'Stroke Volume Variation', component: <StrokeVolumeVariation /> },
   { label: 'Pulse Pressure Variation', component: <PulsePressureVariation /> },
-  { label: 'Central Venous Pressure Interpretation', component: <CentralVenousPressure /> },
-  { label: 'Pulmonary Artery Catheter Data Interpretation', component: <PulmonaryArteryCatheter /> },
-  { label: 'Transesophageal Echocardiography (TEE) for Hemodynamic Monitoring', component: <TEEHemodynamic /> },
-  { label: 'Neuromuscular Blockade Monitoring (Train-of-Four, etc.)', component: <NeuromuscularBlockade /> },
-  { label: 'Entropy Monitoring for Depth of Anesthesia', component: <EntropyMonitoring /> },
-  { label: 'Narcotrend Index', component: <NarcotrendIndex /> },
-  { label: 'Cerebral Oximetry (NIRS)', component: <CerebralOximetry /> },
-  { label: 'Lactate Levels', component: <LactateLevels /> },
-  { label: 'Base Deficit/Base Excess', component: <BaseDeficitExcess /> },
-  { label: 'Strong Ion Difference (SID)', component: <StrongIonDifference /> },
-  { label: 'Allergic Reaction Risk Assessment', component: <AllergicReactionRisk /> },
-  { label: 'Latex Allergy Risk', component: <LatexAllergyRisk /> },
-  { label: 'Malignant Hyperthermia Susceptibility Assessment', component: <MalignantHyperthermiaSusceptibility /> },
-  { label: 'Sickle Cell Disease Considerations', component: <SickleCellConsiderations /> },
-  { label: 'Obstructive Sleep Apnea Risk (Berlin Questionnaire)', component: <BerlinQuestionnaire /> },
-  { label: 'Gastroesophageal Reflux Disease (GERD) Risk for Aspiration', component: <GERDRisk /> },
-  { label: 'Aspiration Risk Assessment', component: <AspirationRisk /> },
-  { label: 'American Society of Anesthesiologists (ASA) Difficult Airway Algorithm', component: <ASADifficultAirway /> },
-  { label: 'Cannot Intubate, Cannot Oxygenate (CICO) Algorithm', component: <CICOAlgorithm /> },
   { label: 'Rapid Sequence Intubation (RSI) Drug Dosing', component: <RSIDrugDosing /> },
-  { label: 'Preoxygenation Techniques', component: <PreoxygenationTechniques /> },
-  { label: 'Apneic Oxygenation', component: <ApneicOxygenation /> },
-  { label: 'High-Flow Nasal Oxygen (HFNO) for Preoxygenation', component: <HFNO /> },
-  { label: 'Non-Invasive Ventilation (NIV) Settings', component: <NIVSettings /> },
-  { label: 'Extracorporeal Membrane Oxygenation (ECMO) Basics', component: <ECMOBasics /> },
-  { label: 'Intra-Aortic Balloon Pump (IABP) for Cardiac Support', component: <IABP /> },
-  { label: 'Ventricular Assist Devices (VADs)', component: <VADs /> },
-  { label: 'Nerve Identification for Regional Blocks', component: <NerveIdentification /> },
-  { label: 'Postoperative Cognitive Dysfunction (POCD) Risk Assessment', component: <POCDRisk /> },
-  { label: 'Enhanced Recovery After Surgery (ERAS) Protocols', component: <ERASProtocols /> },
-  { label: 'Perioperative Cardiac Arrest Risk', component: <PerioperativeCardiacArrest /> },
-  { label: 'Anesthesia for Patients with Implanted Devices', component: <ImplantedDevices /> }
 ];
 
 const AnesthesiologyCalculators = () => {
   const { calculator } = useParams();
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredCalculators = calculators.filter(c =>
     c.label.toLowerCase().includes(searchQuery.toLowerCase())
@@ -193,7 +122,7 @@ const AnesthesiologyCalculators = () => {
       const calcName = calculator.replace(/-/g, ' ');
       const index = calculators.findIndex(c => c.label.toLowerCase() === calcName.toLowerCase());
       if (index !== -1) {
-        setSearchQuery(''); // Reset search to show all calculators
+        setSearchQuery('');
         setSelectedTab(index);
       } else {
         setSelectedTab(0);
@@ -203,7 +132,7 @@ const AnesthesiologyCalculators = () => {
     }
   }, [calculator]);
 
-  const handleTabChange = (_, newIndex) => {
+  const handleTabChange = (newIndex) => {
     setSelectedTab(newIndex);
   };
 
@@ -214,85 +143,48 @@ const AnesthesiologyCalculators = () => {
 
   return (
     <motion.div
-      className="h-full w-full max-w-full flex flex-col bg-white relative"
+      className="min-h-screen w-full bg-background text-foreground flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Floating Search Component */}
-      <FloatingSearch
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        placeholder="Search anesthesiology calculators..."
-      />
+      <div className="sticky top-0 z-10 p-4 bg-background">
+        <FloatingSearch
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          placeholder="Search anesthesiology calculators..."
+          className="w-full max-w-2xl mx-auto"
+        />
+      </div>
 
-      <Box className="calculator-tabs" sx={{ borderBottom: 1, borderColor: '#E5E7EB', px: 2, bgcolor: '#F9FAFB', overflowX: 'auto' }}>
-        <Tabs
-          value={selectedTab}
-          onChange={handleTabChange}
-          variant="scrollable"
-          scrollButtons={isMobile ? 'auto' : false}
-          allowScrollButtonsMobile
-          sx={{
-            '& .MuiTabs-flexContainer': {
-              flexWrap: 'nowrap'
-            },
-            '& .MuiTab-root': {
-              borderRadius: 3,
-              m: 0.5,
-              bgcolor: '#fff',
-              border: '1px solid #E5E7EB',
-              fontFamily: 'Inter, sans-serif',
-              fontSize: 14,
-              textTransform: 'none',
-              color: '#1F2937',
-              px: 2,
-              py: 1,
-              boxShadow: '0 1px 2px rgba(0,0,0,0.08)',
-              flexShrink: 0,
-              minWidth: 'auto'
-            },
-            '& .Mui-selected': {
-              bgcolor: '#0d9488',
-              color: '#fff',
-              fontWeight: 600,
-              boxShadow: '0 2px 4px rgba(39,199,184,0.2)'
-            },
-            '& .MuiTabs-indicator': {
-              backgroundColor: '#0d9488'
-            },
-            '& .MuiTabs-scroller': {
-              overflowX: 'auto !important',
-              scrollbarWidth: 'thin',
-              scrollbarColor: '#d1d5db transparent',
-              '&::-webkit-scrollbar': {
-                height: '8px'
-              },
-              '&::-webkit-scrollbar-track': {
-                background: 'transparent'
-              },
-              '&::-webkit-scrollbar-thumb': {
-                background: '#d1d5db',
-                borderRadius: '4px'
-              }
-            }
-          }}
-        >
-          {filteredCalculators.map((calc) => (
-            <Tab key={calc.label} label={calc.label} />
+      <div className="px-4 py-2 border-b border-border bg-secondary overflow-x-auto">
+        <div className="flex space-x-2 max-w-full overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent">
+          {filteredCalculators.map((calc, index) => (
+            <button
+              key={calc.label}
+              onClick={() => handleTabChange(index)}
+              className={`px-4 py-2 rounded-radius text-sm font-medium transition-all duration-200 whitespace-nowrap
+                ${selectedTab === index
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-card text-card-foreground hover:bg-accent hover:text-accent-foreground'}`}
+            >
+              {calc.label}
+            </button>
           ))}
-        </Tabs>
-      </Box>
+        </div>
+      </div>
 
-      <Box className="flex-1 overflow-y-auto p-4 bg-white w-full max-w-full">
+      <div className="flex-1 p-6 bg-background">
         {filteredCalculators.length > 0 ? (
-          filteredCalculators[selectedTab]?.component
+          <div className="max-w-4xl mx-auto">
+            {filteredCalculators[selectedTab]?.component}
+          </div>
         ) : (
-          <Typography variant="body1" className="text-gray-500 text-center mt-8">
+          <p className="text-muted-foreground text-center mt-8">
             No calculators match your search.
-          </Typography>
+          </p>
         )}
-      </Box>
+      </div>
     </motion.div>
   );
 };

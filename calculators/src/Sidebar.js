@@ -63,66 +63,73 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       ref={sidebarRef}
       className={`sidebar fixed inset-y-0 left-0 transform ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 z-50 bg-background flex flex-col w-[250px] lg:w-[250px] md:w-[200px] sm:w-3/4 shadow-lg lg:shadow-none`}
     >
-      <div className="flex items-center justify-between lg:hidden border-b border-sidebar-border p-6 bg-sidebar-background">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-sidebar-primary rounded-lg flex items-center justify-center">
-            <Calculator className="w-5 h-5 text-sidebar-primary-foreground" />
+      {/* Header for Mobile */}
+      <div className="flex items-center justify-between lg:hidden border-b border-border p-4 bg-background">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <Calculator className="w-5 h-5 text-primary-foreground" />
           </div>
-          <h2 className="text-xl font-bold text-sidebar-foreground">Calculators</h2>
+          <h2 className="text-lg font-bold text-foreground">Calculators</h2>
         </div>
         <button
           onClick={toggleMobile}
-          className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-200"
+          className="p-1.5 rounded-lg hover:bg-accent transition-colors duration-200"
         >
-          <Menu className="w-6 h-6 text-sidebar-foreground" />
+          <Menu className="w-5 h-5 text-foreground" />
         </button>
       </div>
-      <div className="hidden lg:block p-6 border-b border-sidebar-border bg-sidebar-background">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-sidebar-primary rounded-xl flex items-center justify-center shadow-lg">
-            <Calculator className="w-6 h-6 text-sidebar-primary-foreground" />
+
+      {/* Header for Desktop */}
+      <div className="hidden lg:block p-4 border-b border-border bg-background">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm">
+            <Calculator className="w-5 h-5 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-sidebar-foreground">Medical Calculators</h2>
-            <p className="text-sm text-sidebar-foreground mt-0.5">Clinical decision tools</p>
+            <h2 className="text-lg font-bold text-foreground">Calculators</h2>
+            <p className="text-xs text-muted-foreground">Clinical tools</p>
           </div>
         </div>
       </div>
-      <div className="p-4">
+
+      {/* Search Bar */}
+      <div className="p-3">
         <div className="relative">
           <input
             type="text"
-            placeholder="Search calculators!"
+            placeholder="Search calculators"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-2 pl-10 bg-card text-foreground border rounded-lg focus:outline-none focus:ring-2 focus:ring-sidebar-ring"
+            className="w-full p-1.5 pl-8 bg-card text-foreground border border-border rounded-radius focus:outline-none focus:ring-1 focus:ring-ring text-sm"
           />
-          <Search className="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <Search className="w-4 h-4 text-muted-foreground absolute left-2 top-1/2 transform -translate-y-1/2" />
         </div>
       </div>
-      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
+
+      {/* Navigation */}
+      <nav className="p-3 space-y-1 flex-1 overflow-y-auto">
         {searchQuery ? (
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {filteredCalculators.length > 0 ? (
               filteredCalculators.map(({ calc, path, specialty }) => (
                 <li key={calc}>
                   <Link
                     to={path}
                     onClick={toggleMobile}
-                    className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
+                    className={`block py-1.5 px-2 text-xs font-medium transition-all duration-200 ${
                       location.pathname === path
-                        ? 'text-sidebar-primary bg-sidebar-accent'
-                        : 'text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent'
-                    } rounded-lg`}
+                        ? 'text-primary bg-accent rounded-radius'
+                        : 'text-foreground hover:text-primary hover:bg-accent'
+                    }`}
                   >
                     {calc} <span className="text-xs text-muted-foreground">({specialty})</span>
                   </Link>
                 </li>
               ))
             ) : (
-              <li className="py-2.5 px-3 text-sm text-muted-foreground">No matches found</li>
+              <li className="py-1.5 px-2 text-xs text-muted-foreground">No matches found</li>
             )}
           </ul>
         ) : (
@@ -133,39 +140,37 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
 
             return (
               <div key={item.label} className="group">
-                <div className="flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm">
+                <div className="flex items-center justify-between px-2 py-2 rounded-radius text-left font-medium transition-all duration-200 group-hover:shadow-sm">
                   <Link
                     to={item.path}
                     onClick={toggleMobile}
-                    className={`flex items-center space-x-3 flex-grow ${
-                      isActive
-                        ? 'text-sidebar-primary'
-                        : 'text-sidebar-foreground hover:text-sidebar-foreground'
+                    className={`flex items-center space-x-2 flex-grow ${
+                      isActive ? 'text-primary' : 'text-foreground hover:text-foreground'
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-lg transition-colors duration-200 ${
+                      className={`p-1.5 rounded-lg transition-colors duration-200 ${
                         isActive
-                          ? 'bg-sidebar-accent text-sidebar-primary'
-                          : 'bg-muted text-muted-foreground group-hover:bg-sidebar-accent group-hover:text-sidebar-foreground'
+                          ? 'bg-accent text-primary'
+                          : 'bg-muted text-muted-foreground group-hover:bg-accent group-hover:text-foreground'
                       }`}
                     >
-                      <Icon size={18} />
+                      <Icon size={16} />
                     </div>
                     <span className="text-sm font-semibold">{item.label}</span>
                   </Link>
                   <button
                     onClick={() => toggleExpand(item.label)}
-                    className={`p-2 rounded-lg transition-colors duration-200 ${
-                      isActive ? 'text-sidebar-primary' : 'text-sidebar-foreground'
-                    } hover:bg-sidebar-accent`}
+                    className={`p-1.5 rounded-lg transition-colors duration-200 ${
+                      isActive ? 'text-primary' : 'text-foreground'
+                    } hover:bg-accent`}
                   >
-                    {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                    {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                   </button>
                 </div>
                 {isOpen && (
-                  <div className="mt-2 ml-4 pl-6 border-l-2 border-sidebar-border">
-                    <ul className="space-y-1">
+                  <div className="mt-1 ml-3 pl-4 border-l border-border">
+                    <ul className="space-y-0.5">
                       {item.calculators.map((calc) => {
                         const calcPath = `${item.path}/${calc.replace(/\s+/g, '-')}`;
                         return (
@@ -173,11 +178,11 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                             <Link
                               to={calcPath}
                               onClick={toggleMobile}
-                              className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
+                              className={`block py-1.5 px-2 text-xs font-medium transition-all duration-200 ${
                                 location.pathname === calcPath
-                                  ? 'text-sidebar-primary bg-sidebar-accent'
-                                  : 'text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent'
-                              } rounded-lg`}
+                                  ? 'text-primary bg-accent rounded-radius'
+                                  : 'text-foreground hover:text-primary hover:bg-accent'
+                              }`}
                             >
                               {calc}
                             </Link>
@@ -192,14 +197,16 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           })
         )}
       </nav>
-      <div className="mt-auto p-6 border-t border-sidebar-border bg-sidebar-background">
+
+      {/* Footer */}
+      <div className="mt-auto p-4 border-t border-border bg-background">
         <div className="text-center">
-          <p className="text-xs text-sidebar-foreground font-medium">
-            {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available
+          <p className="text-xs text-foreground font-medium">
+            {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators
           </p>
-          <div className="mt-2 flex justify-center space-x-1">
+          <div className="mt-1 flex justify-center space-x-1">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 bg-muted rounded-full"></div>
+              <div key={i} className="w-1 h-1 bg-muted rounded-full"></div>
             ))}
           </div>
         </div>

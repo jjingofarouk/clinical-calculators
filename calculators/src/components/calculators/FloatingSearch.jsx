@@ -30,7 +30,7 @@ const FloatingSearch = ({
       {/* Floating Search Button */}
       <button
         onClick={handleSearchToggle}
-        className="fixed top-4 right-4 bg-primary text-primary-foreground p-3 rounded-full shadow-md hover:bg-accent hover:text-accent-foreground transition-all duration-200 z-50"
+        className="fixed bottom-4 right-4 bg-primary text-primary-foreground p-3 rounded-full shadow-md hover:bg-accent hover:text-accent-foreground transition-all duration-200 z-50"
         aria-label="search"
       >
         {searchOpen ? <X size={24} /> : <Search size={24} />}
@@ -40,11 +40,11 @@ const FloatingSearch = ({
       <AnimatePresence>
         {searchOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.3 }}
-            className="p-4 bg-card border-b border-border shadow-sm"
+            className="fixed bottom-16 right-4 p-4 bg-card border border-border rounded-radius shadow-sm w-full max-w-md"
           >
             <div className="relative">
               <input

@@ -23,51 +23,51 @@ const categories = sidebarItems.map(item => ({
 
 function getCategoryColor(label) {
   const colorMap = {
-    'Allergy and Immunology': '#0f766e',
-    'Anesthesiology': '#6b7280',
-    'Bariatric Surgery': '#f97316',
-    'Cardiology': '#ef4444',
-    'Cardiothoracic Surgery': '#dc2626',
-    'Colorectal Surgery': '#fb923c',
-    'Critical Care': '#10b981',
-    'Dermatology': '#22d3ee',
-    'Emergency Medicine': '#f87171',
-    'Endocrinology': '#8b5cf6',
-    'ENT': '#ec4899',
-    'Family Medicine': '#14b8a6',
-    'Gastroenterology': '#f97316',
-    'General Surgery': '#16a34a',
-    'Geriatrics': '#475569',
-    'Hematology': '#e11d48',
-    'Hepatology': '#ea580c',
-    'Infectious Disease': '#06b6d4',
-    'Internal Medicine': '#1d4ed8',
-    'Medical Genetics': '#7c3aed',
-    'Nephrology': '#64748b',
-    'Neurology': '#6366f1',
-    'Neurosurgery': '#4f46e5',
-    'Obstetrics and Gynecology': '#ec4899',
-    'Oncology': '#d97706',
-    'Ophthalmology': '#0ea5e9',
-    'Orthopedics': '#eab308',
-    'Pain Medicine': '#6d28d9',
-    'Palliative Care': '#94a3b8',
-    'Pathology': '#78716c',
-    'Pediatrics': '#db2777',
-    'Physical Medicine': '#ca8a04',
-    'Plastic Surgery': '#0891b2',
-    'Psychiatry': '#7e22ce',
-    'Pulmonary': '#3b82f6',
-    'Radiation Oncology': '#c026d3',
-    'Rheumatology': '#047857',
-    'Sports Medicine': '#d97706',
-    'Toxicology': '#155e75',
-    'Transplant Medicine': '#1e40af',
-    'Trauma Surgery': '#b91c1c',
-    'Urology': '#0ea5e9',
-    'Vascular Surgery': '#9f1239',
+    'Allergy and Immunology': 'hsl(186, 61%, 35%)',
+    'Anesthesiology': 'hsl(220, 13%, 46%)',
+    'Bariatric Surgery': 'hsl(24, 94%, 50%)',
+    'Cardiology': 'hsl(0, 83%, 62%)',
+    'Cardiothoracic Surgery': 'hsl(0, 82%, 45%)',
+    'Colorectal Surgery': 'hsl(24, 94%, 62%)',
+    'Critical Care': 'hsl(160, 82%, 39%)',
+    'Dermatology': 'hsl(186, 83%, 45%)',
+    'Emergency Medicine': 'hsl(0, 87%, 67%)',
+    'Endocrinology': 'hsl(262, 87%, 62%)',
+    'ENT': 'hsl(330, 81%, 60%)',
+    'Family Medicine': 'hsl(174, 78%, 41%)',
+    'Gastroenterology': 'hsl(24, 94%, 50%)',
+    'General Surgery': 'hsl(134, 76%, 38%)',
+    'Geriatrics': 'hsl(223, 17%, 35%)',
+    'Hematology': 'hsl(348, 89%, 47%)',
+    'Hepatology': 'hsl(24, 88%, 47%)',
+    'Infectious Disease': 'hsl(186, 95%, 39%)',
+    'Internal Medicine': 'hsl(229, 70%, 33%)',
+    'Medical Genetics': 'hsl(262, 88%, 58%)',
+    'Nephrology': 'hsl(220, 13%, 46%)',
+    'Neurology': 'hsl(239, 82%, 62%)',
+    'Neurosurgery': 'hsl(244, 67%, 53%)',
+    'Obstetrics and Gynecology': 'hsl(330, 81%, 60%)',
+    'Oncology': 'hsl(36, 92%, 45%)',
+    'Ophthalmology': 'hsl(195, 86%, 47%)',
+    'Orthopedics': 'hsl(45, 94%, 47%)',
+    'Pain Medicine': 'hsl(262, 72%, 37%)',
+    'Palliative Care': 'hsl(220, 17%, 62%)',
+    'Pathology': 'hsl(20, 14%, 45%)',
+    'Pediatrics': 'hsl(335, 76%, 54%)',
+    'Physical Medicine': 'hsl(41, 94%, 40%)',
+    'Plastic Surgery': 'hsl(188, 90%, 34%)',
+    'Psychiatry': 'hsl(271, 70%, 40%)',
+    'Pulmonary': 'hsl(221, 83%, 53%)',
+    'Radiation Oncology': 'hsl(300, 78%, 47%)',
+    'Rheumatology': 'hsl(160, 91%, 27%)',
+    'Sports Medicine': 'hsl(36, 92%, 45%)',
+    'Toxicology': 'hsl(192, 73%, 28%)',
+    'Transplant Medicine': 'hsl(229, 76%, 31%)',
+    'Trauma Surgery': 'hsl(0, 82%, 38%)',
+    'Urology': 'hsl(195, 86%, 47%)',
+    'Vascular Surgery': 'hsl(340, 82%, 38%)',
   };
-  return colorMap[label] || '#6b7280';
+  return colorMap[label] || 'hsl(220, 13%, 46%)';
 }
 
 function getCategoryDescription(label, calculators) {
@@ -123,24 +123,24 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-50 w-full max-w-full m-0 p-6">
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">Clinical Calculators</h1>
-      <p className="text-gray-600 mb-6">
+    <div className="min-h-screen w-full max-w-full m-0 p-6 bg-background text-foreground">
+      <h1 className="text-3xl font-bold header mb-2">Clinical Calculators</h1>
+      <p className="text-muted-foreground mb-6">
         Quickly access a range of evidence-based medical calculators by category.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full max-w-full">
+      <div className="custom-grid">
         {categories.map((cat) => (
           <div
             key={cat.label}
-            className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition duration-200 cursor-pointer w-full p-4"
+            className="card hover:shadow-lg transition duration-200 cursor-pointer"
             onClick={() => navigate(cat.path)}
           >
             <div className="flex items-center gap-4">
               <cat.icon size={32} style={{ color: cat.color }} />
               <div>
-                <h2 className="text-lg font-semibold text-gray-800">{cat.label}</h2>
-                <p className="text-sm text-gray-600">{cat.description}</p>
+                <h2 className="text-lg font-semibold text-foreground">{cat.label}</h2>
+                <p className="text-sm text-muted-foreground">{cat.description}</p>
               </div>
             </div>
           </div>

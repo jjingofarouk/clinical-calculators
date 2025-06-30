@@ -2,76 +2,220 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Root layout fix */
-html,
-body,
-#root {
-  @apply min-h-screen w-screen bg-gray-50 overflow-y-auto overflow-x-hidden;
-  margin: 0;
-  padding: 0;
-  font-family: theme('fontFamily.sans');
+@layer base {
+    :root {
+        /* Light mode colors based on second design’s teal/gray palette */
+        --background: 0 0% 98%; /* bg-gray-50 */
+        --foreground: 220 13% 13%; /* text-gray-900 */
+        --card: 0 0% 100%; /* bg-white */
+        --card-foreground: 220 13% 13%; /* text-gray-900 */
+        --popover: 0 0% 100%; /* bg-white */
+        --popover-foreground: 220 13% 13%; /* text-gray-900 */
+        --primary: 186 61% 35%; /* bg-teal-600 */
+        --primary-foreground: 0 0% 100%; /* text-white */
+        --secondary: 210 16% 82%; /* bg-gray-200 */
+        --secondary-foreground: 220 13% 13%; /* text-gray-900 */
+        --muted: 210 16% 82%; /* bg-gray-200 */
+        --muted-foreground: 220 13% 46%; /* text-gray-600 */
+        --accent: 186 61% 45%; /* lighter teal for accents */
+        --accent-foreground: 0 0% 100%; /* text-white */
+        --destructive: 0 84% 60%; /* red for errors, from first design */
+        --destructive-foreground: 0 0% 98%; /* text-white */
+        --border: 210 16% 82%; /* border-gray-200 */
+        --input: 210 16% 82%; /* border-gray-200 */
+        --ring: 186 61% 35%; /* teal-600 for focus rings */
+        --radius: 0.5rem; /* rounded-lg */
+        --sidebar-background: 0 0% 100%; /* bg-white */
+        --sidebar-foreground: 220 13% 13%; /* text-gray-900 */
+        --sidebar-primary: 186 61% 35%; /* teal-600 */
+        --sidebar-primary-foreground: 0 0% 100%; /* text-white */
+        --sidebar-accent: 210 16% 82%; /* bg-gray-200 */
+        --sidebar-accent-foreground: 220 13% 13%; /* text-gray-900 */
+        --sidebar-border: 210 16% 82%; /* border-gray-200 */
+        --sidebar-ring: 186 61% 35%; /* teal-600 */
+        --chart-1: 186 61% 35%; /* teal-600 */
+        --chart-2: 186 61% 45%; /* teal-500 */
+        --chart-3: 186 61% 55%; /* teal-400 */
+        --chart-4: 186 61% 65%; /* teal-300 */
+        --chart-5: 186 61% 75%; /* teal-200 */
+    }
+
+    .dark {
+        /* Dark mode colors, adjusted to complement teal/gray palette */
+        --background: 220 13% 13%; /* dark gray, ~gray-900 */
+        --foreground: 0 0% 98%; /* text-white */
+        --card: 220 13% 18%; /* darker gray, ~gray-800 */
+        --card-foreground: 0 0% 98%; /* text-white */
+        --popover: 220 13% 18%; /* gray-800 */
+        --popover-foreground: 0 0% 98%; /* text-white */
+        --primary: 186 61% 45%; /* teal-500, slightly lighter for dark mode */
+        --primary-foreground: 0 0% 98%; /* text-white */
+        --secondary: 220 13% 28%; /* gray-700 */
+        --secondary-foreground: 0 0% 98%; /* text-white */
+        --muted: 220 13% 28%; /* gray-700 */
+        --muted-foreground: 220 13% 60%; /* lighter gray for muted text */
+        --accent: 186 61% 55%; /* teal-400 */
+        --accent-foreground: 0 0% 98%; /* text-white */
+        --destructive: 0 62% 30%; /* darker red, from first design */
+        --destructive-foreground: 0 0% 98%; /* text-white */
+        --border: 220 13% 28%; /* gray-700 */
+        --input: 220 13% 28%; /* gray-700 */
+        --ring: 186 61% 45%; /* teal-500 */
+        --sidebar-background: 220 13% 18%; /* gray-800 */
+        --sidebar-foreground: 0 0% 98%; /* text-white */
+        --sidebar-primary: 186 61% 45%; /* teal-500 */
+        --sidebar-primary-foreground: 0 0% 98%; /* text-white */
+        --sidebar-accent: 220 13% 28%; /* gray-700 */
+        --sidebar-accent-foreground: 0 0% 98%; /* text-white */
+        --sidebar-border: 220 13% 28%; /* gray-700 */
+        --sidebar-ring: 186 61% 45%; /* teal-500 */
+        --chart-1: 186 61% 55%; /* teal-400 */
+        --chart-2: 186 61% 65%; /* teal-300 */
+        --chart-3: 186 61% 75%; /* teal-200 */
+        --chart-4: 186 61% 85%; /* teal-100 */
+        --chart-5: 186 61% 95%; /* teal-50 */
+    }
+
+    /* Apply border and background globally */
+    * {
+        @apply border-border;
+    }
+
+    html,
+    body,
+    #root {
+        @apply min-h-screen w-screen bg-background text-foreground overflow-y-auto overflow-x-hidden;
+        margin: 0;
+        padding: 0;
+        font-family: theme('fontFamily.sans');
+    }
 }
 
-/* Base font and color for body */
-body {
-  @apply text-gray-900 antialiased;
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
 }
 
-/* Card styling */
-.card {
-  @apply rounded-lg shadow-md bg-white border border-gray-200 p-4;
+@layer components {
+    /* Card styling */
+    .card {
+        @apply rounded-[--radius] shadow-md bg-card text-card-foreground border p-4;
+    }
+
+    /* Section headers */
+    .header {
+        @apply text-primary font-semibold text-xl mb-2;
+    }
+
+    /* Teal primary buttons */
+    .btn-primary {
+        @apply bg-primary text-primary-foreground rounded-[--radius] hover:bg-primary/90 transition px-4 py-2;
+    }
+
+    /* Sidebar layout */
+    .sidebar {
+        @apply w-64 lg:w-72 max-w-full bg-sidebar-background text-sidebar-foreground h-full border-[--sidebar-border];
+    }
+
+    /* Main layout */
+    .main {
+        @apply w-full max-w-full h-full overflow-y-auto overflow-x-hidden bg-background;
+    }
+
+    /* Calculator tab scroll container */
+    .calculator-tabs {
+        @apply flex flex-row overflow-x-auto whitespace-nowrap bg-card;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--muted) transparent;
+    }
+
+    .calculator-tabs::-webkit-scrollbar {
+        @apply h-2;
+    }
+
+    .calculator-tabs::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+
+    .calculator-tabs::-webkit-scrollbar-thumb {
+        @apply bg-muted rounded-full;
+    }
+
+    .calculator-tabs > * {
+        @apply flex-shrink-0 mx-1;
+    }
+
+    /* Grid for category/home cards */
+    .custom-grid {
+        @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full;
+    }
+
+    /* Remove padding and margin from container wrappers */
+    .container, .wrapper {
+        @apply w-full max-w-full m-0 p-0;
+    }
 }
 
-/* Section headers */
-.header {
-  @apply text-teal-600 font-semibold text-xl mb-2;
+/* Skeleton loading states */
+.skeleton {
+    * {
+        pointer-events: none !important;
+    }
+
+    *[class^="text-"] {
+        color: transparent;
+        @apply rounded-md bg-foreground/20 select-none animate-pulse;
+    }
+
+    .skeleton-bg {
+        @apply bg-foreground/10;
+    }
+
+    .skeleton-div {
+        @apply bg-foreground/20 animate-pulse;
+    }
 }
 
-/* Teal primary buttons */
-.btn-primary {
-  @apply bg-teal-600 text-white rounded hover:bg-teal-700 transition px-4 py-2;
+/* ProseMirror for rich text editing */
+.ProseMirror {
+    outline: none;
 }
 
-/* Sidebar layout */
-aside {
-  @apply w-64 lg:w-72 max-w-full bg-white h-full;
+/* CodeMirror editor styles */
+.cm-editor,
+.cm-gutters {
+    @apply bg-background dark:bg-muted outline-none selection:bg-accent !important;
 }
 
-/* Main layout */
-main {
-  @apply w-full max-w-full h-full overflow-y-auto overflow-x-hidden bg-gray-50;
+.ͼo.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground,
+.ͼo.cm-selectionBackground,
+.ͼo.cm-content::selection {
+    @apply bg-accent dark:bg-accent/50 !important;
 }
 
-/* Calculator tab scroll container */
-.calculator-tabs {
-  @apply flex flex-row overflow-x-auto whitespace-nowrap bg-white;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+.cm-activeLine,
+.cm-activeLineGutter {
+    @apply bg-transparent !important;
 }
 
-.calculator-tabs::-webkit-scrollbar {
-  @apply h-2;
+.cm-activeLine {
+    @apply rounded-r-sm !important;
 }
 
-.calculator-tabs::-webkit-scrollbar-track {
-  @apply bg-transparent;
+.cm-lineNumbers {
+    @apply min-w-7;
 }
 
-.calculator-tabs::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+.cm-foldGutter {
+    @apply min-w-3;
 }
 
-.calculator-tabs > * {
-  @apply flex-shrink-0 mx-1;
+.cm-lineNumbers .cm-activeLineGutter {
+    @apply rounded-l-sm !important;
 }
 
-/* Grid for category/home cards */
-.custom-grid {
-  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full;
-}
-
-/* Remove padding and margin from container wrappers */
-.container, .wrapper {
-  @apply w-full max-w-full m-0 p-0;
+.suggestion-highlight {
+    @apply bg-accent hover:bg-accent/80 dark:hover:bg-accent/60 dark:text-accent-foreground dark:bg-accent/40;
 }

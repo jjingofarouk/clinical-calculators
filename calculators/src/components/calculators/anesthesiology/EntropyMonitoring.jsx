@@ -128,7 +128,7 @@ const EntropyMonitoring = () => {
         >
           <Typography className="header">Entropy Monitoring Guidelines</Typography>
           <Typography variant="body2">
-            Entropy monitoring assesses the depth of anesthesia by analyzing EEG signals. State Entropy (SE) reflects cortical activity, while Response Entropy (RE) includes frontal muscle activity. A RE-SE difference > 10 or SE < 40 may indicate deep anesthesia, while SE > 60 suggests light anesthesia. Burst Suppression Ratio (BSR) is adjusted for age due to variability in EEG patterns.
+            Entropy monitoring assesses the depth of anesthesia by analyzing EEG signals. State Entropy (SE) reflects cortical activity, while Response Entropy (RE) includes frontal muscle activity. A RE-SE difference &gt; 10 or SE &lt; 40 may indicate deep anesthesia, while SE &gt; 60 suggests light anesthesia. Burst Suppression Ratio (BSR) is adjusted for age due to variability in EEG patterns.
           </Typography>
           <Typography variant="body2" className="mt-2">
             <strong>Sources:</strong>

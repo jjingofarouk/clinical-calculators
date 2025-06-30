@@ -1,14 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-// Layout with responsive sidebar
 import Layout from './Layout';
-
-// Pages
 import Home from './Home';
 import NotFound from './NotFound';
-
-// Calculator Category Pages
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
 import AnesthesiologyCalculators from './components/calculators/anesthesiology/AnesthesiologyCalculators';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
@@ -23,10 +17,9 @@ import ICUCalculators from './components/calculators/icu/ICUCalculators';
 
 export default function App() {
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-0 m-0">
+    <div className="min-h-screen w-full bg-background text-foreground p-0 m-0">
       <Router>
         <Routes>
-          {/* All pages wrapped in Layout */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/calculators/Allergy" element={<AllergyCalculators />} />
@@ -51,7 +44,6 @@ export default function App() {
             <Route path="/calculators/Orthopedics/:calculator" element={<OrthopedicsCalculators />} />
             <Route path="/calculators/ICU" element={<ICUCalculators />} />
             <Route path="/calculators/ICU/:calculator" element={<ICUCalculators />} />
-            {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

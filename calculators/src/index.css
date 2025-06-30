@@ -75,7 +75,7 @@
     }
 
     * {
-        border-color: hsl(var(--border));
+        @apply border-border;
     }
 
     html,
@@ -108,7 +108,7 @@
     }
 
     .sidebar {
-        @apply w-64 lg:w-72 max-w-full bg-sidebar-background text-sidebar-foreground h-full border-r-[--sidebar-border];
+        @apply w-64 lg:w-72 max-w-full bg-sidebar-background text-sidebar-foreground h-full border-r border-sidebar-border;
     }
 
     .main {

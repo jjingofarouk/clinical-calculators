@@ -83,11 +83,7 @@ import NIVSettings from './NIVSettings';
 import ECMOBasics from './ECMOBasics';
 import IABP from './IABP';
 import VADs from './VADs';
-import POCUS from './POCUS';
-import LungUltrasound from './LungUltrasound';
-import CardiacUltrasound from './CardiacUltrasound';
 import NerveIdentification from './NerveIdentification';
-import VascularAccessUltrasound from './VascularAccessUltrasound';
 import POCDRisk from './POCDRisk';
 import ERASProtocols from './ERASProtocols';
 import PerioperativeCardiacArrest from './PerioperativeCardiacArrest';
@@ -174,11 +170,7 @@ const calculators = [
   { label: 'Extracorporeal Membrane Oxygenation (ECMO) Basics', component: <ECMOBasics /> },
   { label: 'Intra-Aortic Balloon Pump (IABP) for Cardiac Support', component: <IABP /> },
   { label: 'Ventricular Assist Devices (VADs)', component: <VADs /> },
-  { label: 'Point-of-Care Ultrasound (POCUS) for Anesthesiologists', component: <POCUS /> },
-  { label: 'Lung Ultrasound', component: <LungUltrasound /> },
-  { label: 'Cardiac Ultrasound', component: <CardiacUltrasound /> },
   { label: 'Nerve Identification for Regional Blocks', component: <NerveIdentification /> },
-  { label: 'Vascular Access Ultrasound', component: <VascularAccessUltrasound /> },
   { label: 'Postoperative Cognitive Dysfunction (POCD) Risk Assessment', component: <POCDRisk /> },
   { label: 'Enhanced Recovery After Surgery (ERAS) Protocols', component: <ERASProtocols /> },
   { label: 'Perioperative Cardiac Arrest Risk', component: <PerioperativeCardiacArrest /> },

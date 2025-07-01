@@ -256,11 +256,11 @@ const SOFAScore = () => {
                   }}
                 >
                   <MenuItem value="">Select Renal Score</MenuItem>
-                  <MenuItem value="0"><1.2 (0 points)</MenuItem>
+                  <MenuItem value="0">&lt;1.2 (0 points)</MenuItem>
                   <MenuItem value="1">1.2–1.9 (1 point)</MenuItem>
                   <MenuItem value="2">2.0–3.4 (2 points)</MenuItem>
-                  <MenuItem value="3">3.5–4.9 or urine <500 mL/day (3 points)</MenuItem>
-                  <MenuItem value="4">≥5.0 or urine <200 mL/day (4 points)</MenuItem>
+                  <MenuItem value="3">3.5–4.9 or urine &lt;500 mL/day (3 points)</MenuItem>
+                  <MenuItem value="4">≥5.0 or urine &lt;200 mL/day (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Higher creatinine or low urine output indicates renal dysfunction.</p>
               </FormControl>

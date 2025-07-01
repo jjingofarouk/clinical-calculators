@@ -319,11 +319,11 @@ const OsmolalGap = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Interpretation:</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong><10 mOsm/kg:</strong> Normal; no significant unmeasured osmoles.</li>
-            <li><strong>10–20 mOsm/kg:</strong> Mildly elevated; consider ethanol or early toxic alcohol ingestion.</li>
-            <li><strong>>20 mOsm/kg:</strong> Significantly elevated; suspect toxic alcohol ingestion (e.g., methanol, ethylene glycol).</li>
-          </ul>
+   <ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>&lt;10 mOsm/kg:</strong> Normal; no significant unmeasured osmoles.</li>
+  <li><strong>10–20 mOsm/kg:</strong> Mildly elevated; consider ethanol or early toxic alcohol ingestion.</li>
+  <li><strong>&gt;20 mOsm/kg:</strong> Significantly elevated; suspect toxic alcohol ingestion (e.g., methanol, ethylene glycol).</li>
+</ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For elevated osmolal gaps, obtain toxic alcohol levels (e.g., methanol, ethylene glycol) and consider anion gap for metabolic acidosis. Initiate fomepizole or ethanol therapy for suspected toxic alcohol ingestion. Consult toxicology or nephrology for hemodialysis in severe cases. Rule out other causes (e.g., ketoacidosis, lactate) for high gaps. Always correlate with clinical presentation and history.
           </p>

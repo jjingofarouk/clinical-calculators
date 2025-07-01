@@ -4,6 +4,7 @@ import Layout from './Layout';
 import Home from './Home';
 import NotFound from './NotFound';
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
+import BariatricsCalculators from './components/calculators/allergy/BariatricsCalculators';
 import AnesthesiologyCalculators from './components/calculators/anesthesiology/AnesthesiologyCalculators';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';
@@ -26,6 +27,8 @@ export default function App() {
             <Route path="/calculators/Allergy/:calculator" element={<AllergyCalculators />} />
             <Route path="/calculators/Anesthesiology" element={<AnesthesiologyCalculators />} />
             <Route path="/calculators/Anesthesiology/:calculator" element={<AnesthesiologyCalculators />} />
+            <Route path="/calculators/Bariatrics" element={<BariatricsCalculators />} />
+            <Route path="/calculators/Bariatrics/:calculator" element={<BariatricsCalculators />} />
             <Route path="/calculators/General" element={<GeneralCalculators />} />
             <Route path="/calculators/General/:calculator" element={<GeneralCalculators />} />
             <Route path="/calculators/Cardiovascular" element={<CardiovascularCalculators />} />

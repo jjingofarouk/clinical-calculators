@@ -562,7 +562,7 @@ const NotFound = () => {
   const IconComponent = currentMessage.icon;
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] w-full bg-gray-50 p-8">
+    <div className="flex items-center justify-center min-h-[60vh] w-full bg-background p-8">
       <div 
         className="text-center max-w-2xl mx-auto"
         style={{
@@ -578,11 +578,11 @@ const NotFound = () => {
             transition: 'transform 0.6s ease-out 0.2s'
           }}
         >
-          <IconComponent className="w-16 h-16 text-teal-600 mx-auto mb-4" />
+          <IconComponent className="w-16 h-16 text-primary dark:text-primary-foreground mx-auto mb-4" />
         </div>
         
         <h1 
-          className="text-2xl font-bold text-gray-800 mb-4"
+          className="text-2xl font-bold text-foreground dark:text-foreground mb-4"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
@@ -593,7 +593,7 @@ const NotFound = () => {
         </h1>
         
         <p 
-          className="text-gray-600 mb-8 leading-relaxed text-base"
+          className="text-muted-foreground dark:text-muted-foreground mb-8 leading-relaxed text-base"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
@@ -613,7 +613,7 @@ const NotFound = () => {
         >
           <button
             onClick={() => window.location.href = '/'}
-            className="btn-primary flex items-center justify-center gap-2 transform hover:scale-105 transition-all duration-200"
+            className="bg-primary text-primary-foreground rounded-radius flex items-center justify-center gap-2 hover:bg-primary/90 transition-all duration-200 transform hover:scale-105 px-4 py-2"
           >
             <Home className="w-4 h-4" />
             Return to Home
@@ -621,7 +621,7 @@ const NotFound = () => {
           
           <button
             onClick={() => window.history.back()}
-            className="bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-all duration-200 px-4 py-2 flex items-center justify-center gap-2 transform hover:scale-105"
+            className="bg-secondary text-secondary-foreground dark:bg-secondary dark:text-secondary-foreground rounded-radius flex items-center justify-center gap-2 hover:bg-secondary/80 transition-all duration-200 px-4 py-2 transform hover:scale-105"
           >
             <ArrowLeft className="w-4 h-4" />
             Go Back
@@ -629,7 +629,6 @@ const NotFound = () => {
         </div>
       </div>
     </div>
-  );
-};
+);
 
 export default NotFound;

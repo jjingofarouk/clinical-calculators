@@ -169,9 +169,9 @@ const WilsonScore = () => {
                   }}
                 >
                   <MenuItem value="">Select Mouth Opening</MenuItem>
-                  <MenuItem value="<3.5"><3.5 cm</MenuItem>
+                  <MenuItem value="&lt;3.5">&lt;3.5 cm</MenuItem>
                   <MenuItem value="3.5-4">3.5–4 cm</MenuItem>
-                  <MenuItem value=">4">>4 cm</MenuItem>
+                  <MenuItem value=">4">&gt;4 cm</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Limited mouth opening increases intubation difficulty.</p>
               </FormControl>

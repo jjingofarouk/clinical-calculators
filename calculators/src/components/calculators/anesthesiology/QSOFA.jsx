@@ -234,11 +234,11 @@ const QSOFA = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Criteria (1 point each):</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong>Respiratory Rate:</strong> ≥22 breaths/min.</li>
-            <li><strong>Systolic Blood Pressure:</strong> ≤100 mmHg.</li>
-            <li><strong>Altered Mental Status:</strong> Glasgow Coma Scale <15.</li>
-          </ul>
+  <ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>Respiratory Rate:</strong> ≥22 breaths/min.</li>
+  <li><strong>Systolic Blood Pressure:</strong> ≤100 mmHg.</li>
+  <li><strong>Altered Mental Status:</strong> Glasgow Coma Scale &lt;15.</li>
+</ul>
           <p className="text-muted-foreground mb-4">
             <strong>Risk Interpretation:</strong>
           </p>

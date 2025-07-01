@@ -63,7 +63,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       ref={sidebarRef}
       className={`bg-card text-card-foreground h-full fixed inset-y-0 left-0 transform ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-64 lg:w-72 max-w-full z-50 shadow-2xl lg:shadow-none flex flex-col border-r border-border rounded-r-radius`}
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 w-64 lg:w-72 max-w-full z-9999 shadow-2xl lg:shadow-none flex flex-col border-r border-border rounded-r-radius`}
     >
       <div className="flex items-center justify-between lg:hidden border-b border-border p-6 bg-secondary">
         <div className="flex items-center space-x-3">

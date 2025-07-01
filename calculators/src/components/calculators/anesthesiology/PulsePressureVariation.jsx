@@ -265,11 +265,11 @@ const PulsePressureVariation = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Interpretation:</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong>PPV <13%:</strong> Unlikely fluid responsive; avoid unnecessary fluids.</li>
-            <li><strong>PPV 13–15%:</strong> Possibly fluid responsive; consider fluid challenge.</li>
-            <li><strong>PPV >15%:</strong> Likely fluid responsive; fluid administration recommended.</li>
-          </ul>
+<ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>PPV &lt;13%:</strong> Unlikely fluid responsive; avoid unnecessary fluids.</li>
+  <li><strong>PPV 13–15%:</strong> Possibly fluid responsive; consider fluid challenge.</li>
+  <li><strong>PPV &gt;15%:</strong> Likely fluid responsive; fluid administration recommended.</li>
+</ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For PPV >13%, perform a fluid challenge (e.g., 250–500 mL crystalloid over 10–15 minutes) and monitor response via PPV, cardiac output, or other hemodynamic parameters. Ensure patient is in sinus rhythm, mechanically ventilated with adequate tidal volume, and monitored via arterial line. Avoid PPV use in patients with arrhythmias, spontaneous breathing, or low tidal volumes. Correlate with other clinical data (e.g., lactate, urine output) and consult critical care specialists for complex cases.
           </p>

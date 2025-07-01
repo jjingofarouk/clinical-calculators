@@ -344,7 +344,7 @@ const NutritionRiskScreening = () => {
             <strong>Risk Interpretation:</strong>
           </p>
           <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong>Score <3:</strong> Low risk; no immediate nutritional intervention needed.</li>
+            <li><strong>Score &lt;3:</strong> Low risk; no immediate nutritional intervention needed.</li>
             <li><strong>Score ≥3:</strong> High risk; nutritional support required.</li>
           </ul>
           <p className="text-muted-foreground">

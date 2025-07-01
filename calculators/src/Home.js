@@ -85,7 +85,7 @@ function getCategoryDescription(label, calculators) {
   const descriptionMap = {
     'Allergy and Immunology': 'SCORAD, EASI, IgE',
     'Anesthesiology': 'ASA, Mallampati',
-    'Bariatric Surgery': 'BMI, Weight Loss',
+    'Bariatrics': 'BMI, Weight Loss',
     'Cardiology': 'ASCVD, CHA2DS2-VASc',
     'Cardiothoracic Surgery': 'EuroSCORE, STS',
     'Colorectal Surgery': 'CR-POSSUM, LARS',

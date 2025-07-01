@@ -1,4 +1,3 @@
-// BariatricsCalculators.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,6 +8,15 @@ import BariatricSurgeryOutcomeScore from './BariatricSurgeryOutcomeScore';
 import BariatricRiskScore from './BariatricRiskScore';
 import ABCDScore from './ABCDScore';
 import DiaRemScore from './DiaRemScore';
+import DiaBetterScore from './DiaBetterScore';
+import AdDiaRemScore from './AdDiaRemScore';
+import OSMRSCalculator from './OSMRSCalculator';
+import PostDischargeVTECalculator from './PostDischargeVTECalculator';
+import SLEEVEPASSScore from './SLEEVEPASSScore';
+import MBSAQIPLeakRiskCalculator from './MBSAQIPLeakRiskCalculator';
+import POWERScore from './POWERScore';
+import EBMILPredictor from './EBMILPredictor';
+import BariatricReadmissionCalculator from './BariatricReadmissionCalculator';
 
 const calculators = [
   { label: 'MBSAQIP Risk Calculator', component: <MBSAQIPRiskCalculator /> },
@@ -16,6 +24,15 @@ const calculators = [
   { label: 'Bariatric Risk Score', component: <BariatricRiskScore /> },
   { label: 'ABCD Score', component: <ABCDScore /> },
   { label: 'DiaRem Score', component: <DiaRemScore /> },
+  { label: 'DiaBetter Score', component: <DiaBetterScore /> },
+  { label: 'Ad-DiaRem Score', component: <AdDiaRemScore /> },
+  { label: 'OS-MRS Calculator', component: <OSMRSCalculator /> },
+  { label: 'Post-Discharge VTE Risk Calculator', component: <PostDischargeVTECalculator /> },
+  { label: 'SLEEVEPASS Score', component: <SLEEVEPASSScore /> },
+  { label: 'MBSAQIP Leak Risk Calculator', component: <MBSAQIPLeakRiskCalculator /> },
+  { label: 'POWER Score', component: <POWERScore /> },
+  { label: '%EBMIL Predictor', component: <EBMILPredictor /> },
+  { label: 'Bariatric Readmission Calculator', component: <BariatricReadmissionCalculator /> },
 ];
 
 const BariatricsCalculators = () => {

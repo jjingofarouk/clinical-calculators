@@ -70,13 +70,13 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Calculator className="w-5 h-5 text-primary-foreground" />
           </div>
-          <h2 className="text-xl font-bold text-foreground dark:text-foreground">Calculators</h2>
+          <h2 className="text-xl font-bold text-foreground">Calculators</h2>
         </div>
         <button
           onClick={toggleMobile}
           className="p-2 rounded-lg hover:bg-accent transition-colors duration-200"
         >
-          <Menu className="w-6 h-6 text-foreground dark:text-foreground" />
+          <Menu className="w-6 h-6 text-foreground" />
         </button>
       </div>
       <div className="hidden lg:block p-6 border-b border-border bg-card">
@@ -85,8 +85,8 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
             <Calculator className="w-6 h-6 text-primary-foreground" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-foreground dark:text-foreground">Medical Calculators</h2>
-            <p className="text-sm text-foreground dark:text-foreground mt-0.5">Clinical decision tools</p>
+            <h2 className="text-xl font-bold text-foreground">Medical Calculators</h2>
+            <p className="text-sm text-muted-foreground mt-0.5">Clinical decision tools</p>
           </div>
         </div>
       </div>
@@ -97,9 +97,9 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
             placeholder="Search calculators!"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-2 pl-10 bg-card text-foreground dark:text-foreground border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full p-2 pl-10 bg-card text-foreground border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
           />
-          <Search className="w-5 h-5 text-muted-foreground dark:text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <Search className="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 transform -translate-y-1/2" />
         </div>
       </div>
       <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
@@ -113,16 +113,16 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     onClick={toggleMobile}
                     className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
                       location.pathname === path
-                        ? 'text-primary bg-accent dark:text-primary-foreground dark:bg-accent'
-                        : 'text-foreground hover:text-primary hover:bg-accent dark:text-foreground dark:hover:text-primary-foreground dark:hover:bg-accent'
+                        ? 'text-primary bg-accent'
+                        : 'text-foreground hover:text-primary hover:bg-accent'
                     } rounded-lg`}
                   >
-                    {calc} <span className="text-xs text-muted-foreground dark:text-muted-foreground">({specialty})</span>
+                    {calc} <span className="text-xs text-muted-foreground">({specialty})</span>
                   </Link>
                 </li>
               ))
             ) : (
-              <li className="py-2.5 px-3 text-sm text-muted-foreground dark:text-muted-foreground">No matches found</li>
+              <li className="py-2.5 px-3 text-sm text-muted-foreground">No matches found</li>
             )}
           </ul>
         ) : (
@@ -139,15 +139,15 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                     onClick={toggleMobile}
                     className={`flex items-center space-x-3 flex-grow ${
                       isActive
-                        ? 'text-primary dark:text-primary-foreground'
-                        : 'text-foreground hover:text-primary dark:text-foreground dark:hover:text-primary-foreground'
+                        ? 'text-primary'
+                        : 'text-foreground hover:text-primary'
                     }`}
                   >
                     <div
                       className={`p-2 rounded-lg transition-colors duration-200 ${
                         isActive
-                          ? 'bg-accent text-primary dark:bg-accent dark:text-primary-foreground'
-                          : 'bg-muted text-muted-foreground group-hover:bg-accent group-hover:text-primary dark:group-hover:text-primary-foreground'
+                          ? 'bg-accent text-primary'
+                          : 'bg-muted text-muted-foreground group-hover:bg-accent group-hover:text-primary'
                       }`}
                     >
                       <Icon size={18} />
@@ -157,7 +157,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                   <button
                     onClick={() => toggleExpand(item.label)}
                     className={`p-2 rounded-lg transition-colors duration-200 ${
-                      isActive ? 'text-primary dark:text-primary-foreground' : 'text-foreground dark:text-foreground hover:bg-accent'
+                      isActive ? 'text-primary' : 'text-foreground hover:bg-accent'
                     }`}
                   >
                     {isOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
@@ -175,8 +175,8 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
                               onClick={toggleMobile}
                               className={`block py-2.5 px-3 text-sm font-medium transition-all duration-200 ${
                                 location.pathname === calcPath
-                                  ? 'text-primary bg-accent dark:text-primary-foreground dark:bg-accent'
-                                  : 'text-foreground hover:text-primary hover:bg-accent dark:text-foreground dark:hover:text-primary-foreground dark:hover:bg-accent'
+                                  ? 'text-primary bg-accent'
+                                  : 'text-foreground hover:text-primary hover:bg-accent'
                               } rounded-lg`}
                             >
                               {calc}
@@ -194,7 +194,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
       </nav>
       <div className="mt-auto p-6 border-t border-border bg-card">
         <div className="text-center">
-          <p className="text-xs text-foreground dark:text-foreground font-medium">
+          <p className="text-xs text-foreground font-medium">
             {sidebarItems.reduce((total, item) => total + item.calculators.length, 0)} calculators available
           </p>
           <div className="mt-2 flex justify-center space-x-1">

@@ -62,8 +62,8 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
     <aside
       ref={sidebarRef}
       className={`sidebar fixed inset-y-0 left-0 w-full lg:w-72 transform ${
-        mobileOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
+        mobileOpen ? 'translate-x-0 bg-black/95 backdrop-blur-md' : '-translate-x-full backdrop-blur-md'
+      } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 lg:bg-sidebar-background z-50 shadow-2xl lg:shadow-none flex flex-col`}
     >
       <div className="flex items-center justify-between lg:hidden border-b border-sidebar-border p-6 bg-sidebar-background">
         <div className="flex items-center space-x-3">
@@ -106,7 +106,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
         {searchQuery ? (
           <ul className="space-y-1">
             {filteredCalculators.length > 0 ? (
-              filteredCalculators.map(({ calc, path, specialty }) => (
+              whatsoeverCalculators.map(({ calc, path, specialty }) => (
                 <li key={calc}>
                   <Link
                     to={path}
@@ -133,7 +133,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
 
             return (
               <div key={item.label} className="group">
-                <div className="flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm">
+                     <div className="flex items-center justify-between px-4 py-3.5 rounded-xl text-left font-medium transition-all duration-200 group-hover:shadow-sm">
                   <Link
                     to={item.path}
                     onClick={toggleMobile}

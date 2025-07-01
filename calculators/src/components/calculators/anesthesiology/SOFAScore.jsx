@@ -140,7 +140,7 @@ const SOFAScore = () => {
                   <MenuItem value="1">100–149 (1 point)</MenuItem>
                   <MenuItem value="2">50–99 (2 points)</MenuItem>
                   <MenuItem value="3">20–49 (3 points)</MenuItem>
-                  <MenuItem value="4"><20 (4 points)</MenuItem>
+                  <MenuItem value="4">&lt;20 (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Lower platelet counts indicate worse coagulation dysfunction.</p>
               </FormControl>

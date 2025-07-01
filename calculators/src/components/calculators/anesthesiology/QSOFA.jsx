@@ -242,10 +242,10 @@ const QSOFA = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Risk Interpretation:</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong>Score <2:</strong> Low risk; monitor for clinical deterioration.</li>
-            <li><strong>Score ≥2:</strong> High risk; increased likelihood of mortality or ICU admission.</li>
-          </ul>
+        <ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>Score &lt;2:</strong> Low risk; monitor for clinical deterioration.</li>
+  <li><strong>Score ≥2:</strong> High risk; increased likelihood of mortality or ICU admission.</li>
+</ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For a qSOFA score ≥2, urgently evaluate for sepsis using SIRS criteria or SOFA score. Obtain blood cultures, lactate levels, and initiate broad-spectrum antibiotics if infection is suspected. Consider ICU transfer and fluid resuscitation. For low-risk patients, continue monitoring vital signs and reassess frequently. Always integrate with clinical judgment and patient history.
           </p>

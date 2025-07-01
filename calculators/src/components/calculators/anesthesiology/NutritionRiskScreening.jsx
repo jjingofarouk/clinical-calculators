@@ -333,13 +333,13 @@ const NutritionRiskScreening = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Risk Factors:</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong>BMI:</strong> <18.5 (3 points); 18.5–20.5 (1 point).</li>
-            <li><strong>Weight Loss:</strong> >10% in 3 months (3 points); 5–10% (2 points); <5% (1 point).</li>
-            <li><strong>Food Intake:</strong> 0–25% of normal (3 points); 25–50% (2 points); 50–75% (1 point).</li>
-            <li><strong>Disease Severity:</strong> Severe (3 points); moderate (2 points); mild (1 point).</li>
-            <li><strong>Age:</strong> ≥70 years adds 1 point to the total score.</li>
-          </ul>
+         <ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>BMI:</strong> &lt;18.5 (3 points); 18.5–20.5 (1 point).</li>
+  <li><strong>Weight Loss:</strong> &gt;10% in 3 months (3 points); 5–10% (2 points); &lt;5% (1 point).</li>
+  <li><strong>Food Intake:</strong> 0–25% of normal (3 points); 25–50% (2 points); 50–75% (1 point).</li>
+  <li><strong>Disease Severity:</strong> Severe (3 points); moderate (2 points); mild (1 point).</li>
+  <li><strong>Age:</strong> ≥70 years adds 1 point to the total score.</li>
+</ul>
           <p className="text-muted-foreground mb-4">
             <strong>Risk Interpretation:</strong>
           </p>

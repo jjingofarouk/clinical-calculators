@@ -121,7 +121,7 @@ const NutritionRiskScreening = () => {
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'hsl(var(--ring))' },
                 }}
               />
-              <p className="text-muted-foreground text-sm mt-1">BMI <18.5 indicates severe malnutrition; 18.5–20.5 indicates mild risk.</p>
+              <p className="text-muted-foreground text-sm mt-1">BMI &lt;18.5 indicates severe malnutrition; 18.5–20.5 indicates mild risk.</p>
             </motion.div>
 
             <motion.div

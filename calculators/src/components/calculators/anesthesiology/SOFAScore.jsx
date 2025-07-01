@@ -197,10 +197,10 @@ const SOFAScore = () => {
                 >
                   <MenuItem value="">Select Cardiovascular Score</MenuItem>
                   <MenuItem value="0">No hypotension (0 points)</MenuItem>
-                  <MenuItem value="1">MAP <70 mmHg (1 point)</MenuItem>
+                  <MenuItem value="1">MAP &lt;70 mmHg (1 point)</MenuItem>
                   <MenuItem value="2">Dopamine ≤5 or dobutamine (2 points)</MenuItem>
                   <MenuItem value="3">Dopamine >5, epi ≤0.1, or norepi ≤0.1 (3 points)</MenuItem>
-                  <MenuItem value="4">Dopamine >15, epi >0.1, or norepi >0.1 (4 points)</MenuItem>
+                  <MenuItem value="4">Dopamine &gt;15, epi &gt;0.1, or norepi &gt;0.1 (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Based on mean arterial pressure or vasopressor use.</p>
               </FormControl>

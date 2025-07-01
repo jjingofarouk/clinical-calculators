@@ -4,7 +4,7 @@ import Layout from './Layout';
 import Home from './Home';
 import NotFound from './NotFound';
 import AllergyCalculators from './components/calculators/allergy/AllergyCalculators';
-import BariatricsCalculators from './components/calculators/allergy/BariatricsCalculators';
+import BariatricsCalculators from './components/calculators/bariatrics/BariatricsCalculators';
 import AnesthesiologyCalculators from './components/calculators/anesthesiology/AnesthesiologyCalculators';
 import GeneralCalculators from './components/calculators/general/GeneralCalculators';
 import CardiovascularCalculators from './components/calculators/cardiovascular/CardiovascularCalculators';

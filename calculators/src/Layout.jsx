@@ -30,32 +30,32 @@ const Layout = () => {
     <div className="flex min-h-screen w-full bg-background text-foreground m-0 p-0">
       <Sidebar mobileOpen={mobileOpen} toggleMobile={toggleMobile} />
       <div className="flex-1 flex flex-col w-full max-w-full m-0 p-0">
-        <div className="lg:hidden flex items-center justify-between border-b border-sidebar-border shadow-sm m-0 p-4 bg-sidebar-background">
+        <div className="lg:hidden flex items-center justify-between border-b border-border shadow-sm m-0 p-4 bg-secondary">
           <button onClick={toggleMobile}>
-            <Menu className="text-sidebar-foreground" />
+            <Menu className="text-muted-foreground" />
           </button>
-          <h1 className="text-lg font-semibold text-sidebar-primary">Clinical Calculators</h1>
+          <h1 className="text-lg font-semibold text-primary">Clinical Calculators</h1>
           <button onClick={toggleTheme}>
             {isDarkMode ? (
-              <Sun className="text-sidebar-foreground" />
+              <Sun className="text-muted-foreground" />
             ) : (
-              <Moon className="text-sidebar-foreground" />
+              <Moon className="text-muted-foreground" />
             )}
           </button>
         </div>
-        <div className="hidden lg:flex justify-end p-4 border-b border-sidebar-border bg-sidebar-background">
+        <div className="hidden lg:flex justify-end p-4 border-b border-border bg-secondary">
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-200"
+            className="p-2 rounded-radius hover:bg-muted transition-colors duration-200"
           >
             {isDarkMode ? (
-              <Sun className="w-5 h-5 text-sidebar-foreground" />
+              <Sun className="w-5 h-5 text-muted-foreground" />
             ) : (
-              <Moon className="w-5 h-5 text-sidebar-foreground" />
+              <Moon className="w-5 h-5 text-muted-foreground" />
             )}
           </button>
         </div>
-        <main className="main">
+        <main className="flex-1 bg-background">
           <Outlet />
         </main>
       </div>

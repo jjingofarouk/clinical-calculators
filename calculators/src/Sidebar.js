@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -62,7 +61,7 @@ export default function Sidebar({ mobileOpen, toggleMobile }) {
   return (
     <aside
       ref={sidebarRef}
-      className={`sidebar fixed inset-y-0 left-0 transform ${
+      className={`sidebar fixed inset-y-0 left-0 w-full lg:w-72 transform ${
         mobileOpen ? 'translate-x-0' : '-translate-x-full'
       } transition-transform duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 z-50 shadow-2xl lg:shadow-none backdrop-blur-sm flex flex-col`}
     >

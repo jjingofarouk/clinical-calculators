@@ -199,7 +199,7 @@ const SOFAScore = () => {
                   <MenuItem value="0">No hypotension (0 points)</MenuItem>
                   <MenuItem value="1">MAP &lt;70 mmHg (1 point)</MenuItem>
                   <MenuItem value="2">Dopamine ≤5 or dobutamine (2 points)</MenuItem>
-                  <MenuItem value="3">Dopamine >5, epi ≤0.1, or norepi ≤0.1 (3 points)</MenuItem>
+                  <MenuItem value="3">Dopamine &gt;5, epi ≤0.1, or norepi ≤0.1 (3 points)</MenuItem>
                   <MenuItem value="4">Dopamine &gt;15, epi &gt;0.1, or norepi &gt;0.1 (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Based on mean arterial pressure or vasopressor use.</p>
@@ -230,7 +230,7 @@ const SOFAScore = () => {
                   <MenuItem value="1">13–14 (1 point)</MenuItem>
                   <MenuItem value="2">10–12 (2 points)</MenuItem>
                   <MenuItem value="3">6–9 (3 points)</MenuItem>
-                  <MenuItem value="4"><6 (4 points)</MenuItem>
+                  <MenuItem value="4">&lt;6 (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Lower GCS indicates worse neurological dysfunction.</p>
               </FormControl>
@@ -378,7 +378,7 @@ const SOFAScore = () => {
           <ul className="list-disc pl-6 text-muted-foreground mb-4">
             <li><strong>Score 0–6:</strong> Low risk; minimal organ dysfunction.</li>
             <li><strong>Score 7–12:</strong> Moderate risk; significant organ dysfunction.</li>
-            <li><strong>Score >12:</strong> High risk; severe organ failure with high mortality risk.</li>
+            <li><strong>Score &gt;12:</strong> High risk; severe organ failure with high mortality risk.</li>
           </ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For moderate to high scores, escalate care with ICU admission and targeted organ support (e.g., mechanical ventilation, vasopressors, dialysis). Monitor daily SOFA scores to assess progression or improvement. Integrate with clinical context, such as sepsis protocols, and consult specialists (e.g., intensivist, nephrologist) for severe cases. Early intervention is critical to improve outcomes.

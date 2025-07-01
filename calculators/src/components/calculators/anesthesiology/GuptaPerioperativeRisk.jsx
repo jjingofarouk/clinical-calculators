@@ -157,7 +157,7 @@ const GuptaPerioperativeRisk = () => {
 
             <motion.div
               initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: around 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: 0.2 }}
             >
               <FormControl fullWidth className="bg-background">

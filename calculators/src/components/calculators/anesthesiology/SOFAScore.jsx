@@ -166,7 +166,7 @@ const SOFAScore = () => {
                   }}
                 >
                   <MenuItem value="">Select Liver Score</MenuItem>
-                  <MenuItem value="0"><1.2 (0 points)</MenuItem>
+                  <MenuItem value="0">&lt;1.2 (0 points)</MenuItem>
                   <MenuItem value="1">1.2–1.9 (1 point)</MenuItem>
                   <MenuItem value="2">2.0–5.9 (2 points)</MenuItem>
                   <MenuItem value="3">6.0–11.9 (3 points)</MenuItem>

@@ -140,10 +140,10 @@ const WilsonScore = () => {
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'hsl(var(--ring))' },
                   }}
                 >
-                  <MenuItem value="">Select Thyromental Distance</MenuItem>
-                  <MenuItem value="<6"><6 cm</MenuItem>
-                  <MenuItem value="6-6.5">6–6.5 cm</MenuItem>
-                  <MenuItem value=">6.5">>6.5 cm</MenuItem>
+       <MenuItem value="">Select Thyromental Distance</MenuItem>
+<MenuItem value="<6">&lt;6 cm</MenuItem>
+<MenuItem value="6-6.5">6–6.5 cm</MenuItem>
+<MenuItem value=">6.5">&gt;6.5 cm</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Shorter distance suggests difficult intubation.</p>
               </FormControl>

@@ -504,11 +504,11 @@ const PREDELIRIC = () => {
           <p className="text-muted-foreground mb-4">
             <strong>Risk Interpretation:</strong>
           </p>
-          <ul className="list-disc pl-6 text-muted-foreground mb-4">
-            <li><strong><20%:</strong> Low risk; minimal interventions needed.</li>
-            <li><strong>20–50%:</strong> Moderate risk; implement preventive strategies.</li>
-            <li><strong>>50%:</strong> High risk; aggressive prevention and monitoring required.</li>
-          </ul>
+ <ul className="list-disc pl-6 text-muted-foreground mb-4">
+  <li><strong>&lt;20%:</strong> Low risk; minimal interventions needed.</li>
+  <li><strong>20–50%:</strong> Moderate risk; implement preventive strategies.</li>
+  <li><strong>&gt;50%:</strong> High risk; aggressive prevention and monitoring required.</li>
+</ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For moderate to high-risk patients, implement non-pharmacologic interventions (e.g., early mobilization, reorientation, sleep protocols). Avoid unnecessary sedatives and optimize pain management. Monitor daily with a delirium assessment tool (e.g., CAM-ICU). Consult a specialist for high-risk cases. Always integrate with patient-specific factors and ICU protocols.
           </p>

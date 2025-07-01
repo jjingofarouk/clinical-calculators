@@ -36,7 +36,7 @@ function getCategoryColor(label) {
   const colorMap = {
     'Allergy and Immunology': 'hsl(186, 61%, 35%)',
     'Anesthesiology': 'hsl(220, 13%, 46%)',
-    'Bariatric Surgery': 'hsl(24, 94%, 50%)',
+    'Bariatrics': 'hsl(24, 94%, 50%)',
     'Cardiology': 'hsl(0, 83%, 62%)',
     'Cardiothoracic Surgery': 'hsl(0, 82%, 45%)',
     'Colorectal Surgery': 'hsl(24, 94%, 62%)',

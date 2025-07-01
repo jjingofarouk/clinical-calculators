@@ -110,7 +110,7 @@ const SOFAScore = () => {
                   <MenuItem value="1">300–399 (1 point)</MenuItem>
                   <MenuItem value="2">200–299 (2 points)</MenuItem>
                   <MenuItem value="3">100–199 or mechanical ventilation (3 points)</MenuItem>
-                  <MenuItem value="4"><100 or mechanical ventilation (4 points)</MenuItem>
+                  <MenuItem value="4">&lt;100 or mechanical ventilation (4 points)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Based on PaO2/FiO2 ratio or ventilation status.</p>
               </FormControl>

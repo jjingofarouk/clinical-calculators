@@ -157,7 +157,7 @@ const AdDiaRemScore = () => {
           />
         </div>
         <div>
-          <label className="<branch name="block text-sm font-medium text-foreground mb-1">C-Peptide (ng/mL)</label>
+<label className="block text-sm font-medium text-foreground mb-1">C-Peptide (ng/mL)</label>
           <input
             type="number"
             name="cPeptide"

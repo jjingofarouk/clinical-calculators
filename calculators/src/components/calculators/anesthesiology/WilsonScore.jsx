@@ -225,9 +225,9 @@ const WilsonScore = () => {
                   }}
                 >
                   <MenuItem value="">Select Body Weight</MenuItem>
-                  <MenuItem value="<70"><70 kg</MenuItem>
+                  <MenuItem value="&lt;70">&lt;70 kg</MenuItem>
                   <MenuItem value="70-90">70–90 kg</MenuItem>
-                  <MenuItem value=">90">>90 kg</MenuItem>
+                  <MenuItem value="&gt;90">&gt;90 kg</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Higher body weight may increase intubation difficulty.</p>
               </FormControl>
@@ -333,10 +333,10 @@ const WilsonScore = () => {
           </p>
           <ul className="list-disc pl-6 text-muted-foreground mb-4">
             <li><strong>Mallampati Score:</strong> Class III–IV (limited/no visibility) indicates higher risk (2 points).</li>
-            <li><strong>Thyromental Distance:</strong> <6 cm suggests difficulty (2 points).</li>
-            <li><strong>Mouth Opening:</strong> <3.5 cm limits laryngoscope access (2 points).</li>
-            <li><strong>Neck Extension:</strong> Limited extension (<20°) complicates alignment (2 points).</li>
-            <li><strong>Body Weight:</strong> >90 kg may increase difficulty due to anatomy (2 points).</li>
+            <li><strong>Thyromental Distance:</strong> &lt;6 cm suggests difficulty (2 points).</li>
+            <li><strong>Mouth Opening:</strong> &lt;3.5 cm limits laryngoscope access (2 points).</li>
+            <li><strong>Neck Extension:</strong> Limited extension (&lt;20°) complicates alignment (2 points).</li>
+            <li><strong>Body Weight:</strong> &gt;90 kg may increase difficulty due to anatomy (2 points).</li>
           </ul>
           <p className="text-muted-foreground mb-4">
             <strong>Risk Interpretation:</strong>
@@ -344,7 +344,7 @@ const WilsonScore = () => {
           <ul className="list-disc pl-6 text-muted-foreground mb-4">
             <li><strong>Score 0–2:</strong> Low risk; standard intubation techniques likely sufficient.</li>
             <li><strong>Score 3–5:</strong> Moderate risk; prepare for potential difficulty with backup devices.</li>
-            <li><strong>Score >5:</strong> High risk; anticipate significant challenges and consider advanced techniques.</li>
+            <li><strong>Score &gt;5:</strong> High risk; anticipate significant challenges and consider advanced techniques.</li>
           </ul>
           <p className="text-muted-foreground">
             <strong>Clinical Recommendations:</strong> For moderate to high-risk patients, ensure availability of advanced airway tools (e.g., video laryngoscope, bougie, fiberoptic scope). Consider awake intubation for high-risk cases. Always have a surgical airway kit (e.g., cricothyrotomy) available. Perform a thorough preoperative airway assessment and involve an experienced anesthesiologist for high-risk cases.

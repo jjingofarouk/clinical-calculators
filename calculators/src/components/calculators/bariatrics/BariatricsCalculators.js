@@ -9,7 +9,7 @@ import BariatricRiskScore from './BariatricRiskScore';
 import ABCDScore from './ABCDScore';
 import DiaRemScore from './DiaRemScore';
 import DiaBetterScore from './DiaBetterScore';
-import AdDiaRemScore from './AdDiaRemScore';
+import AdDiaRemScore from './AdDiaremScore';
 import OSMRSCalculator from './OSMRSCalculator';
 import PostDischargeVTECalculator from './PostDischargeVTECalculator';
 import SLEEVEPASSScore from './SLEEVEPASSScore';

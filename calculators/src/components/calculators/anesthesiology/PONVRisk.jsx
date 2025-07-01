@@ -296,7 +296,8 @@ const PONVRisk = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="bg-card rounded-radius shadow-lg p-6"
         >
-          <h2 className="text-xl font-semibold text-card-foreground mb-4">Clinical Guidance</hstrong>
+          <h2 className="text-xl font-semibold text-card-foreground mb-4">Clinical Guidance</h2>
+          <p className="text-muted-foreground mb-4">
             <strong>Apfel Score Overview:</strong> The Apfel Score is a validated tool to predict the risk of postoperative nausea and vomiting (PONV) based on four risk factors: female gender, non-smoker status, history of PONV or motion sickness, and postoperative opioid use. Each factor contributes one point to the score.
           </p>
           <p className="text-muted-foreground mb-4">

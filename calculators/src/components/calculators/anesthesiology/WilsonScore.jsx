@@ -199,7 +199,7 @@ const WilsonScore = () => {
                   <MenuItem value="">Select Neck Extension</MenuItem>
                   <MenuItem value="normal">Normal (>35°)</MenuItem>
                   <MenuItem value="moderate">Moderate (20–35°)</MenuItem>
-                  <MenuItem value="limited">Limited (<20°)</MenuItem>
+                  <MenuItem value="limited">Limited (&lt;20°)</MenuItem>
                 </Select>
                 <p className="text-muted-foreground text-sm mt-1">Restricted neck extension complicates airway alignment.</p>
               </FormControl>

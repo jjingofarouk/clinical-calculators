@@ -15,7 +15,7 @@ import NeurologyCalculators from './components/calculators/neurology/NeurologyCa
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
 import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
-import CardiothoracicSurgeryCalculators from './components/calculators/cardiothoracic/CardiothoracicSurgeryCalculators';
+import CardiothoracicSurgeryCalculators from './components/calculators/cvsurgery/CardiothoracicSurgeryCalculators';
 
 export default function App() {
   return (

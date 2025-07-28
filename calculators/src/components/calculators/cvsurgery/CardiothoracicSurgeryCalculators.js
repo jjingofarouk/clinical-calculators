@@ -8,6 +8,8 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material';
+
+// Existing imports
 import EuroSCORE from './EuroSCORE';
 import STSScore from './STSScore';
 import CABGRisk from './CABGRisk';
@@ -18,6 +20,19 @@ import PneumonectomyRisk from './PneumonectomyRisk';
 import EsophagectomyRisk from './EsophagectomyRisk';
 import TamponadeRisk from './TamponadeRisk';
 import PostopAFRisk from './PostopAFRisk';
+
+// Missing imports - add these
+import BleedingRisk from './BleedingRisk';
+import ReoperationRisk from './ReoperationRisk';
+import SternalInfection from './SternalInfection';
+import VentilatorDays from './VentilatorDays';
+import ICUStay from './ICUStay';
+import MortalityRisk from './MortalityRisk';
+import CABGPatency from './CABGPatency';
+import GraftFailureRisk from './GraftFailureRisk';
+import PostopComplication from './PostopComplication';
+import SurvivalProbability from './SurvivalProbability';
+import SYNTAXScore from './SYNTAXScore';
 
 const calculators = [
   { label: 'EuroSCORE', component: <EuroSCORE /> },
@@ -30,6 +45,18 @@ const calculators = [
   { label: 'Esophagectomy Risk', component: <EsophagectomyRisk /> },
   { label: 'Tamponade Risk', component: <TamponadeRisk /> },
   { label: 'Postop AF Risk', component: <PostopAFRisk /> },
+  // Add the missing calculators
+  { label: 'Bleeding Risk', component: <BleedingRisk /> },
+  { label: 'Reoperation Risk', component: <ReoperationRisk /> },
+  { label: 'Sternal Infection', component: <SternalInfection /> },
+  { label: 'Ventilator Days', component: <VentilatorDays /> },
+  { label: 'ICU Stay', component: <ICUStay /> },
+  { label: 'Mortality Risk', component: <MortalityRisk /> },
+  { label: 'CABG Patency', component: <CABGPatency /> },
+  { label: 'Graft Failure Risk', component: <GraftFailureRisk /> },
+  { label: 'Postop Complication', component: <PostopComplication /> },
+  { label: 'Survival Probability', component: <SurvivalProbability /> },
+  { label: 'SYNTAX Score', component: <SYNTAXScore /> },
 ];
 
 const CardiothoracicSurgeryCalculators = () => {

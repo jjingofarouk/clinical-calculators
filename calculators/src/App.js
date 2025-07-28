@@ -15,6 +15,7 @@ import NeurologyCalculators from './components/calculators/neurology/NeurologyCa
 import NephrologyCalculators from './components/calculators/nephrology/NephrologyCalculators';
 import OrthopedicsCalculators from './components/calculators/ortho/OrthopedicsCalculators';
 import ICUCalculators from './components/calculators/icu/ICUCalculators';
+import CardiothoracicSurgeryCalculators from './components/calculators/cardiothoracic/CardiothoracicSurgeryCalculators';
 
 export default function App() {
   return (
@@ -47,6 +48,8 @@ export default function App() {
             <Route path="/calculators/Orthopedics/:calculator" element={<OrthopedicsCalculators />} />
             <Route path="/calculators/ICU" element={<ICUCalculators />} />
             <Route path="/calculators/ICU/:calculator" element={<ICUCalculators />} />
+            <Route path="/calculators/CardiothoracicSurgery" element={<CardiothoracicSurgeryCalculators />} />
+            <Route path="/calculators/CardiothoracicSurgery/:calculator" element={<CardiothoracicSurgeryCalculators />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

@@ -24,77 +24,84 @@ const ICUStay = () => {
   };
 
   const helperText = {
-    age: 'Patient age in years (18-100).',
-    surgeryType: 'Type of surgery: 1 = CABG, 2 = Valve, 3 = Combined.',
-    ef: 'Left ventricular ejection fraction (%) measured by echocardiography (10-80%).',
-    renalFunction: 'Presence of renal dysfunction (e.g., creatinine > 2 mg/dL; 0 = No, 1 = Yes).',
-    diabetes: 'Presence of diabetes mellitus (0 = No, 1 = Yes).',
-    urgency: 'Urgency of procedure: 1 = Elective, 2 = Urgent, 3 = Emergent.',
+    age: 'Patient age in years (18-100)',
+    surgeryType: 'Type of surgery: 1 = CABG, 2 = Valve, 3 = Combined',
+    ef: 'Left ventricular ejection fraction (%) measured by echocardiography (10-80%)',
+    renalFunction: 'Presence of renal dysfunction (e.g., creatinine > 2 mg/dL): 0 = No, 1 = Yes',
+    diabetes: 'Presence of diabetes mellitus: 0 = No, 1 = Yes',
+    urgency: 'Urgency of procedure: 1 = Elective, 2 = Urgent, 3 = Emergent',
+  };
+
+  const validateField = (field, value) => {
+    if (value === '') {
+      return `${ranges[field].label} is required`;
+    }
+
+    const numValue = ranges[field].type === 'float' ? parseFloat(value) : parseInt(value);
+    
+    if (isNaN(numValue)) {
+      return `${ranges[field].label} must be a number`;
+    }
+    
+    if (numValue < ranges[field].min || numValue > ranges[field].max) {
+      return `${ranges[field].label} must be between ${ranges[field].min} and ${ranges[field].max}`;
+    }
+    
+    if (ranges[field].type === 'integer' && !Number.isInteger(numValue)) {
+      return `${ranges[field].label} must be an integer`;
+    }
+    
+    return '';
   };
 
   const handleChange = (field) => (e) => {
     const value = e.target.value;
-    setFormData({ ...formData, [field]: value });
+    setFormData(prev => ({ ...prev, [field]: value }));
 
-    if (value === '') {
-      setErrors({ ...errors, [field]: `${ranges[field].label} is required.` });
-      return;
-    }
-
-    const numValue = ranges[field].type === 'float' ? parseFloat(value) : parseInt(value);
-    if (isNaN(numValue)) {
-      setErrors({ ...errors, [field]: `${ranges[field].label} must be a number.` });
-    } else if (numValue < ranges[field].min || numValue > ranges[field].max) {
-      setErrors({
-        ...errors,
-        [field]: `${ranges[field].label} must be between ${ranges[field].min} and ${ranges[field].max}.`,
-      });
-    } else if (ranges[field].type === 'integer' && !Number.isInteger(numValue)) {
-      setErrors({ ...errors, [field]: `${ranges[field].label} must be an integer.` });
-    } else {
-      setErrors({ ...errors, [field]: '' });
-    }
+    const error = validateField(field, value);
+    setErrors(prev => ({ ...prev, [field]: error }));
   };
 
   const handleCalculate = () => {
     const newErrors = {};
     let hasError = false;
+
+    // Validate all fields
     Object.keys(formData).forEach((field) => {
-      if (formData[field] === '') {
-        newErrors[field] = `${ranges[field].label} is required.`;
-        hasError = true;
-      } else {
-        const numValue = ranges[field].type === 'float' ? parseFloat(formData[field]) : parseInt(formData[field]);
-        if (isNaN(numValue)) {
-          newErrors[field] = `${ranges[field].label} must be a number.`;
-          hasError = true;
-        } else if (numValue < ranges[field].min || numValue > ranges[field].max) {
-          newErrors[field] = `${ranges[field].label} must be between ${ranges[field].min} and ${ranges[field].max}.`;
-          hasError = true;
-        } else if (ranges[field].type === 'integer' && !Number.isInteger(numValue)) {
-          newErrors[field] = `${ranges[field].label} must be an integer.`;
-          hasError = true;
-        }
-      }
+      const error = validateField(field, formData[field]);
+      newErrors[field] = error;
+      if (error) hasError = true;
     });
 
+    setErrors(newErrors);
+
     if (hasError) {
-      setErrors(newErrors);
       setResult(null);
       return;
     }
 
+    // Parse form data to numbers
+    const data = {
+      age: parseInt(formData.age),
+      surgeryType: parseInt(formData.surgeryType),
+      ef: parseInt(formData.ef),
+      renalFunction: parseInt(formData.renalFunction),
+      diabetes: parseInt(formData.diabetes),
+      urgency: parseInt(formData.urgency),
+    };
+
+    // Calculate coefficients based on risk factors
     const coefficients = {
-      age: formData.age > 65 ? 0.3 : 0,
-      surgeryType: [0, 0, 0.2, 0.4][formData.surgeryType],
-      ef: formData.ef < 50 ? 0.3 : 0,
-      renalFunction: formData.renalFunction === '1' ? 0.4 : 0,
-      diabetes: formData.diabetes === '1' ? 0.2 : 0,
-      urgency: [0, 0, 0.5, 0.8][formData.urgency],
+      age: data.age > 65 ? 0.3 : 0,
+      surgeryType: [0, 0, 0.2, 0.4][data.surgeryType] || 0,
+      ef: data.ef < 50 ? 0.3 : 0,
+      renalFunction: data.renalFunction === 1 ? 0.4 : 0,
+      diabetes: data.diabetes === 1 ? 0.2 : 0,
+      urgency: [0, 0, 0.5, 0.8][data.urgency] || 0,
     };
 
     const sum = Object.values(coefficients).reduce((a, b) => a + b, 0);
-    const days = Math.round(2 + sum * 3);
+    const days = Math.max(1, Math.round(2 + sum * 3)); // Ensure minimum 1 day
 
     let riskLevel = '';
     let riskColor = '';
@@ -102,19 +109,19 @@ const ICUStay = () => {
 
     if (days <= 3) {
       riskLevel = 'Short Stay';
-      riskColor = 'bg-green-100 text-green-800';
-      interpretation = 'Short expected ICU stay; standard care recommended.';
+      riskColor = 'success';
+      interpretation = 'Short expected ICU stay; standard postoperative care recommended.';
     } else if (days <= 7) {
       riskLevel = 'Moderate Stay';
-      riskColor = 'bg-yellow-100 text-yellow-800';
-      interpretation = 'Moderate ICU stay; plan for extended monitoring.';
+      riskColor = 'warning';
+      interpretation = 'Moderate ICU stay expected; plan for extended monitoring and resource allocation.';
     } else {
       riskLevel = 'Prolonged Stay';
-      riskColor = 'bg-red-100 text-red-800';
-      interpretation = 'Prolonged ICU stay; prepare for comprehensive management.';
+      riskColor = 'error';
+      interpretation = 'Prolonged ICU stay expected; prepare for comprehensive management and additional resources.';
     }
 
-    setResult({ days, riskLevel, riskColor, interpretation });
+    setResult({ days, riskLevel, riskColor, interpretation, coefficients });
   };
 
   const handleReset = () => {
@@ -131,128 +138,133 @@ const ICUStay = () => {
   };
 
   const hasErrors = Object.values(errors).some((error) => error !== '');
+  const isFormComplete = Object.values(formData).every((value) => value !== '');
 
   return (
-    <Box className="min-h-screen w-full bg-background text-foreground p-2">
-      <Typography variant="h4" className="font-bold text-foreground mb-4">
-        ICU Stay Calculator
-      </Typography>
-      <Box className="flex items-center mb-4">
-        <Info className="w-5 h-5 text-primary mr-2" />
-        <Typography variant="body2" className="text-muted-foreground">
-          Estimates duration of ICU stay after cardiothoracic surgery. (Source: Widyastuti et al., Ann Thorac Surg 2016)
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', p: 2 }}>
+      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+          ICU Stay Duration Calculator
         </Typography>
-      </Box>
-
-      <Box className="card w-full max-w-2xl mx-auto p-4 bg-card text-card-foreground shadow-lg rounded-radius">
-        {hasErrors && (
-          <Alert severity="warning" className="mb-4 flex items-center">
-            <AlertCircle className="w-5 h-5 mr-2" />
-            Please correct the errors below before calculating.
-          </Alert>
-        )}
-
-        {Object.keys(formData).map((field) => (
-          <Box key={field) className="mb-4">
-            <Typography variant="subtitle1" className="font-semibold text-card-foreground mb-2">
-              {ranges[field].label}
-            </Typography>
-            <Tooltip title={helperText[field]} placement="top">
-              <TextField
-                fullWidth
-                type="number"
-                value={formData[field]}
-                onChange={handleChange(field)}
-                placeholder={`Range: ${ranges[field].min}-${ranges[field].max}`}
-                variant="outlined"
-                error={!!errors[field]}
-                helperText={errors[field] || helperText[field]}
-                aria-label={ranges[field].label}
-                sx={{
-                  backgroundColor: 'hsl(var(--card))',
-                  borderRadius: 'var(--radius)',
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: 'hsl(var(--border))' },
-                    '&:hover fieldset': { borderColor: 'hsl(var(--primary))' },
-                    '&.Mui-focused fieldset': { borderColor: 'hsl(var(--primary))' },
-                  },
-                  '& .MuiInputBase-input': { color: 'hsl(var(--card-foreground))' },
-                  '& .MuiFormHelperText-root': { color: 'hsl(var(--muted-foreground))' },
-                }}
-              />
-            </Tooltip>
-          </Box>
-        ))}
-
-        <Box className="flex gap-4">
-          <Button
-            variant="contained"
-            onClick={handleCalculate}
-            className="w-full py-3 bg-primary text-primary-foreground"
-            disabled={hasErrors}
-            sx={{
-              backgroundColor: 'hsl(var(--primary))',
-              '&:hover': { backgroundColor: 'hsl(var(--primary) / 0.9)' },
-              textTransform: 'none',
-              fontWeight: '600',
-              borderRadius: 'var(--radius)',
-            }}
-          >
-            Calculate ICU Stay
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            className="w-full py-3 border-border text-card-foreground"
-            sx={{
-              borderColor: 'hsl(var(--border))',
-              color: 'hsl(var(--card-foreground))',
-              textTransform: 'none',
-              fontWeight: '600',
-              borderRadius: 'var(--radius)',
-              '&:hover': { borderColor: 'hsl(var(--primary))', color: 'hsl(var(--primary))' },
-            }}
-          >
-            Reset
-          </Button>
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, p: 2, bgcolor: 'info.light', borderRadius: 1 }}>
+          <Info size={20} style={{ marginRight: 8, color: '#1976d2' }} />
+          <Typography variant="body2" color="text.secondary">
+            Estimates duration of ICU stay after cardiothoracic surgery based on patient risk factors.
+            <br />
+            <strong>Source:</strong> Widyastuti et al., Ann Thorac Surg 2016
+          </Typography>
         </Box>
 
-        {result && (
-          <Box className="mt-6 pt-4 border-t border-border">
-            <Typography variant="h6" className="font-semibold text-card-foreground mb-2">
-              Estimated ICU Stay
-            </Typography>
-            <Typography variant="body1" className="font-medium text-card-foreground mb-2">
-              {result.days} days
-            </Typography>
-            <Typography variant="h6" className="font-semibold text-card-foreground mb-2">
-              Stay Level
-            </Typography>
-            <Typography
-              variant="body1"
-              className={`font-medium p-2 rounded ${result.riskColor}`}
+        <Box sx={{ bgcolor: 'background.paper', p: 3, borderRadius: 2, boxShadow: 2 }}>
+          {hasErrors && !isFormComplete && (
+            <Alert 
+              severity="warning" 
+              icon={<AlertCircle size={20} />}
+              sx={{ mb: 3 }}
             >
-              {result.riskLevel}
-            </Typography>
-            <Typography variant="body2" className="text-muted-foreground mt-2">
-              <strong>Interpretation:</strong> {result.interpretation}
-            </Typography>
-            <Box className="flex items-center mt-2">
-              <Info className="w-4 h-4 text-primary mr-1" />
-              <Typography variant="body2" className="text-muted-foreground">
-                Source:{' '}
-                <a
-                  href="https://pubmed.ncbi.nlm.nih.gov/27499474/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline"
-                >
-                  Widyastuti et al., Ann Thorac Surg 2016
-                </a>
-              </Typography>
-            </Box>
+              Please correct the errors below and complete all fields before calculating.
+            </Alert>
+          )}
+
+          <Box sx={{ display: 'grid', gap: 3, gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' } }}>
+            {Object.entries(formData).map(([field, value]) => (
+              <Tooltip key={field} title={helperText[field]} placement="top" arrow>
+                <TextField
+                  fullWidth
+                  label={ranges[field].label}
+                  type="number"
+                  value={value}
+                  onChange={handleChange(field)}
+                  placeholder={`${ranges[field].min}-${ranges[field].max}`}
+                  variant="outlined"
+                  error={!!errors[field]}
+                  helperText={errors[field] || helperText[field]}
+                  inputProps={{
+                    min: ranges[field].min,
+                    max: ranges[field].max,
+                    step: ranges[field].type === 'integer' ? 1 : 0.1,
+                  }}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': { borderColor: 'primary.main' },
+                    },
+                  }}
+                />
+              </Tooltip>
+            ))}
           </Box>
-        )}
+
+          <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+            <Button
+              variant="contained"
+              onClick={handleCalculate}
+              disabled={hasErrors || !isFormComplete}
+              fullWidth
+              size="large"
+              sx={{ py: 1.5, fontWeight: 600 }}
+            >
+              Calculate ICU Stay
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleReset}
+              fullWidth
+              size="large"
+              sx={{ py: 1.5, fontWeight: 600 }}
+            >
+              Reset Form
+            </Button>
+          </Box>
+
+          {result && (
+            <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
+              <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+                Calculation Results
+              </Typography>
+              
+              <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
+                <Box sx={{ p: 2, bgcolor: 'primary.light', borderRadius: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.contrastText' }}>
+                    Estimated ICU Stay
+                  </Typography>
+                  <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'primary.contrastText' }}>
+                    {result.days} {result.days === 1 ? 'day' : 'days'}
+                  </Typography>
+                </Box>
+                
+                <Box sx={{ p: 2, bgcolor: `${result.riskColor}.light`, borderRadius: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                    Risk Category
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                    {result.riskLevel}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <Typography variant="body2">
+                  <strong>Clinical Interpretation:</strong> {result.interpretation}
+                </Typography>
+              </Alert>
+
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Reference:</strong>{' '}
+                  <a
+                    href="https://pubmed.ncbi.nlm.nih.gov/27499474/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#1976d2', textDecoration: 'none' }}
+                  >
+                    Widyastuti Y, et al. Risk factors for prolonged mechanical ventilation after cardiac surgery. Ann Thorac Surg. 2016;102(4):1204-1209.
+                  </a>
+                </Typography>
+              </Box>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
